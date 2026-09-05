@@ -17,6 +17,8 @@
 
 不要假设另一个 AI 自动拥有当前会话、本地仓库、私有 GitHub、工作树、日志、附件或工具权限。
 
+在当前个人开发流程中，Gemini 是默认独立审阅者；本协议不管理 Gemini 的具体模型选择。
+
 ## 2. Handoff Readiness Gate
 
 跨 AI 交接前检查：
@@ -74,22 +76,22 @@ Gate 的目标是防止断链，不要求每次由用户手工打勾。
 
 报告中的文字判断是 Claim；命令输出、CI、runtime 结果等才是 Evidence。
 
-## 5. Design Review Pack
+## 5. Gemini Design Review Pack
 
-独立 Design Review 至少包含：
+Design Review 至少包含：
 
 - 项目目标 / 非目标的相关部分；
 - 当前架构相关部分；
 - 相关 Decision / ADR；
 - 当前 Task；
-- 设计方案；
+- ChatGPT 设计方案；
 - 备选方案（若有）；
 - 已知风险；
 - 明确希望审查的问题。
 
 不要无差别上传整个项目知识库。
 
-## 6. Code Review Pack
+## 6. Gemini Code Review Pack
 
 至少包含：
 
@@ -111,6 +113,15 @@ evidence/
 
 `evidence/`：tests、build、CI、runtime 等真实验证材料。
 
+High Risk Code Review 优先使用明确的 **base commit → review commit** 锚点。任务改动不应只停留在未提交工作树中，否则 Review Pack 可能静默遗漏真正需要审查的变化。
+
+一般开发允许 dirty working tree，但生成 commit-anchored Review Pack 时：
+
+- 默认应先把本 Task 的修改形成可审查 commit；
+- 如果仍存在已知且与本 Task 无关的 dirty state，可以由 Codex确认后显式允许；
+- `MANIFEST.md` 必须记录打包时的 working tree state；
+- 不得把“工作树是 dirty”与“Review Pack 已包含这些修改”混为一谈。
+
 ## 7. Context Selection
 
 目标是 Minimum Sufficient Context。
@@ -126,7 +137,9 @@ Large Task：优先顺序：
 3. 无法拆分时生成 Multi-Part Review Pack；
 4. 单文件微观审查只能用于某个 Finding 的补充验证，不可替代整个 Large Change Review。
 
-Relevant files 的选择应由 Codex/ChatGPT依据 diff 与调用链完成，用户不负责手工理解依赖。
+Relevant files 的选择应由 Codex / ChatGPT 依据 diff 与调用链完成，用户不负责手工理解依赖。
+
+如果 changed path 因安全策略、大小或格式限制被排除，必须出现在 `MANIFEST.md` 中。Gemini 应把这种排除视为潜在缺失上下文，而不是默认认为未提供部分不存在问题。
 
 ## 8. Security / Redaction
 
@@ -138,14 +151,14 @@ Allowlist + Mandatory Denylist + Secret Scan + Log Redaction
 
 默认永不发送：
 
-- `.env` / `.env.*`
-- `*.pem` / `*.key` / `*.p12` / `*.pfx`
-- SSH private keys
-- database dumps
-- `.git/`
-- `node_modules/`
-- 明确的生产凭据文件
-- 无必要的大型 generated / vendor 文件
+- `.env` / `.env.*`（允许明确作为 schema 的 `.env.example` / `.env.sample` / `.env.template`）；
+- `*.pem` / `*.key` / `*.p12` / `*.pfx`；
+- SSH private keys；
+- database dumps；
+- `.git/`；
+- `node_modules/`；
+- 明确的生产凭据文件；
+- 无必要的大型 generated / vendor 文件。
 
 `.gitignore` 不是 Secret Boundary。
 
@@ -153,9 +166,11 @@ Allowlist + Mandatory Denylist + Secret Scan + Log Redaction
 
 Secret Scan 失败或发现疑似凭据时，Pack 生成应 fail closed，并要求处理后重新生成。
 
+当前 v1 helper 只提供基础 secret-pattern 检查，不应被视为专业 Secret / PII Scanner。敏感日志应在进入 Pack 前完成脱敏；Tier 3 项目优先使用独立 secret-scanning 能力。
+
 ## 9. Missing Context Declaration
 
-独立审阅者材料不足时必须允许输出：
+Gemini 材料不足时必须允许输出：
 
 ```text
 INSUFFICIENT_CONTEXT
