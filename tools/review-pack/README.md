@@ -22,9 +22,17 @@ review-pack/
 
 当前工具是 **commit-to-commit** 的 small/medium Review Pack 生成器。
 
-它不会静默把未提交工作树修改混进 `diff.patch`。默认存在 dirty working tree 时会停止；只有 Codex 已确认脏修改与本次审查无关时，才可显式使用 `--allow-dirty`，并且该状态会写进 `MANIFEST.md`。
-
 需要独立 Code Review 的任务，应优先形成清晰的 base commit / review commit 锚点，再生成 Review Pack。
+
+为了保证 `diff.patch` 与 `context/changed/` 指向同一份代码：
+
+- `--head` 必须等于当前实际 checkout 的 `HEAD`；
+- 支持普通 Git clone 和 linked worktree；
+- Reviewed code / `--context` 不能存在未提交覆盖；
+- `--allow-dirty` 只允许已知、与审查代码和 context 无关的工作树修改；
+- `--review`、`--report`、`--evidence` 和输出 ZIP 属于显式 Review Artifact，可以保持未提交，不要求为了生成 Pack 把这些临时文件提交进项目 Git。
+
+工具不会静默把未提交源码修改混进 commit diff。所有工作树状态仍记录到 `MANIFEST.md`，供审阅者判断上下文完整性。
 
 ## 安全原则
 
@@ -65,11 +73,15 @@ python3 tools/review-pack/generate_review_pack.py \
 python3 tools/review-pack/test_generate_review_pack.py
 ```
 
-覆盖基础安全行为，包括：
+覆盖基础安全与上下文完整性行为，包括：
 
 - 普通文本变更可生成 Pack；
 - `.env` 不进入 patch；
 - `.env.example` 可作为安全 schema 示例；
 - 疑似 secret 时 fail closed；
-- dirty worktree 默认阻断；
-- 显式允许 dirty 时只记录、不静默混入 commit diff。
+- 普通 dirty source 默认阻断；
+- 显式允许 unrelated dirty 时记录但不混入 commit diff；
+- dirty source 与 reviewed code/context 重叠时仍强制阻断；
+- 临时 REVIEW / REPORT / evidence 文件无需提交即可打包；
+- `--head` 与实际 checkout 不一致时阻断；
+- linked Git worktree 可正常生成 Pack。
