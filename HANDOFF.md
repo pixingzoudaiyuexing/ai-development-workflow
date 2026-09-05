@@ -52,6 +52,7 @@ Gate 的目标是防止断链，不要求每次由用户手工打勾。
 - Workflow Source
 - Workflow Docs to Read
 - Project Docs to Read
+- Context Budget / Do Not Preload
 - Current Task
 - Scope
 - Non-goals
@@ -61,6 +62,15 @@ Gate 的目标是防止断链，不要求每次由用户手工打勾。
 启动消息应明确要求新对话先从 Workflow `START-HERE.md` 建立规则上下文，再按给定 Repo / 项目文档恢复事实上下文。
 
 如果 Project / Repo 文档尚未建立，必须明确说明当前哪些事实来自 Primary Conversation Handoff、哪些仍待写入 Git；不要假装 Git 中已经存在。
+
+### Context Truncation
+
+Conversation Handoff 遵循 **Minimum Sufficient Context**：
+
+- Primary 只指定当前 Child 真正需要读取的 Workflow / 项目文档；
+- 不要因为“以后可能有用”而预加载整个项目知识库；
+- 对明显无关的领域或文档，Primary 应在 Handoff 中明确写入 `Do Not Preload`；
+- 如果 Child 后续缺少关键上下文，应请求具体文件 / Contract / Evidence，而不是自动扩大到全项目读取。
 
 ### Escalation Triggers
 
@@ -80,11 +90,16 @@ Child Conversation 发现以下情况时应返回 Primary Conversation，而不�
 - 当前任务结果摘要；
 - 相关 Repo / branch / commit（若发生代码变更）；
 - 已验证 Evidence / 未验证项；
+- 本次更新或影响到的 Git 核心文档列表（没有则写 None）；
 - 新形成或需要确认的长期决定；
 - 对其他 Repo / 产品边界的影响；
 - Blockers / 下一步建议。
 
 用户只负责把结果带回主对话，不负责重新整理或技术裁决。
+
+Primary 收到返回包后，如果下一步任务依赖该 Child 的真实实现、架构、Contract 或长期文档变化，必须先执行 Re-Sync：读取返回的 commit anchor 和受影响 Git 文档，再进行下一次 Task 编排。
+
+如果 Primary 无法直接访问对应 Repo，不得要求零代码用户手工寻找 diff / 文档；应让 Child / Codex 输出精确文件内容、diff 或结构化返回包。
 
 ## 4. ChatGPT → Codex
 
@@ -143,7 +158,21 @@ Design Review 至少包含：
 
 ## 7. Gemini Code Review Pack
 
-至少包含：
+**Codex 是 Review Pack 的唯一默认生成责任方。**
+
+当 ChatGPT 判定需要 Gemini Code Review 时，应先把“生成 Review Pack”作为当前 Codex Task 的 Stop Point / Handoff 要求，或单独生成一个 Review Pack Generation Task。Codex 负责：
+
+- 运行 `tools/review-pack/` 工具；
+- 生成 `diff.patch`；
+- 收集允许进入 Pack 的测试 / build / CI / runtime Evidence；
+- 执行既定脱敏与 Secret Scan；
+- 输出最终 ZIP 或结构化 Markdown fallback。
+
+用户只负责把最终产物交给 Gemini；不得要求零代码用户自己制作 patch、提取 exit code、整理 raw logs 或拼装 Review Pack。
+
+如果 Codex 所在环境无法生成 Pack，应明确报告阻塞点并采用 `HANDOFF.md` 定义的 fallback，而不是把技术整理工作转嫁给用户。
+
+Review Pack 至少包含：
 
 ```text
 REVIEW.md
