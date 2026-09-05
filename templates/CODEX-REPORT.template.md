@@ -35,6 +35,14 @@
 - Result Commit: [填写]
 - Final `git status`: [填写]
 
+## Review Handoff
+
+- Independent Code Review Required: Yes / No
+- Review Pack: None / [路径或文件]
+- Review Base Commit: [如适用]
+- Review Commit: [如适用]
+- Known Excluded Context: None / [说明]
+
 ## Known Limitations
 
 - [填写]
