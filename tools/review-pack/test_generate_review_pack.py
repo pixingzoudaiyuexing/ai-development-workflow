@@ -122,9 +122,9 @@ class ReviewPackTests(unittest.TestCase):
         )
         self.assertEqual(p.returncode, 4)
         self.assertFalse(out.exists())
-        self.assertIn("working tree is dirty", p.stderr)
+        self.assertIn("working tree has non-artifact changes", p.stderr)
 
-    def test_allow_dirty_records_but_does_not_silently_include_worktree(self):
+    def test_allow_dirty_records_unrelated_state(self):
         repo = self.make_repo()
         (repo / "app.py").write_text("x = 1\n", encoding="utf-8")
         base = self.commit(repo, "init")
@@ -151,6 +151,105 @@ class ReviewPackTests(unittest.TestCase):
             manifest = zf.read("review-pack/MANIFEST.md").decode()
             self.assertEqual(patch, "")
             self.assertIn("?? note.txt", manifest)
+
+    def test_uncommitted_review_report_and_evidence_are_expected_artifacts(self):
+        repo = self.make_repo()
+        (repo / "app.py").write_text("x = 1\n", encoding="utf-8")
+        base = self.commit(repo, "init")
+        (repo / "app.py").write_text("x = 2\n", encoding="utf-8")
+        self.commit(repo, "change")
+
+        (repo / "review.md").write_text("# Review\nTask details\n", encoding="utf-8")
+        (repo / "report.md").write_text("# Report\nDone\n", encoding="utf-8")
+        (repo / "test-output.txt").write_text("PASS\n", encoding="utf-8")
+        out = repo / "pack.zip"
+
+        p = run(
+            [
+                "python3", str(TOOL),
+                "--repo", str(repo),
+                "--base", base,
+                "--review", "review.md",
+                "--report", "report.md",
+                "--evidence", "test-output.txt",
+                "--output", str(out),
+            ]
+        )
+        self.assertEqual(p.returncode, 0)
+        with zipfile.ZipFile(out) as zf:
+            self.assertIn("review-pack/REVIEW.md", zf.namelist())
+            self.assertIn("review-pack/CODEX-REPORT.md", zf.namelist())
+            self.assertIn("review-pack/evidence/test-output.txt", zf.namelist())
+
+    def test_head_must_match_checked_out_head(self):
+        repo = self.make_repo()
+        (repo / "app.py").write_text("x = 1\n", encoding="utf-8")
+        base = self.commit(repo, "init")
+        (repo / "app.py").write_text("x = 2\n", encoding="utf-8")
+        self.commit(repo, "change")
+
+        out = repo / "pack.zip"
+        p = run(
+            [
+                "python3", str(TOOL),
+                "--repo", str(repo),
+                "--base", base,
+                "--head", base,
+                "--output", str(out),
+            ],
+            check=False,
+        )
+        self.assertEqual(p.returncode, 9)
+        self.assertFalse(out.exists())
+        self.assertIn("--head must match", p.stderr)
+
+    def test_allow_dirty_rejects_overlap_with_reviewed_source(self):
+        repo = self.make_repo()
+        (repo / "app.py").write_text("x = 1\n", encoding="utf-8")
+        base = self.commit(repo, "init")
+        (repo / "app.py").write_text("x = 2\n", encoding="utf-8")
+        self.commit(repo, "change")
+        (repo / "app.py").write_text("x = 999\n", encoding="utf-8")
+
+        out = repo / "pack.zip"
+        p = run(
+            [
+                "python3", str(TOOL),
+                "--repo", str(repo),
+                "--base", base,
+                "--output", str(out),
+                "--allow-dirty",
+            ],
+            check=False,
+        )
+        self.assertEqual(p.returncode, 10)
+        self.assertFalse(out.exists())
+        self.assertIn("overlap reviewed code/context", p.stderr)
+
+    def test_linked_worktree_is_supported(self):
+        repo = self.make_repo()
+        (repo / "app.py").write_text("x = 1\n", encoding="utf-8")
+        base = self.commit(repo, "init")
+
+        wt_parent = tempfile.TemporaryDirectory()
+        self.addCleanup(wt_parent.cleanup)
+        worktree = Path(wt_parent.name) / "wt"
+        run(["git", "worktree", "add", "-q", "-b", "review-test", str(worktree)], cwd=repo)
+        (worktree / "app.py").write_text("x = 2\n", encoding="utf-8")
+        self.commit(worktree, "change")
+
+        self.assertTrue((worktree / ".git").is_file())
+        out = worktree / "pack.zip"
+        p = run(
+            [
+                "python3", str(TOOL),
+                "--repo", str(worktree),
+                "--base", base,
+                "--output", str(out),
+            ]
+        )
+        self.assertEqual(p.returncode, 0)
+        self.assertTrue(out.exists())
 
 
 if __name__ == "__main__":
