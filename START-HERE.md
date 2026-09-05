@@ -2,7 +2,7 @@
 
 这是 AI Development Workflow 的唯一入口。
 
-先判断当前场景，然后只读取需要的文档；不要一次性把所有规则加载进上下文。
+先读取 `VERSION` 确认当前 Workflow 版本，再判断当前场景，然后只读取需要的文档；不要一次性把所有规则加载进上下文。
 
 ## 1. 新项目
 
@@ -29,9 +29,9 @@
 3. `WORKFLOW.md`
 4. `RISK-GATES.md`
 
-然后完成 Task Risk 判断，再决定是否进入 Codex 或先做独立 Design Review。
+然后完成 Task Risk 判断，再决定是否进入 Codex 或先做 Gemini Design Review。
 
-## 3. 跨 AI 交接 / 独立审查
+## 3. 跨 AI 交接 / Gemini 独立审查
 
 读取：
 
@@ -61,7 +61,8 @@ Hotfix 可以延后部分流程，但不能永久跳过流程。
 
 - ChatGPT：产品、需求、架构、任务拆解、风险判断、技术裁决。
 - Codex：默认唯一代码实施者，负责代码、测试、构建、Git 与证据收集。
-- 独立审阅者：按 Risk Gate 做 Design/Code Review，默认不直接改代码。
+- Gemini：默认独立审阅者，按 Risk Gate 做 Design/Code Review，默认不直接改代码。
+- Workflow 不管理 Gemini 的具体模型选择。
 - 用户：定义“我要什么”和“是否上线”，不负责技术争议裁决。
 - 发生重大 AI 分歧时，进入 Evidence Gate，不继续无限理论争论。
 - 任何跨 AI 箭头都必须有 Handoff。
