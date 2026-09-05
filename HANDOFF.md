@@ -1,8 +1,8 @@
-# CROSS-AI HANDOFF PROTOCOL
+# CROSS-CONTEXT HANDOFF PROTOCOL
 
 ## 1. No Magic Arrows
 
-任何 AI → AI 的交接都必须回答：
+任何 AI → AI、Conversation → Conversation 的交接都必须回答：
 
 - 传什么；
 - 谁生成；
@@ -15,28 +15,93 @@
 - 如何确认交接完整；
 - 结果如何返回并可追踪。
 
-不要假设另一个 AI 自动拥有当前会话、本地仓库、私有 GitHub、工作树、日志、附件或工具权限。
+不要假设另一个 AI 或同一 Project 中的另一个对话自动拥有当前会话、本地仓库、私有 GitHub、工作树、日志、附件或工具权限。
+
+Project Memory 可以辅助上下文恢复，但不是正式 Handoff 的替代品。
 
 在当前个人开发流程中，Gemini 是默认独立审阅者。
 
 ## 2. Handoff Readiness Gate
 
-跨 AI 交接前检查：
+交接前检查：
 
 1. 接收方角色和目标是否明确；
-2. 当前 Repo / branch / base commit 是否明确；
+2. 当前 Project / Repo / branch / base commit 是否按场景明确；
 3. Task / Scope / Non-goals / Acceptance Criteria 是否明确；
 4. 相关 Architecture / Decision 是否已选择；
-5. Diff / Patch / Changed Files 是否准备；
+5. 需要的 Diff / Patch / Changed Files 是否准备；
 6. Evidence 与 Unverified Gaps 是否准备；
-7. Pack 是否经过敏感信息过滤；
+7. 跨 AI Pack 是否经过敏感信息过滤；
 8. 上下文是否在接收方可处理范围内；
-9. 接收方如果不能直接访问 Repo，是否已有 Review Pack；
-10. 结果返回格式是否明确。
+9. 接收方如果不能直接访问 Repo，是否已有替代材料；
+10. 结果返回格式与返回位置是否明确。
 
 Gate 的目标是防止断链，不要求每次由用户手工打勾。
 
-## 3. ChatGPT → Codex
+## 3. Primary Conversation → Child Conversation
+
+当 Primary Conversation 判断需要新建子对话时，必须生成用户可直接复制的 Conversation Handoff，而不是让用户自己描述技术职责。
+
+使用 `templates/CONVERSATION-HANDOFF.template.md`，至少包含：
+
+- Suggested Conversation Name
+- Parent / Primary Conversation
+- Project
+- Purpose
+- Repository / Domain
+- Workflow Source
+- Workflow Docs to Read
+- Project Docs to Read
+- Context Budget / Do Not Preload
+- Current Task
+- Scope
+- Non-goals
+- Escalation Triggers
+- Expected Return Package
+
+启动消息应明确要求新对话先从 Workflow `START-HERE.md` 建立规则上下文，再按给定 Repo / 项目文档恢复事实上下文。
+
+如果 Project / Repo 文档尚未建立，必须明确说明当前哪些事实来自 Primary Conversation Handoff、哪些仍待写入 Git；不要假装 Git 中已经存在。
+
+### Context Truncation
+
+Conversation Handoff 遵循 **Minimum Sufficient Context**：
+
+- Primary 只指定当前 Child 真正需要读取的 Workflow / 项目文档；
+- 不要因为“以后可能有用”而预加载整个项目知识库；
+- 对明显无关的领域或文档，Primary 应在 Handoff 中明确写入 `Do Not Preload`；
+- 如果 Child 后续缺少关键上下文，应请求具体文件 / Contract / Evidence，而不是自动扩大到全项目读取。
+
+### Escalation Triggers
+
+Child Conversation 发现以下情况时应返回 Primary Conversation，而不是自行扩大决策范围：
+
+- 需求改变产品目标、非目标或核心业务规则；
+- 需要修改另一个 Repo；
+- 需要改变跨 Repo Contract / API Contract；
+- 需要改变核心架构或安全边界；
+- 当前 Task 与 Handoff Scope 明显冲突；
+- 发现一个会影响其他工作流的重要长期决定。
+
+### Child Conversation → Primary Conversation
+
+完成阶段性工作或触发升级时，返回包至少包含：
+
+- 当前任务结果摘要；
+- 相关 Repo / branch / commit（若发生代码变更）；
+- 已验证 Evidence / 未验证项；
+- 本次更新或影响到的 Git 核心文档列表（没有则写 None）；
+- 新形成或需要确认的长期决定；
+- 对其他 Repo / 产品边界的影响；
+- Blockers / 下一步建议。
+
+用户只负责把结果带回主对话，不负责重新整理或技术裁决。
+
+Primary 收到返回包后，如果下一步任务依赖该 Child 的真实实现、架构、Contract 或长期文档变化，必须先执行 Re-Sync：读取返回的 commit anchor 和受影响 Git 文档，再进行下一次 Task 编排。
+
+如果 Primary 无法直接访问对应 Repo，不得要求零代码用户手工寻找 diff / 文档；应让 Child / Codex 输出精确文件内容、diff 或结构化返回包。
+
+## 4. ChatGPT → Codex
 
 最小 Task 包：
 
@@ -61,7 +126,7 @@ Gate 的目标是防止断链，不要求每次由用户手工打勾。
 
 如果重要决定仍只存在于聊天、尚未进入 Git，应先将其整理为当前 Task 的明确 Context，必要时在完成后按 `DOCUMENTATION.md` 沉淀。
 
-## 4. Codex → ChatGPT
+## 5. Codex → ChatGPT
 
 最小结果包：
 
@@ -76,7 +141,7 @@ Gate 的目标是防止断链，不要求每次由用户手工打勾。
 
 报告中的文字判断是 Claim；命令输出、CI、runtime 结果等才是 Evidence。
 
-## 5. Gemini Design Review Pack
+## 6. Gemini Design Review Pack
 
 Design Review 至少包含：
 
@@ -91,9 +156,23 @@ Design Review 至少包含：
 
 不要无差别上传整个项目知识库。
 
-## 6. Gemini Code Review Pack
+## 7. Gemini Code Review Pack
 
-至少包含：
+**Codex 是 Review Pack 的唯一默认生成责任方。**
+
+当 ChatGPT 判定需要 Gemini Code Review 时，应先把“生成 Review Pack”作为当前 Codex Task 的 Stop Point / Handoff 要求，或单独生成一个 Review Pack Generation Task。Codex 负责：
+
+- 运行 `tools/review-pack/` 工具；
+- 生成 `diff.patch`；
+- 收集允许进入 Pack 的测试 / build / CI / runtime Evidence；
+- 执行既定脱敏与 Secret Scan；
+- 输出最终 ZIP 或结构化 Markdown fallback。
+
+用户只负责把最终产物交给 Gemini；不得要求零代码用户自己制作 patch、提取 exit code、整理 raw logs 或拼装 Review Pack。
+
+如果 Codex 所在环境无法生成 Pack，应明确报告阻塞点并采用 `HANDOFF.md` 定义的 fallback，而不是把技术整理工作转嫁给用户。
+
+Review Pack 至少包含：
 
 ```text
 REVIEW.md
@@ -122,7 +201,7 @@ High Risk Code Review 优先使用明确的 **base commit → review commit** �
 - `MANIFEST.md` 必须记录打包时的 working tree state；
 - 不得把“工作树是 dirty”与“Review Pack 已包含这些修改”混为一谈。
 
-## 7. Context Selection
+## 8. Context Selection
 
 目标是 Minimum Sufficient Context。
 
@@ -141,7 +220,7 @@ Relevant files 的选择应由 Codex / ChatGPT 依据 diff 与调用链完成，
 
 如果 changed path 因安全策略、大小或格式限制被排除，必须出现在 `MANIFEST.md` 中。Gemini 应把这种排除视为潜在缺失上下文，而不是默认认为未提供部分不存在问题。
 
-## 8. Security / Redaction
+## 9. Security / Redaction
 
 Review Pack 使用：
 
@@ -168,7 +247,7 @@ Secret Scan 失败或发现疑似凭据时，Pack 生成应 fail closed，并要
 
 当前 v1 helper 只提供基础 secret-pattern 检查，不应被视为专业 Secret / PII Scanner。敏感日志应在进入 Pack 前完成脱敏；Tier 3 项目优先使用独立 secret-scanning 能力。
 
-## 9. Missing Context Declaration
+## 10. Missing Context Declaration
 
 Gemini 材料不足时必须允许输出：
 
@@ -186,7 +265,7 @@ Reason: <why it blocks reliable conclusion>
 
 禁止基于未提供实现假装确定结论。
 
-## 10. Finding Schema
+## 11. Finding Schema
 
 推荐：
 
@@ -214,7 +293,7 @@ G-003 NEEDS_EVIDENCE
 
 Codex Fix Task 必须携带对应 Finding ID，确保发现 → 裁决 → 修复 → 验证可追踪。
 
-## 11. Multi-Repo Handoff
+## 12. Multi-Repo Handoff
 
 跨 Repo Task 至少记录：
 
