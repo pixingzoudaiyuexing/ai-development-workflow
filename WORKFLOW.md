@@ -11,7 +11,7 @@
 - 任务拆解；
 - Task Risk 判断；
 - Codex Task 生成；
-- 综合 Codex 证据与独立审查意见；
+- 综合 Codex 证据与 Gemini / 独立审查意见；
 - 技术裁决；
 - 必要时设计 Evidence Gate 的最小可证伪实验。
 
@@ -32,7 +32,9 @@
 
 除非明确要求，Codex 是默认唯一代码实施者。
 
-### 独立审阅者
+### Gemini / 独立审阅者
+
+在当前个人开发流程中，Gemini 是默认独立审阅者。
 
 负责：
 
@@ -42,7 +44,7 @@
 - 独立第二意见；
 - 明确指出缺失上下文，而不是基于未知实现强行推理。
 
-Workflow 不管理独立审阅者使用哪一个具体模型。
+Workflow 不管理 Gemini 使用哪一个具体模型，也不做 Gemini 模型路由。
 
 ## 2. 标准开发循环
 
@@ -51,7 +53,7 @@ Workflow 不管理独立审阅者使用哪一个具体模型。
 ↓
 ChatGPT：分析 / 设计 / Task Risk
 ↓
-必要时：Independent Design Review
+必要时：Gemini Design Review
 ↓
 ChatGPT：最终方案
 ↓
@@ -61,7 +63,7 @@ Codex：Preflight → 实现 → 验证 → Evidence → Report
 ↓
 ChatGPT：核对验收与 Risk Gate
 ↓
-High Risk：Independent Code Review
+High Risk：Gemini Code Review
 ↓
 ChatGPT：Accepted / Rejected / Needs Evidence
 ↓
@@ -175,7 +177,7 @@ STOP
 
 ## 8. Evidence Gate
 
-当 ChatGPT 与独立审阅者出现会影响实施方向的重大、无法靠已有材料解决的分歧时：
+当 ChatGPT 与 Gemini / 独立审阅者出现会影响实施方向的重大、无法靠已有材料解决的分歧时：
 
 1. 停止观点争论；
 2. ChatGPT 把争议转换成可证伪假设；
