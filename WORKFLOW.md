@@ -13,7 +13,8 @@
 - Codex Task 生成；
 - 综合 Codex 证据与 Gemini 审查意见；
 - 技术裁决；
-- 必要时设计 Evidence Gate 的最小可证伪实验。
+- 必要时设计 Evidence Gate 的最小可证伪实验；
+- 在长期项目中承担 Conversation Orchestration，决定是否需要子对话以及如何交接。
 
 默认不作为主代码修改者。
 
@@ -74,7 +75,103 @@ ChatGPT：Accepted / Rejected / Needs Evidence
 仅在 DOCUMENTATION.md 触发条件成立时更新长期文档
 ```
 
-## 3. Codex Preflight
+## 3. ChatGPT Project 与 Conversation Orchestration
+
+### 3.1 一个产品，一个 ChatGPT Project
+
+一个长期产品原则上使用一个 ChatGPT Project。一个产品可以包含多个 Git Repo，也可以包含多个职责明确的 ChatGPT 对话。
+
+Project Memory 可以帮助同一 Project 内的对话引用相关历史，但不得把它当作完整、确定、永久同步的事实数据库。
+
+长期事实仍以项目 Git 文档为锚点，例如：
+
+- `AGENTS.md`
+- `docs/PROJECT.md`
+- `docs/ARCHITECTURE.md`
+- `docs/DECISIONS.md` / `docs/adr/`
+- `docs/ROADMAP.md`
+- `docs/STATUS.md`（checkpoint only）
+
+原则：**对话负责讨论与执行上下文，Git 文档负责长期事实。**
+
+### 3.2 Primary Conversation
+
+新项目的初始 Project Discovery 对话默认成为 **Primary Conversation（主对话）**。
+
+主对话负责：
+
+- 接收用户新增需求与方向变化；
+- 产品、架构、跨 Repo 边界设计；
+- 判断需求属于局部任务还是跨领域任务；
+- 决定是否需要创建、复用或结束 Child Conversation；
+- 生成子对话可直接复制的启动消息；
+- 指定子对话需要读取的 Workflow 文档、项目文档、Repo 与当前任务；
+- 接收子对话返回结果并决定下一步。
+
+用户不负责判断“应该开几个对话、属于前端还是后端、是否跨 Repo”。这些属于主对话的编排职责。
+
+### 3.3 Child Conversation
+
+Child Conversation（子对话）是有明确工作边界的长期或阶段性工作区，例如：
+
+- Backend / API
+- Frontend / Web
+- Client
+- Deployment / Operations
+- 某个长期独立模块
+
+子对话不重新拥有整个产品的架构裁决权。它应优先处理自己的 Repo / Scope；如果发现当前需求影响产品规则、核心架构、其他 Repo 或既有 Contract，应暂停扩大范围并返回 Primary Conversation。
+
+子对话可以长期存在，也可以只是某个阶段的专项对话。是否创建新子对话由 Primary Conversation 根据复杂度、持续时间、Repo 边界和上下文隔离收益决定，不由用户提前猜测。
+
+### 3.4 Conversation Topology
+
+Project Discovery 后，如果项目存在多个长期工作流或多个 Repo，Primary Conversation 应主动给出建议的 Conversation Topology，例如：
+
+```text
+Project: CloudGap
+│
+├── Primary：产品 / 需求 / 架构 / 调度
+├── Child：CloudGap API
+└── Child：CloudGap Web
+```
+
+每个建议的 Child Conversation 必须同时给出：
+
+- 建议名称；
+- 为什么需要；
+- 负责的 Repo / Domain；
+- 需要读取的 Workflow 文档；
+- 需要读取的项目 Git 文档；
+- 当前第一个任务；
+- Scope / Non-goals；
+- 什么时候必须返回主对话；
+- 完成后需要带回什么结果；
+- 一段用户可直接复制到新对话的启动消息。
+
+使用 `templates/CONVERSATION-HANDOFF.template.md`。
+
+### 3.5 新需求如何路由
+
+用户可以始终先把新需求告诉 Primary Conversation。
+
+Primary Conversation 负责选择：
+
+```text
+留在主对话分析
+或
+交给现有子对话
+或
+创建新的子对话
+或
+拆成多个有顺序的 Repo Task
+```
+
+如果用户已经处于某个子对话，并且需求明显属于该子对话的既有 Scope，可以直接处理；一旦发现跨产品 / 架构 / Repo 边界，再升级回 Primary Conversation。
+
+不要要求零代码用户充当人工路由器。
+
+## 4. Codex Preflight
 
 开始非简单任务前至少确认：
 
@@ -95,7 +192,7 @@ git rev-parse HEAD
 
 Remote Sync Check（例如 `git fetch`）是条件式操作：仅在存在远端依赖、网络与权限可用且当前任务需要确认远端状态时执行。
 
-## 4. Codex Model Routing
+## 5. Codex Model Routing
 
 正式 Codex Task 必须包含：
 
@@ -119,7 +216,7 @@ Remote Sync Check（例如 `git fetch`）是条件式操作：仅在存在远端
 
 Risk 与模型不是一一对应：高风险但机械的实现未必必须 Sol；低业务风险但极难调试的问题可能需要 Sol。
 
-## 5. Claims vs Evidence
+## 6. Claims vs Evidence
 
 AI 的“我已经修复”“测试通过”“没有兼容问题”属于 Claim。
 
@@ -137,7 +234,7 @@ Evidence 可以包括：
 
 统一原则：**任务风险越高，越必须依赖独立、可重复的验证，而不是 Agent 自述。**
 
-## 6. Acceptance Evidence
+## 7. Acceptance Evidence
 
 每个正式 Task 的 Acceptance Criteria 应尽量对应可验证 Evidence。
 
@@ -153,7 +250,7 @@ Evidence 可以包括：
 
 没有实际运行的验证，不得写成“已通过”。
 
-## 7. Ground Truth Verification
+## 8. Ground Truth Verification
 
 代码、文档、测试、运行行为、已确认产品要求和安全边界都只是事实来源的一部分。
 
@@ -173,7 +270,7 @@ STOP
 
 禁止简单采用“代码永远正确”或“文档永远正确”。
 
-## 8. Evidence Gate
+## 9. Evidence Gate
 
 当 ChatGPT 与 Gemini 出现会影响实施方向的重大、无法靠已有材料解决的分歧时：
 
@@ -188,7 +285,7 @@ STOP
 
 如果实验需要生产环境、可能破坏数据或无法安全执行，必须先停下并改用安全的 staging、dry-run、只读验证或其他替代证据。
 
-## 9. Multi-Repo 最小支持
+## 10. Multi-Repo 最小支持
 
 一个产品可以对应多个 Git Repo，一个 ChatGPT Project 也可以讨论这个产品的多个 Repo。
 
@@ -199,7 +296,7 @@ STOP
 - 明确 cross-repo contract 与验收标准；
 - v1 不做复杂的多仓库自动编排。
 
-## 10. 完成定义
+## 11. 完成定义
 
 代码写完不等于任务完成。
 
