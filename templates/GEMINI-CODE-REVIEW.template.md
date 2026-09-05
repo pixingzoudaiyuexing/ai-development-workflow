@@ -1,6 +1,4 @@
-# Independent Code Review
-
-> 本模板不规定审阅 AI 的具体模型。
+# Gemini Code Review
 
 ## Review Role
 
