@@ -40,7 +40,12 @@
 - `AGENTS.md` [如存在]
 - [相关 `docs/PROJECT.md` / `docs/ARCHITECTURE.md` / ADR / STATUS 等]
 
-不要无差别读取所有文档，只读取当前职责与任务需要的内容。
+## Context Budget / Do Not Preload
+
+- Required now: [当前任务真正需要的文档 / Contract / 文件]
+- Do not preload: [明显无关的领域或文档，例如后端 DB ADR / Ops 文档；没有则写 None]
+
+不要无差别读取所有文档，也不要因为“以后可能有用”预加载整个项目知识库。后续如果真实问题需要更多上下文，再请求具体文件。
 
 ## Current Task
 
@@ -74,9 +79,12 @@ Primary Conversation 可按项目补充触发条件。
 - 结果摘要；
 - Repo / branch / commit（如适用）；
 - Evidence / Unverified Gaps；
+- Updated / Affected Git Docs: [列出本次更新或影响到的核心项目文档；没有写 None]；
 - 需要确认或沉淀的长期决定；
 - 对其他 Repo / 产品边界的影响；
 - Blockers / 下一步建议。
+
+Primary 收到返回包后，如果下一步依赖本次真实实现、架构、Contract 或长期文档变化，应先按 commit anchor + Updated / Affected Git Docs 执行 Re-Sync，再继续编排。
 
 ## Copy-Paste Starter Message
 
@@ -96,9 +104,14 @@ Repository / Domain：[填写]
 当前任务：[填写]
 Scope：[填写]
 Non-goals：[填写]
+Required Context：[填写]
+Do Not Preload：[填写]
 
 长期事实以项目 Git 文档为锚点，不要假设你自动拥有其他对话的全部上下文。
+不要无差别加载整个项目文档；只有在真实问题需要时再请求额外上下文。
 如果当前需求触发 Escalation Triggers，请停止扩大范围并明确告诉我需要把什么结果带回 Primary Conversation。
+
+完成或升级返回时，请明确给出 Repo / branch / commit、Evidence / Unverified Gaps，以及 Updated / Affected Git Docs。
 
 先恢复上下文并确认任务边界，不要默认开始修改代码。
 ```
