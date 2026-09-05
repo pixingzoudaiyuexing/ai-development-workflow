@@ -31,7 +31,7 @@ Project Discovery 完成前，不生成正式 Codex Task，不开始写代码。
 
 ### Tier 1 — 小型长期项目
 
-至少建立：
+默认建立：
 
 ```text
 AGENTS.md
@@ -39,22 +39,29 @@ docs/PROJECT.md
 docs/STATUS.md
 ```
 
+其中 `STATUS.md` 仍按 checkpoint 使用，不作为日报。
+
 ### Tier 2 — 正式长期项目
 
-建议建立：
+默认建立：
 
 ```text
 AGENTS.md
 docs/PROJECT.md
 docs/ARCHITECTURE.md
 docs/ROADMAP.md
-docs/DECISIONS.md   # 有长期重要决定时
 docs/STATUS.md      # checkpoint only
+```
+
+在出现长期重要决定时增加：
+
+```text
+docs/DECISIONS.md
 ```
 
 ### Tier 3 — 商业 / 核心 / 高风险长期项目
 
-建议建立：
+默认建立：
 
 ```text
 AGENTS.md
@@ -62,7 +69,7 @@ docs/PROJECT.md
 docs/ARCHITECTURE.md
 docs/ROADMAP.md
 docs/STATUS.md
-docs/adr/           # 一事一记的重要架构决策
+docs/adr/           # 出现重要架构决策时一事一记
 ```
 
 并默认要求存在独立于 Codex 自述之外的自动化验证能力。具体 CI/CD 平台不由本 Workflow 指定；若不适用，必须在项目规则或 ADR 中记录 Waiver 原因。
@@ -116,7 +123,7 @@ docs/adr/           # 一事一记的重要架构决策
 
 - 项目目标与非目标已足够清晰；
 - Project Tier 已确定；
-- 对应 Tier 的最低文档已建立；
+- 对应 Tier 的默认基础文档已建立；
 - 项目 `AGENTS.md` 已定义 baseline verification；
 - 真实仓库 / 分支已确认；
 - 未知事项不会阻止第一个 Task；
