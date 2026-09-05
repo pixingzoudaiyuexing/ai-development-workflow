@@ -124,7 +124,7 @@ Child Conversation（子对话）是有明确工作边界的长期或阶段性�
 
 子对话可以长期存在，也可以只是某个阶段的专项对话。是否创建新子对话由 Primary Conversation 根据复杂度、持续时间、Repo 边界和上下文隔离收益决定，不由用户提前猜测。
 
-### 3.4 Conversation Topology
+### 3.4 Conversation Topology 与 Context Budget
 
 Project Discovery 后，如果项目存在多个长期工作流或多个 Repo，Primary Conversation 应主动给出建议的 Conversation Topology，例如：
 
@@ -149,6 +149,13 @@ Project: CloudGap
 - 完成后需要带回什么结果；
 - 一段用户可直接复制到新对话的启动消息。
 
+上下文遵循 **Minimum Sufficient Context**：
+
+- 只预加载当前职责和任务需要的 Workflow / 项目文档；
+- 不因为“可能以后有用”就把整个项目文档集塞进 Child Conversation；
+- Primary 应明确当前不需要预加载的明显无关领域 / 文档；
+- Child 如果后续被真实问题阻塞，再请求补充具体上下文，而不是一开始全量加载。
+
 使用 `templates/CONVERSATION-HANDOFF.template.md`。
 
 ### 3.5 新需求如何路由
@@ -170,6 +177,21 @@ Primary Conversation 负责选择：
 如果用户已经处于某个子对话，并且需求明显属于该子对话的既有 Scope，可以直接处理；一旦发现跨产品 / 架构 / Repo 边界，再升级回 Primary Conversation。
 
 不要要求零代码用户充当人工路由器。
+
+### 3.6 Primary Re-Sync Gate
+
+Child Conversation 返回结果后，Primary Conversation 不得只依赖历史 Project Memory 或文字摘要继续编排。
+
+如果下一步任务依赖该 Child 的真实代码状态、架构变化、Contract 变化或长期文档变化，Primary 必须先刷新相关 Git 事实：
+
+1. 读取返回包中的 Repo / branch / commit anchor；
+2. 读取本次明确受影响或已更新的核心 Git 文档；
+3. 必要时核对相关 diff / Implementation Report / Evidence；
+4. 然后才生成依赖这些变化的下一项 Task。
+
+`STATUS.md` 只在它本来就属于当前 checkpoint、被更新或恢复流程需要时读取；不要为了 Re-Sync 强迫每个 Task 更新 STATUS。
+
+如果 Primary 无法直接访问对应 Repo / 文档，应让 Child / Codex 提供精确的文件内容、diff 或结构化 Handoff；不得把“去 Git 里自己找这些文件”变成零代码用户的任务。
 
 ## 4. Codex Preflight
 
