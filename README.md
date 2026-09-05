@@ -4,9 +4,9 @@
 
 它解决的不是“怎么写一个更厉害的 Prompt”，而是：
 
-- 不依赖 ChatGPT、Codex 或其他审阅 AI 的长期记忆；
+- 不依赖 ChatGPT、Codex 或 Gemini 的长期记忆；
 - 用 Git 保存长期事实、项目规则和关键决策；
-- 明确 ChatGPT、Codex 与独立审阅者之间的职责边界；
+- 明确 ChatGPT、Codex 与 Gemini 之间的职责边界；
 - 让风险、证据、审查和跨 AI 交接成为可重复流程；
 - 尽量减少零代码用户手工搬运上下文和做技术裁决的负担。
 
@@ -27,7 +27,7 @@ ChatGPT 想
    ↓
 Codex 做
    ↓
-独立审阅者查（按风险 Gate）
+Gemini 查（按风险 Gate）
    ↓
 ChatGPT 裁
    ↓
@@ -40,7 +40,7 @@ Codex 修
 - 高风险任务必须提供更强的可验证证据；
 - 跨 AI 交接不存在“魔法箭头”，必须有明确上下文与交接包；
 - 用户负责产品目标和最终上线决定，不负责底层技术争论与验证实验设计；
-- Workflow 只管理真正需要管理的变量；Gemini 等独立审阅者的具体模型选择不属于本仓库职责；
+- Workflow 不管理 Gemini 的具体模型选择，也不做 Gemini 模型路由；
 - Codex 的模型选择需要考虑额度与实现复杂度，因此正式 Codex Task 必须给出模型与推理强度建议。
 
 ## 文档导航
@@ -52,7 +52,7 @@ Codex 修
 - [`HANDOFF.md`](./HANDOFF.md)：跨 AI 上下文交接与 Review Pack
 - [`EMERGENCY.md`](./EMERGENCY.md)：生产事故与 Hotfix Lane
 - [`DOCUMENTATION.md`](./DOCUMENTATION.md)：长期项目文档边界与更新规则
-- [`templates/`](./templates/)：项目文档、Codex Task/Report、独立审查模板
+- [`templates/`](./templates/)：项目文档、Codex Task/Report、Gemini 审查模板
 - [`tools/review-pack/`](./tools/review-pack/)：Review Pack 生成工具与安全规则
 
 ## 版本策略
