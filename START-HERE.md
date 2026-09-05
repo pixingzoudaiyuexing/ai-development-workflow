@@ -62,7 +62,6 @@ Hotfix 可以延后部分流程，但不能永久跳过流程。
 - ChatGPT：产品、需求、架构、任务拆解、风险判断、技术裁决。
 - Codex：默认唯一代码实施者，负责代码、测试、构建、Git 与证据收集。
 - Gemini：默认独立审阅者，按 Risk Gate 做 Design/Code Review，默认不直接改代码。
-- Workflow 不管理 Gemini 的具体模型选择。
 - 用户：定义“我要什么”和“是否上线”，不负责技术争议裁决。
 - 发生重大 AI 分歧时，进入 Evidence Gate，不继续无限理论争论。
 - 任何跨 AI 箭头都必须有 Handoff。
