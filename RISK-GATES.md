@@ -44,7 +44,7 @@ ChatGPT / 直接明确任务
 ChatGPT
 → Codex
 → Evidence
-→ ChatGPT 判断是否需要独立审查
+→ ChatGPT 判断是否需要 Gemini 独立审查
 ```
 
 ### High
@@ -54,8 +54,8 @@ ChatGPT
 High 默认要求：
 
 - 更强 Acceptance Evidence；
-- Codex 完成后独立 Code Review；
-- 必要时在 Codex 前做独立 Design Review。
+- Codex 完成后 Gemini Code Review；
+- 必要时在 Codex 前做 Gemini Design Review。
 
 ## 2. Hard Risk Triggers
 
@@ -76,7 +76,7 @@ High 默认要求：
 
 High 并不自动等于所有任务都需要 Design Review。
 
-以下情况通常在 Codex 动工前做独立 Design Review：
+以下情况通常在 Codex 动工前做 Gemini Design Review：
 
 - 命中 Hard Risk Trigger 且设计本身仍存在选择；
 - 核心架构 / 安全边界正在改变；
@@ -87,9 +87,9 @@ High 并不自动等于所有任务都需要 Design Review。
 
 ## 4. Code Review Gate
 
-所有 High Risk Task 在 Codex 完成并提供基本 Evidence 后，必须进入独立 Code Review。
+所有 High Risk Task 在 Codex 完成并提供基本 Evidence 后，必须进入 Gemini Code Review。
 
-审阅者发现的问题回到 ChatGPT，由 ChatGPT标记：
+Gemini 发现的问题回到 ChatGPT，由 ChatGPT标记：
 
 - ACCEPTED
 - PARTIALLY_ACCEPTED
