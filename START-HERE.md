@@ -24,7 +24,7 @@
 
 初始 Project Discovery 对话默认作为 Primary Conversation。Project Discovery 基本完成后，由 Primary Conversation 判断是否需要 Child Conversation，并直接生成 Conversation Topology 与可复制启动消息；不要让零代码用户自己决定前端 / 后端 / Repo 路由。
 
-对于长期复杂、多 Repo 或多 Conversation 项目，Primary 同时判断是否启用 Notion Project Knowledge。启用后必须绑定 Current Project 与独立 Notion Project Root；不得依赖 workspace-wide 搜索恢复项目事实。
+对于长期复杂、多 Repo 或多 Conversation 项目，Primary 同时按 `BOOTSTRAP.md` 的 Project Knowledge Gate 判断是否启用 Notion Project Knowledge。启用后的隔离、写权限与 Re-Anchor 规则统一读取 `KNOWLEDGE-MANAGEMENT.md`。
 
 ## 2. Primary Conversation 创建或调度 Child Conversation
 
@@ -54,7 +54,7 @@ Primary Conversation 负责决定：复用现有子对话、新建子对话、�
 
 Child Conversation 不应自行扩大产品 / 架构 / 跨 Repo 决策范围；命中 Handoff 中的 Escalation Trigger 时返回 Primary Conversation。
 
-项目启用 Notion 时，Child 按 `CHILD-CONVERSATION.md` 的事件触发 Re-Anchor：新阶段、新的非简单 Task、边界冲突、Return to Primary、长时间恢复或明显漂移时重新读取相关项目知识。Child 只读项目级 Notion，不直接修改正式项目事实。
+项目启用 Notion 时，Child 的 Re-Anchor 与项目知识权限以 `CHILD-CONVERSATION.md` 和 `KNOWLEDGE-MANAGEMENT.md` 为准；本入口不重复维护 Trigger 列表。
 
 ## 4. 跨 AI 交接 / Gemini 独立审查
 
