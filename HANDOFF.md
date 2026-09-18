@@ -67,7 +67,7 @@ Gate 的目标是防止断链，不要求每次由用户手工打勾。
 
 如果 Project / Repo 文档尚未建立，必须明确说明当前哪些事实来自 Primary Conversation Handoff、哪些仍待写入 Git；不要假装 Git 中已经存在。
 
-项目启用 Notion 时，Handoff 必须绑定明确的 Current Project 与 Notion Project Root。Child 不得用 workspace-wide 搜索替代这个 Scope，也不得直接修改项目级正式 Notion。
+项目启用 Notion 时，Handoff 必须绑定明确的 Current Project 与 Notion Project Root；隔离和写权限按 `KNOWLEDGE-MANAGEMENT.md` 执行。
 
 ### Context Truncation
 
