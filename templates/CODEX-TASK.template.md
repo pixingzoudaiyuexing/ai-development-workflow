@@ -11,9 +11,14 @@
 
 ## Recommended Codex Runtime
 
+> ChatGPT 派发本 Task 给用户时，必须先在 Transfer Block 外明确显示：
+> `Codex Model: <Luna/Terra/Sol> | Reasoning: <Light/Medium/High + 轻量/中/高>`
+> 用户不负责自己判断档位。
+
 - Recommended Model: Luna / Terra / Sol
-- Recommended Reasoning: Light / Medium / High
-- Selection Reason: [说明实现复杂度、额度与风险权衡]
+- Recommended Reasoning: Light（轻量） / Medium（中） / High（高）
+- Selection Reason: [说明为什么这是能可靠完成任务的最小充分档位，并兼顾额度]
+- Runtime Principle: Smallest Sufficient Runtime
 
 ## Goal
 
