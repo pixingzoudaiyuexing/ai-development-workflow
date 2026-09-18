@@ -44,21 +44,16 @@
 - Relevant Decisions: [当前任务需要的 ACTIVE / REJECTED / SUPERSEDED；没有写 None]
 - Cross-Project Context: None / [只有 Primary 明确允许时填写]
 
-Child 只能在当前 Project Root 内读取和搜索项目知识，不得把 workspace-wide 搜索结果直接当作当前项目事实。
+Project Knowledge Isolation 与写权限统一按 `KNOWLEDGE-MANAGEMENT.md` 执行。
 
 ## Re-Anchor Policy
 
-如果启用 Notion，Child 在以下节点重新读取相关项目知识：
+如果启用 Notion：
 
-- 新对话初始化；
-- 新 Feature / 新阶段；
-- 新的非简单 Codex Task；
-- Scope / Contract / Architecture / Core Rule 可能变化；
-- 当前方案与既有 Decision 可能冲突；
-- Return to Primary 前；
-- 长时间恢复或出现明显漂移。
+- Canonical policy: `CHILD-CONVERSATION.md` → **Child Re-Anchor**
+- Project-specific additions: [如有补充触发条件则填写；没有写 None]
 
-Child 只读项目级 Notion，不直接修改正式项目事实。
+不要在 Handoff 中复制完整 Trigger 列表，避免不同 Child 使用不同版本的规则。
 
 ## Project Docs to Read
 
@@ -141,7 +136,7 @@ Repo 技术事实以 Git / Runtime / Evidence 为准；如果项目启用 Notion
 不要无差别加载整个项目文档或整个 Notion workspace；只有在真实问题需要时再请求额外上下文。
 如果当前需求触发 Escalation Triggers，请停止扩大范围并明确告诉我需要把什么结果带回 Primary Conversation。
 
-完成或升级返回前，先按 Re-Anchor Policy 重新读取相关项目知识。
+完成或升级返回前，按 `CHILD-CONVERSATION.md` 的 Child Re-Anchor 规则重新读取相关项目知识。
 返回时请明确给出 Repo / branch / commit、Evidence / Unverified Gaps、Updated / Affected Git Docs，以及 Knowledge Update Candidate。
 
 先恢复上下文并确认任务边界，不要默认开始修改代码。
