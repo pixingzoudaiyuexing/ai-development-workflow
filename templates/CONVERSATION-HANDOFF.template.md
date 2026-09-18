@@ -28,6 +28,8 @@
 
 - Repository: `https://github.com/pixingzoudaiyuexing/ai-development-workflow`
 - Version: `v1`
+- Revision: `[填写本项目采用的具体 commit SHA]`
+- Tracking: `Pinned`（除非 Primary 明确执行 Workflow 升级）
 - Entry: `START-HERE.md`
 
 ## Workflow Docs to Read
@@ -116,8 +118,10 @@ Primary Conversation 最终必须把上述信息整理成下面这种**可直接
 
 AI Development Workflow：
 https://github.com/pixingzoudaiyuexing/ai-development-workflow
+Workflow Version：v1
+Workflow Revision：[填写具体 commit SHA]
 
-请从 START-HERE.md 开始，并按本 Handoff 指定的 Workflow / 项目文档建立上下文。
+请从该 Workflow Revision 的 START-HERE.md 开始，并按本 Handoff 指定的 Workflow / 项目文档建立上下文。不得因为 main 后续变化而静默切换规则。
 Project：[填写]
 Primary Conversation：[填写]
 Role：Child Conversation

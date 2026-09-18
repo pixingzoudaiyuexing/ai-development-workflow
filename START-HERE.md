@@ -2,7 +2,7 @@
 
 这是 AI Development Workflow 的唯一入口。
 
-先读取 `VERSION` 确认当前 Workflow 版本，再判断当前场景，然后只读取需要的文档；不要一次性把所有规则加载进上下文。
+先读取 `VERSION` 确认当前 Workflow 版本，并记录当前项目采用的 **Workflow Revision（具体 commit SHA）**。项目默认固定到已记录的 Revision；除非 Primary 明确执行 Workflow 升级，不得因为仓库 `main` 继续变化而静默切换规则。然后再判断当前场景，只读取需要的文档；不要一次性把所有规则加载进上下文。
 
 ## 1. 新项目 / Primary Conversation
 
@@ -91,7 +91,8 @@ Hotfix 可以延后部分流程，但不能永久跳过流程。
 - Gemini：默认独立审阅者，按 Risk Gate 做 Design/Code Review，默认不直接改代码。
 - 用户：定义“我要什么”和“是否上线”，不负责技术争议裁决、Conversation 路由或 Repo 路由。
 - Project Memory 只作为辅助；不得用它替代正式恢复流程。
-- GitHub Workflow 定义“AI 应该怎么工作”；启用 Notion 时，Notion 保存“项目现在怎么定”；Git / Runtime / Tests 保存“技术上现在实际是什么”。
+- GitHub Workflow 定义“AI 应该怎么工作”；项目使用 `Workflow Version + Workflow Revision` 锚定实际规则版本，避免同一个 `v1` 随 `main` 漂移。
+- 启用 Notion 时，Notion 保存项目级长期产品真相与决定状态；Git / Runtime / Tests 保存 Repo 技术现实。两者默认 ownership 见 `DOCUMENTATION.md`。
 - 项目级 Notion 正式写入由 Primary 裁决；Child / Codex / Gemini 只提交 Knowledge Update Candidate。
 - 同一 Notion 账号可包含多个项目，但 Primary / Child 默认只能在当前 Project Root 内读取和搜索。
 - 发生重大 AI 分歧时，进入 Evidence Gate，不继续无限理论争论。

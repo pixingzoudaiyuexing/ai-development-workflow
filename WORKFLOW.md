@@ -220,6 +220,32 @@ Project Root 隔离、Notion 写权限、Knowledge Update Candidate 与 Minimum 
 
 本文件只定义它属于标准开发流程，不复制角色 Trigger，避免同一规则在多个文件独立演化。
 
+### 3.8 Affected Active Children 传播
+
+Notion / Git 被正确更新，并不代表已经存在的长期 Child Conversation 会自动知道变化。
+
+当 Primary 批准的变化影响以下任一内容时：
+
+- shared / cross-repo Contract；
+- Project Core Rule；
+- project-level Decision；
+- 另一个 Child 的 Repo / Domain Scope 或关键假设；
+
+Primary 必须明确列出：
+
+```text
+Affected Active Children:
+- <Child name>
+
+Before continuing related work:
+- Re-Anchor: <Core Rules / Decision IDs / Current State>
+- Re-Sync: <Git docs / contract / commit anchors, if needed>
+```
+
+受影响 Child 在继续**依赖该变化的相关工作**前，必须先收到最小 Update Handoff 并完成 Re-Anchor / 必要的 Git Re-Sync。
+
+不受影响的 Child 不需要机械同步。不要建立实时广播系统；遵守 `HANDOFF.md` 的 No Magic Arrows。
+
 ## 4. Codex Preflight
 
 开始非简单任务前至少确认：
@@ -319,6 +345,13 @@ STOP
 
 禁止简单采用“代码永远正确”或“文档永远正确”。
 
+裁决边界：
+
+- 如果冲突是纯技术事实问题（代码 bug、测试与实现不一致、文档落后、环境异常等），由 Primary 基于 Evidence 做技术裁决；
+- 如果冲突会改变用户已经明确确认的产品目标、业务规则、非目标或核心边界，Primary 必须先用非技术语言向用户说明冲突与可选方向，让用户确认“产品要 A 还是 B”；具体技术实现仍由 Primary 决定。
+
+用户不负责判断代码、架构或验证方法，只负责确认真正的产品意图变化。
+
 ## 9. Evidence Gate
 
 当 ChatGPT 与 Gemini 出现会影响实施方向的重大、无法靠已有材料解决的分歧时：
@@ -358,6 +391,13 @@ STOP
 - Implementation Report；
 - Risk Assessment；
 - 必要的 Review / Evidence Gate 完成；
-- 如果本次产生了 `Knowledge Update Candidate: PROPOSED`，由 Primary 完成接受 / 拒绝 / Needs Evidence 判断。
+- **Documentation Impact Check**：`NONE` 或命中 `DOCUMENTATION.md` 的具体更新项；
+- **Knowledge Impact Check**：`NONE` 或 `Knowledge Update Candidate: PROPOSED`；
+- 如果 Knowledge Candidate = `PROPOSED`，由 Primary 完成 `ACCEPTED / REJECTED / NEEDS_EVIDENCE`；
+- 如果 Candidate = `ACCEPTED`，再明确 `Knowledge Sync: SYNCED | PENDING`。
 
-Notion 暂时不可用不阻塞安全的技术完成；需要同步的项目知识可以标记 `Knowledge Sync: PENDING`，但后续依赖该知识继续编排前应优先完成同步或明确带入 Handoff。
+正常任务命中 Git 长期文档 Trigger 时，应在关闭前同步相应 Git 文档；Hotfix 按 `EMERGENCY.md` 允许延后回填。
+
+Notion 暂时不可用不阻塞安全的技术完成；允许 `Knowledge Sync: PENDING`。但任何后续设计、路由或 Task **如果依赖该 Pending 事实**，在继续前必须先完成同步，或由 Primary 显式重新验证该事实并把它完整带入 Handoff。无关工作可以继续。
+
+如果 Primary 无法直接写 Notion，应生成“页面 + 完整可复制更新文本 + 更新后应看到的结果”，把用户操作降为粘贴 / 替换，而不是要求用户自己整理知识。

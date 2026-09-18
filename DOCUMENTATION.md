@@ -32,19 +32,41 @@ Save Point：低频项目恢复快照，不是日报。
 
 ## 2. Git 文档与 Notion 的边界
 
-项目启用 Notion 时：
+项目启用 Notion 时，默认 canonical ownership 明确为：
 
 ```text
-Git / Repo Docs
-= Repo-local 技术事实、实现 Contract、代码结构、API / schema、build / test 规则、技术 ADR
+Notion canonical
+= project-wide 产品目标 / Core Rules
+= 跨 Repo 职责与产品边界
+= project-level Decision 的当前状态（ACTIVE / REJECTED / SUPERSEDED）
+= Current State
 
-Notion
-= 项目级 Core Rules、Current State、跨 Repo 产品边界、正式 Decisions、Rejected / Superseded 历史
+Git / Repo Docs canonical
+= Repo-local 技术现实与实现架构
+= API / schema / protocol / implementation contract
+= build / test / baseline verification
+= 技术 ADR 的理由、Evidence 与 implementation consequences
+= 真实代码、Runtime 与测试结果
 ```
 
-不要把同一份大段内容复制到两边。需要两边都可发现时，一边保存 canonical 内容，另一边保存短摘要和指针。
+不要把同一份大段内容复制到两边。
 
-Notion 不取代 `AGENTS.md`、`ARCHITECTURE.md`、ADR、真实代码或 Evidence；Git 也不需要承担所有 Conversation Topology、项目当前优先级和已否定产品方案的长期恢复职责。
+对于同时具有项目级意义和技术细节的 Decision：
+
+```text
+Notion
+→ Decision 状态 + 简短项目结论 + Git ADR / doc pointer
+
+Git ADR / docs
+→ 技术理由 + Evidence + 实现后果
+```
+
+对于 `docs/PROJECT.md`：
+
+- Git-only 项目可以继续保存完整 What & Why；
+- 启用 Notion 的长期多 Repo 项目，不再把完整 project-wide Core Rules 复制进每个 Repo；Repo 文档保存 Repo-local 产品上下文，或短摘要 + Notion pointer。
+
+Notion 不取代 `AGENTS.md`、`ARCHITECTURE.md`、ADR、真实代码或 Evidence；Git 也不需要承担 Conversation Topology、项目当前优先级和已否定产品方案的完整长期恢复职责。
 
 发生 Git 与 Notion 冲突时，进入 `WORKFLOW.md` 的 Ground Truth Verification，不允许自动选择某一边。
 
