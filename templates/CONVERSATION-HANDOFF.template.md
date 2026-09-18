@@ -35,6 +35,31 @@
 - `START-HERE.md`
 - [按当前场景选择 `WORKFLOW.md` / `RISK-GATES.md` / `HANDOFF.md` 等]
 
+## Project Knowledge / Notion
+
+- Enabled: Yes / No
+- Current Project: [填写]
+- Notion Project Root: [如启用填写；未启用写 None]
+- Always read: [例如 Core Rules / Current State]
+- Relevant Decisions: [当前任务需要的 ACTIVE / REJECTED / SUPERSEDED；没有写 None]
+- Cross-Project Context: None / [只有 Primary 明确允许时填写]
+
+Child 只能在当前 Project Root 内读取和搜索项目知识，不得把 workspace-wide 搜索结果直接当作当前项目事实。
+
+## Re-Anchor Policy
+
+如果启用 Notion，Child 在以下节点重新读取相关项目知识：
+
+- 新对话初始化；
+- 新 Feature / 新阶段；
+- 新的非简单 Codex Task；
+- Scope / Contract / Architecture / Core Rule 可能变化；
+- 当前方案与既有 Decision 可能冲突；
+- Return to Primary 前；
+- 长时间恢复或出现明显漂移。
+
+Child 只读项目级 Notion，不直接修改正式项目事实。
+
 ## Project Docs to Read
 
 - `AGENTS.md` [如存在]
@@ -82,7 +107,8 @@ Primary Conversation 可按项目补充触发条件。
 - Updated / Affected Git Docs: [列出本次更新或影响到的核心项目文档；没有写 None]；
 - 需要确认或沉淀的长期决定；
 - 对其他 Repo / 产品边界的影响；
-- Blockers / 下一步建议。
+- Blockers / 下一步建议；
+- Knowledge Update Candidate: NONE / PROPOSED（如 PROPOSED，说明以后新对话必须知道什么）。
 
 Primary 收到返回包后，如果下一步依赖本次真实实现、架构、Contract 或长期文档变化，应先按 commit anchor + Updated / Affected Git Docs 执行 Re-Sync，再继续编排。
 
@@ -99,6 +125,9 @@ https://github.com/pixingzoudaiyuexing/ai-development-workflow
 请从 START-HERE.md 开始，并按本 Handoff 指定的 Workflow / 项目文档建立上下文。
 Project：[填写]
 Primary Conversation：[填写]
+Role：Child Conversation
+Notion Project Root：[填写 / None]
+Notion Required Knowledge：[填写 / None]
 本对话职责：[填写]
 Repository / Domain：[填写]
 当前任务：[填写]
@@ -107,11 +136,13 @@ Non-goals：[填写]
 Required Context：[填写]
 Do Not Preload：[填写]
 
-长期事实以项目 Git 文档为锚点，不要假设你自动拥有其他对话的全部上下文。
-不要无差别加载整个项目文档；只有在真实问题需要时再请求额外上下文。
+不要假设你自动拥有其他对话的全部上下文。
+Repo 技术事实以 Git / Runtime / Evidence 为准；如果项目启用 Notion，项目 Core Rules / Current State / Decisions 必须在指定 Project Root 内读取。
+不要无差别加载整个项目文档或整个 Notion workspace；只有在真实问题需要时再请求额外上下文。
 如果当前需求触发 Escalation Triggers，请停止扩大范围并明确告诉我需要把什么结果带回 Primary Conversation。
 
-完成或升级返回时，请明确给出 Repo / branch / commit、Evidence / Unverified Gaps，以及 Updated / Affected Git Docs。
+完成或升级返回前，先按 Re-Anchor Policy 重新读取相关项目知识。
+返回时请明确给出 Repo / branch / commit、Evidence / Unverified Gaps、Updated / Affected Git Docs，以及 Knowledge Update Candidate。
 
 先恢复上下文并确认任务边界，不要默认开始修改代码。
 ```
