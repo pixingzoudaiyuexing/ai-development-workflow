@@ -41,6 +41,8 @@ Primary 不应成为默认代码实施者。
 - 长时间中断后恢复；
 - 发现当前讨论可能与既有 Core Rules / Decisions / Git 事实冲突。
 
+这里的“重要产品 / 架构决定”指：一旦确认，就需要修改 Core Rules，或新增 / 修改正式 Decision 的决定。普通实现细节不因此触发 Re-Anchor。
+
 最小读取：
 
 - Project Core Rules；
@@ -70,9 +72,9 @@ Write Notion
 
 ## 5. Project Isolation
 
-Primary 必须绑定当前 Project Root。
+Primary 必须绑定当前 Project Root。完整隔离规则以 `KNOWLEDGE-MANAGEMENT.md` 的 **Project Knowledge Isolation** 为准。
 
-默认禁止把其他项目 Notion 内容当作当前项目事实。需要跨项目参考时，Primary 必须明确声明 Cross-Project Context，并只读取必要内容。
+Primary 只有在明确声明 Cross-Project Context 时才能引入其他项目知识。
 
 ## 6. 派发 Child
 
