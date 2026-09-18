@@ -100,8 +100,9 @@ Milestone / 长期路线变化
 
 长期暂停后恢复项目：
 
-1. 读取根 `AGENTS.md`；
-2. 检查 Git state / branch / HEAD / 近期历史；
+1. 确认当前 Conversation Role；项目启用 Notion 时先按对应 Role 文件执行 Re-Anchor；
+2. 读取根 `AGENTS.md`；
+3. 检查 Git state / branch / HEAD / 近期历史；
 4. 按项目 `AGENTS.md` 执行 baseline verification；
 5. 读取 STATUS / PROJECT / ARCHITECTURE / 相关 ADR；
 6. Codex 做 Repository Reality Check，报告明显 docs/code drift；
