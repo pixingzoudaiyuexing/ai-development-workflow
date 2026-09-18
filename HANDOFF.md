@@ -158,6 +158,22 @@ Before Continuing Related Work:
 
 ## 4. ChatGPT → Codex
 
+### Codex Runtime Banner
+
+当 ChatGPT 要求用户把 Task 发送给 Codex 时，除了按 **User Relay Rule** 给出完整一键复制 Task Block，还必须在代码块**之前**单独告诉用户本次建议使用：
+
+```text
+Codex Model: Luna | Terra | Sol
+Reasoning: Light（轻量） | Medium（中） | High（高）
+Why: <一句话说明为什么这个档位足够>
+```
+
+这个 Banner 是给用户选择 Codex 运行档位看的，不要求用户自己根据技术内容判断模型。
+
+默认采用 **Smallest Sufficient Runtime**：在能够可靠完成当前任务的前提下，优先选择更低的模型 / Reasoning 档位以节省额度；不要因为 Task Risk 高就机械使用 Sol / High，也不要为了省额度把明显高复杂度任务压到不足的档位。
+
+同一份 Codex Task Block 内仍必须保留 Recommended Model / Recommended Reasoning / Selection Reason，确保任务本身也能独立理解推荐运行档位。
+
 最小 Task 包：
 
 - Goal
