@@ -83,7 +83,9 @@ ChatGPT：Accepted / Rejected / Needs Evidence
 
 Project Memory 可以帮助同一 Project 内的对话引用相关历史，但不得把它当作完整、确定、永久同步的事实数据库。
 
-长期事实仍以项目 Git 文档为锚点，例如：
+长期复杂、多 Repo 或多 Conversation 项目可以启用 Notion 作为 **Project Knowledge Layer**，专门保存项目 Core Rules、Current State 和正式 Decisions。它不替代 Git，也不保存完整聊天。
+
+Repo 内技术事实仍以项目 Git 文档、真实代码、Runtime 与 Evidence 为锚点，例如：
 
 - `AGENTS.md`
 - `docs/PROJECT.md`
@@ -92,11 +94,20 @@ Project Memory 可以帮助同一 Project 内的对话引用相关历史，但�
 - `docs/ROADMAP.md`
 - `docs/STATUS.md`（checkpoint only）
 
-原则：**对话负责讨论与执行上下文，Git 文档负责长期事实。**
+原则：
+
+```text
+GitHub Workflow = AI 应该怎么工作
+Notion           = 项目现在怎么定（启用时）
+Git / Runtime    = 技术上现在实际是什么
+Chat / Memory    = 讨论与临时上下文
+```
+
+发生冲突时不凭优先级猜测，进入 Ground Truth Verification。
 
 ### 3.2 Primary Conversation
 
-新项目的初始 Project Discovery 对话默认成为 **Primary Conversation（主对话）**。
+新项目的初始 Project Discovery 对话默认成为 **Primary Conversation（主对话）**。详细角色边界见 `PRIMARY-CONVERSATION.md`.
 
 主对话负责：
 
@@ -106,13 +117,14 @@ Project Memory 可以帮助同一 Project 内的对话引用相关历史，但�
 - 决定是否需要创建、复用或结束 Child Conversation；
 - 生成子对话可直接复制的启动消息；
 - 指定子对话需要读取的 Workflow 文档、项目文档、Repo 与当前任务；
-- 接收子对话返回结果并决定下一步。
+- 接收子对话返回结果并决定下一步；
+- 项目启用 Notion 时，负责项目级 Knowledge Re-Anchor、正式批准与写入。
 
 用户不负责判断“应该开几个对话、属于前端还是后端、是否跨 Repo”。这些属于主对话的编排职责。
 
 ### 3.3 Child Conversation
 
-Child Conversation（子对话）是有明确工作边界的长期或阶段性工作区，例如：
+Child Conversation（子对话）是有明确工作边界的长期或阶段性工作区。详细角色边界与 Re-Anchor 规则见 `CHILD-CONVERSATION.md`。例如：
 
 - Backend / API
 - Frontend / Web
@@ -123,6 +135,8 @@ Child Conversation（子对话）是有明确工作边界的长期或阶段性�
 子对话不重新拥有整个产品的架构裁决权。它应优先处理自己的 Repo / Scope；如果发现当前需求影响产品规则、核心架构、其他 Repo 或既有 Contract，应暂停扩大范围并返回 Primary Conversation。
 
 子对话可以长期存在，也可以只是某个阶段的专项对话。是否创建新子对话由 Primary Conversation 根据复杂度、持续时间、Repo 边界和上下文隔离收益决定，不由用户提前猜测。
+
+项目启用 Notion 时，Child 可以读取 Primary 指定的项目知识用于校准，但不得直接修改项目级正式知识；需要变化时提交 Knowledge Update Candidate 并返回 Primary。
 
 ### 3.4 Conversation Topology 与 Context Budget
 
@@ -192,6 +206,19 @@ Child Conversation 返回结果后，Primary Conversation 不得只依赖历史 
 `STATUS.md` 只在它本来就属于当前 checkpoint、被更新或恢复流程需要时读取；不要为了 Re-Sync 强迫每个 Task 更新 STATUS。
 
 如果 Primary 无法直接访问对应 Repo / 文档，应让 Child / Codex 提供精确的文件内容、diff 或结构化 Handoff；不得把“去 Git 里自己找这些文件”变成零代码用户的任务。
+
+### 3.7 Project Knowledge Re-Anchor
+
+项目启用 Notion 时，所有长期对话都不得只靠历史聊天或 Memory 维持项目规则。
+
+Primary 与 Child 按角色文件中的事件触发规则执行 Re-Anchor：
+
+- Primary：重要产品 / 架构决定、Child 回归、正式写 Notion、恢复或冲突时重新读取 Core Rules / Current State / relevant Decisions；
+- Child：新阶段、新的非简单 Task、Scope / Contract / Architecture 冲突、Return to Primary、恢复或明显漂移时重新读取相关项目知识。
+
+每次只读取 Minimum Sufficient Knowledge。详细规则见 `KNOWLEDGE-MANAGEMENT.md`。
+
+Notion Project Root 必须绑定 Current Project。默认禁止把 workspace-wide 搜索结果直接视为当前项目事实；跨项目知识只能由 Primary 明确引入。
 
 ## 4. Codex Preflight
 
@@ -330,4 +357,7 @@ STOP
 - 未验证内容说明；
 - Implementation Report；
 - Risk Assessment；
-- 必要的 Review / Evidence Gate 完成。
+- 必要的 Review / Evidence Gate 完成；
+- 如果本次产生了 `Knowledge Update Candidate: PROPOSED`，由 Primary 完成接受 / 拒绝 / Needs Evidence 判断。
+
+Notion 暂时不可用不阻塞安全的技术完成；需要同步的项目知识可以标记 `Knowledge Sync: PENDING`，但后续依赖该知识继续编排前应优先完成同步或明确带入 Handoff。
