@@ -150,7 +150,29 @@ Project Discovery 基本完成后，Primary Conversation 判断是否需要多�
 
 Conversation Topology 可以随着项目演进由 Primary Conversation 调整；新增需求不要求用户提前预测未来会出现哪些工作流。
 
-## 5. Project Ready Gate
+## 5. Project Knowledge Gate
+
+Project Discovery 基本完成后，Primary 判断是否需要启用 Notion Project Knowledge。
+
+默认判断保持简单：
+
+- 短期、单 Repo、单 Conversation，且没有明显 State Drift 风险 → 默认 Git-only；
+- 长期项目并且存在多 Repo 或多个长期 Child Conversation → 默认启用 Notion Project Knowledge；
+- 任何已经真实发生过 State Drift、旧方案复活，或需要长期保留 REJECTED / SUPERSEDED 历史的项目 → 默认启用。
+
+Primary 只需要按这些条件判断，不建立评分系统。
+
+启用 Notion 时，不建立复杂企业知识库。最小结构只要求：
+
+```text
+<Project>｜Core Rules
+<Project>｜Current State
+<Project>｜Decisions
+```
+
+每个项目必须有独立 Project Root。正式隔离、写权限与历史规则见 `KNOWLEDGE-MANAGEMENT.md`。
+
+## 6. Project Ready Gate
 
 进入第一个正式 Codex Task 前确认：
 
@@ -161,6 +183,7 @@ Conversation Topology 可以随着项目演进由 Primary Conversation 调整；
 - 真实仓库 / 分支已确认；
 - 未知事项不会阻止第一个 Task；
 - 当前第一个 Task 有明确 Acceptance Criteria；
-- 如果项目需要多个对话，Conversation Topology 已由 Primary Conversation 给出，必要的 Child Conversation Handoff 已准备。
+- 如果项目需要多个对话，Conversation Topology 已由 Primary Conversation 给出，必要的 Child Conversation Handoff 已准备；
+- 如果项目启用了 Notion，Current Project / Project Root 已明确，Core Rules / Current State / Decisions 的最小结构可访问。
 
 满足后才进入正常 `WORKFLOW.md`。

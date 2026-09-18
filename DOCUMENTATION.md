@@ -30,7 +30,25 @@ Future：Milestone、阶段、优先级、暂缓 / 放弃计划。
 
 Save Point：低频项目恢复快照，不是日报。
 
-## 2. 什么时候更新
+## 2. Git 文档与 Notion 的边界
+
+项目启用 Notion 时：
+
+```text
+Git / Repo Docs
+= Repo-local 技术事实、实现 Contract、代码结构、API / schema、build / test 规则、技术 ADR
+
+Notion
+= 项目级 Core Rules、Current State、跨 Repo 产品边界、正式 Decisions、Rejected / Superseded 历史
+```
+
+不要把同一份大段内容复制到两边。需要两边都可发现时，一边保存 canonical 内容，另一边保存短摘要和指针。
+
+Notion 不取代 `AGENTS.md`、`ARCHITECTURE.md`、ADR、真实代码或 Evidence；Git 也不需要承担所有 Conversation Topology、项目当前优先级和已否定产品方案的长期恢复职责。
+
+发生 Git 与 Notion 冲突时，进入 `WORKFLOW.md` 的 Ground Truth Verification，不允许自动选择某一边。
+
+## 3. 什么时候更新
 
 ```text
 项目目标 / 非目标发生变化
@@ -54,7 +72,7 @@ Milestone / 长期路线变化
 
 普通 Bug、小 Feature、文案、UI 微调默认不修改长期文档，除非它们确实改变了上述长期事实。
 
-## 3. STATUS 更新规则
+## 4. STATUS 更新规则
 
 只在以下时机考虑更新：
 
@@ -72,22 +90,24 @@ Milestone / 长期路线变化
 - 下一主要目标；
 - 更新时间。
 
-## 4. 文档与代码冲突
+## 5. 文档与代码冲突
 
 不要自动相信任何一方。
 
 触发 `WORKFLOW.md` 的 Ground Truth Verification。
 
-## 5. Resume / Reality Check
+## 6. Resume / Reality Check
 
 长期暂停后恢复项目：
 
-1. 读取根 `AGENTS.md`；
-2. 检查 Git state / branch / HEAD / 近期历史；
-3. 按项目 `AGENTS.md` 执行 baseline verification；
-4. 读取 STATUS / PROJECT / ARCHITECTURE / 相关 ADR；
-5. Codex 做 Repository Reality Check，报告明显 docs/code drift；
-6. ChatGPT 生成 Resumption Summary；
-7. 再开始第一个新 Task。
+1. 确认当前 Conversation Role；项目启用 Notion 时先按对应 Role 文件执行 Re-Anchor；
+2. 读取根 `AGENTS.md`；
+3. 检查 Git state / branch / HEAD / 近期历史；
+4. 按项目 `AGENTS.md` 执行 baseline verification；
+5. 读取 STATUS / PROJECT / ARCHITECTURE / 相关 ADR；
+6. Codex 做 Repository Reality Check，报告明显 docs/code drift；
+7. ChatGPT 比较 Notion（如启用）与 Git / Runtime 是否存在 State Drift；
+8. ChatGPT 生成 Resumption Summary；
+9. 再开始第一个新 Task。
 
 不要在恢复时硬编码某一种语言或构建命令。

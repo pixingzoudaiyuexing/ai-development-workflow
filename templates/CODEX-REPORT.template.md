@@ -60,6 +60,16 @@
 - Recommended independent review: Yes / No
 - Reason: [填写]
 
+## Knowledge Update Candidate
+
+- Status: NONE / PROPOSED
+- Core Rule / State Changes: None / [说明]
+- Decisions: None / [说明]
+- Superseded / Rejected Information: None / [说明]
+- Durable Risks / Limitations: None / [说明]
+
+这是给 Primary / Child 检查的候选信息，不是 Codex 自行宣布的项目事实。
+
 ## Claims vs Evidence Note
 
 本报告中的总结和风险判断属于 Agent Claims；实际命令输出、CI、runtime 行为与 diff 才属于 Verifiable Evidence。
