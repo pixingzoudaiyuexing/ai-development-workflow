@@ -1,6 +1,8 @@
 # Conversation Handoff
 
 > 由 Primary Conversation 生成并交给用户复制到新的 Child Conversation。用户不需要自行补技术字段；未知项由 Primary Conversation 标记“待确认”。
+>
+> **User Relay Rule**：最终交给用户转发的内容必须只有一个完整 Copy-Paste Block。用户不需要复制本模板的解释部分，也不得被要求把多个片段手工拼在一起。
 
 ## Suggested Conversation Name
 
@@ -111,7 +113,12 @@ Primary 收到返回包后，如果下一步依赖本次真实实现、架构、
 
 ## Copy-Paste Starter Message
 
-Primary Conversation 最终必须把上述信息整理成下面这种**可直接复制**的启动消息，而不是要求用户自己拼接：
+Primary Conversation 最终必须把上述信息整理成下面这种**可直接一键复制**的启动消息，而不是要求用户自己拼接。
+
+输出时必须明确写：**“下面整块直接发送给 Child，不要修改。”**  
+需要转发的全部内容放在**同一个** fenced code block 中。代码块外的说明只给用户看，不属于 Handoff。
+
+如果生成后又出现补充 / 修正，不要让用户“再补发一段”；必须重新生成完整新版，并明确“上一版作废，请只发送下面完整新版”。
 
 ```text
 这是当前项目中的一个 Child Conversation。
