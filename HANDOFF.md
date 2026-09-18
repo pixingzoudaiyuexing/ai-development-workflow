@@ -26,7 +26,7 @@ Project Memory 可以辅助上下文恢复，但不是正式 Handoff 的替代�
 交接前检查：
 
 1. 接收方角色和目标是否明确；
-2. 当前 Project / Repo / branch / base commit 是否按场景明确；
+2. 当前 Workflow Version + **Workflow Revision（具体 commit SHA）**、Project / Repo / branch / base commit 是否按场景明确；
 3. Task / Scope / Non-goals / Acceptance Criteria 是否明确；
 4. 相关 Architecture / Decision 是否已选择；
 5. 需要的 Diff / Patch / Changed Files 是否准备；
@@ -50,7 +50,7 @@ Gate 的目标是防止断链，不要求每次由用户手工打勾。
 - Project
 - Purpose
 - Repository / Domain
-- Workflow Source
+- Workflow Source + Workflow Version + exact Workflow Revision
 - Workflow Docs to Read
 - Project Docs to Read
 - Project Knowledge Root（如启用 Notion）
@@ -109,6 +109,26 @@ Primary 收到返回包后，如果下一步任务依赖该 Child 的真实实�
 项目启用 Notion 且 Knowledge Update Candidate = PROPOSED 时，Primary 在正式写入前必须先按 `KNOWLEDGE-MANAGEMENT.md` 执行 Re-Anchor，再做 ACCEPT / REJECT / NEEDS_EVIDENCE。
 
 如果 Primary 无法直接访问对应 Repo，不得要求零代码用户手工寻找 diff / 文档；应让 Child / Codex 输出精确文件内容、diff 或结构化返回包。
+
+### Primary → 已存在 Child 的 Update Handoff
+
+当 Primary 批准了会影响已经存在 Child 的 shared Contract、Core Rule、project-level Decision 或 Scope 变化时，不允许假设对方会自动知道。
+
+Primary 生成最小 Update Handoff：
+
+```text
+Project:
+Affected Child:
+Workflow Revision:
+What Changed:
+Relevant Decision / Core Rule:
+Git / Contract Anchor:
+Required Re-Anchor:
+Required Re-Sync:
+Before Continuing Related Work:
+```
+
+只发送给真正受影响的 Active Child。接收方在继续相关工作前完成 Re-Anchor / Re-Sync；无关 Child 不机械刷新。
 
 ## 4. ChatGPT → Codex
 
