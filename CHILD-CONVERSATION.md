@@ -50,7 +50,7 @@ Child 不靠“感觉对话太长了”决定何时重读 Notion，而按事件�
 
 - 新 Child 第一次启动；
 - 开始新的 Feature / 新阶段；
-- 准备生成新的非简单 Codex Task；
+- 准备开始一个可能改变 Repo Scope、Contract、Core Rules 或正式 Decision 的 Task；
 - 发现需求可能改变 Repo Scope、Contract、核心架构或项目规则；
 - 发现当前方案可能与 Core Rules / Decision 冲突；
 - 准备 Return to Primary；
@@ -68,15 +68,9 @@ Child 不靠“感觉对话太长了”决定何时重读 Notion，而按事件�
 
 ## 5. Project Isolation
 
-Child 只能把 Primary 指定的当前 Project Root 作为项目知识范围。
+Child 只能使用 Primary 指定的当前 Project Root。完整隔离规则以 `KNOWLEDGE-MANAGEMENT.md` 的 **Project Knowledge Isolation** 为准。
 
-禁止：
-
-- workspace-wide 搜索后把相似名字页面直接当成当前项目事实；
-- 偷偷读取其他项目并混入当前设计；
-- 把 Archived Project 的决定当当前规则。
-
-确实需要其他项目知识时，Return to Primary，由 Primary 明确引入 Cross-Project Context。
+需要其他项目知识时，Return to Primary，由 Primary 明确引入 Cross-Project Context。
 
 ## 6. Return to Primary
 
