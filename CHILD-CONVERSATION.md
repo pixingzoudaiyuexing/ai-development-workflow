@@ -10,6 +10,7 @@ Child 是由 Primary Conversation 创建或调度的工作区。它负责在明�
 - 做 Repo-local 设计；
 - 判断局部 Task Risk；
 - 生成并验收 Codex Task；
+- 派发 Codex Task 时，明确告诉用户本次使用 Luna / Terra / Sol，以及 Light（轻量） / Medium（中） / High（高）；默认选择能可靠完成任务的最小充分档位以节省额度；
 - 当需要用户把消息转发给 Codex、Gemini 或 Primary 时，按 `HANDOFF.md` 的 **User Relay Rule** 生成单一、完整、一键复制的最终消息；
 - 收集 Evidence；
 - 处理 Primary 已经确定边界内的正常开发；

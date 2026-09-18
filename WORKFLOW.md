@@ -291,7 +291,18 @@ Remote Sync Check（例如 `git fetch`）是条件式操作：仅在存在远端
 - **Terra**：日常主力，普通功能、普通 Bug、跨若干文件的常规开发；
 - **Sol**：高复杂度根因分析、核心架构实现、复杂跨模块逻辑或技术难度显著更高的任务。
 
+Reasoning 默认只在 `Light / Medium / High` 中选择，并在用户可见提示中同时标注中文：`轻量 / 中 / 高`。
+
+采用 **Smallest Sufficient Runtime**：在能够可靠完成任务的前提下，选择足够但不过量的 Model + Reasoning，以兼顾正确性与额度。不要把“更强”当成默认，也不要为了省额度使用明显不足的档位。
+
 Risk 与模型不是一一对应：高风险但机械的实现未必必须 Sol；低业务风险但极难调试的问题可能需要 Sol。
+
+每次实际派发 Codex Task 时，ChatGPT 必须在一键复制 Task Block 之前明确显示本次推荐：
+- Codex Model；
+- Reasoning（Light/Medium/High + 轻量/中/高）；
+- 一句话 Selection Reason。
+
+用户不需要自己从 Task 内容推断应该选哪一档。
 
 ## 6. Claims vs Evidence
 
