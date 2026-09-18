@@ -110,42 +110,16 @@ Child、Codex、Gemini 不得自行把建议宣布成项目级新事实。
 
 Notion 不只是知识存储，也是长期对话的 Re-Anchor 点。
 
-### Primary 必须 Re-Anchor 的时机
+Re-Anchor 采用**事件触发**，不是按消息数量、时间间隔或 token 数量机械触发。
 
-- 新 Primary / 接班 Primary 启动；
-- 准备做重要产品或跨 Repo 架构决定；
-- Child 返回后，准备安排依赖该结果的下一阶段；
-- 准备正式更新 Notion；
-- 长时间中断后恢复；
-- 发现当前讨论与既有规则、Decision 或 Git 事实可能冲突。
+角色触发规则只在两个文件中维护：
 
-Primary Re-Anchor 至少读取：
+- Primary：`PRIMARY-CONVERSATION.md` 的 **Primary Re-Anchor**；
+- Child：`CHILD-CONVERSATION.md` 的 **Child Re-Anchor**。
 
-- Core Rules；
-- Current State；
-- relevant ACTIVE Decisions；
-- relevant REJECTED / SUPERSEDED Decisions；
-- 必要时再核对相关 Git / Runtime / Evidence。
+本文件不重复维护两套 Trigger，避免 Workflow 自身出现规则漂移。
 
-### Child 必须 Re-Anchor 的时机
-
-- 新 Child 第一次启动；
-- 开始新的 Feature / 新阶段；
-- 准备生成一个新的非简单 Codex Task；
-- 发现需求可能改变 Repo Scope、Contract、核心架构或项目规则；
-- 发现当前方案可能与 Core Rules / Decision 冲突；
-- 准备 Return to Primary；
-- 长时间中断后恢复；
-- 出现明显漂移信号，例如重复讨论旧问题、重新提出已否定方案、开始持续讨论本 Repo 之外的职责。
-
-Child 每次只读取 Minimum Sufficient Knowledge：
-
-- Core Rules；
-- Current State；
-- 与本 Child 相关的 ACTIVE Decisions；
-- 与当前问题相关的 REJECTED / SUPERSEDED Decisions。
-
-不要因为 Re-Anchor 就读取整个 Notion 项目知识库。
+每次 Re-Anchor 都遵循 **Minimum Sufficient Knowledge**：只读取当前角色与当前问题需要的 Core Rules、Current State 和相关 Decisions，不因为 Re-Anchor 就加载整个 Notion 项目知识库。
 
 ## 6. Knowledge Update Candidate
 
@@ -177,6 +151,15 @@ Status: NONE
 
 只有“以后新的 Primary / Child 必须知道”的变化才值得进入 Notion。
 
+最简单的判断方法：
+
+> 假设半年后换成一个全新的 Primary / Child，如果它不知道这件事，会不会因此做错产品、架构、Repo 职责或长期边界判断？
+
+- 会 → `PROPOSED`
+- 不会 → `NONE`
+
+因此普通 Bug、CSS 微调、局部重构、一次性调试过程通常都应为 `NONE`。
+
 ## 7. 更新前先校准
 
 Primary 准备写 Notion 前必须：
@@ -191,17 +174,9 @@ Primary 准备写 Notion 前必须：
 
 ## 8. Git 与 Notion 冲突
 
-不要简单规定“Git 永远高于 Notion”或“Notion 永远高于 Git”。
+Notion 与 Git / Runtime / Tests 出现冲突时，不自动相信任何一方。
 
-先判断冲突是什么：
-
-- 实现是否偏离了已批准的项目规则；
-- Notion 是否过期；
-- Git 文档是否过期；
-- 产品要求是否真的改变；
-- Runtime 是否与 Repo 不一致。
-
-然后进入 `WORKFLOW.md` 的 Ground Truth Verification，修正真正错误或过期的一方。
+统一进入 `WORKFLOW.md` 的 **Ground Truth Verification**；该节是冲突处理的 canonical 规则，本文件不再重复另一套流程。
 
 简单记忆：
 
