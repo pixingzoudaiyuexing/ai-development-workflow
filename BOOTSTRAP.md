@@ -176,6 +176,7 @@ Primary 只需要按这些条件判断，不建立评分系统。
 
 进入第一个正式 Codex Task 前确认：
 
+- Workflow Version 与 Workflow Revision（具体 commit SHA）已记录；默认固定到该 Revision，除非 Primary 明确升级；
 - 项目目标与非目标已足够清晰；
 - Project Tier 已确定；
 - 对应 Tier 的默认基础文档已建立；
