@@ -154,15 +154,13 @@ Conversation Topology 可以随着项目演进由 Primary Conversation 调整；
 
 Project Discovery 基本完成后，Primary 判断是否需要启用 Notion Project Knowledge。
 
-推荐启用：
+默认判断保持简单：
 
-- 长期项目；
-- 多 Repo；
-- 多个长期 Child Conversation；
-- 项目核心边界容易在长对话中漂移；
-- 存在重要的 REJECTED / SUPERSEDED 历史，需要防止旧方案复活。
+- 短期、单 Repo、单 Conversation，且没有明显 State Drift 风险 → 默认 Git-only；
+- 长期项目并且存在多 Repo 或多个长期 Child Conversation → 默认启用 Notion Project Knowledge；
+- 任何已经真实发生过 State Drift、旧方案复活，或需要长期保留 REJECTED / SUPERSEDED 历史的项目 → 默认启用。
 
-简单、短期、单 Repo 项目可以继续 Git-only。
+Primary 只需要按这些条件判断，不建立评分系统。
 
 启用 Notion 时，不建立复杂企业知识库。最小结构只要求：
 
@@ -172,9 +170,7 @@ Project Discovery 基本完成后，Primary 判断是否需要启用 Notion Proj
 <Project>｜Decisions
 ```
 
-每个项目必须有独立 Project Root。Primary / Child 默认只在当前 Project Root 内读取和搜索；跨项目知识由 Primary 明确引入。
-
-正式规则见 `KNOWLEDGE-MANAGEMENT.md`。
+每个项目必须有独立 Project Root。正式隔离、写权限与历史规则见 `KNOWLEDGE-MANAGEMENT.md`。
 
 ## 6. Project Ready Gate
 
