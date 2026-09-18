@@ -1,13 +1,14 @@
 # AGENTS.md
 
-> AI Workflow: v1  
+> AI Workflow Version: v1  
+> Workflow Revision: [bootstrap 时填写具体 commit SHA]  
 > Workflow Source: https://github.com/pixingzoudaiyuexing/ai-development-workflow
 
 ## 项目规则入口
 
 在执行中型及以上开发任务前，先阅读与当前任务直接相关的项目文档。
 
-如果需要恢复完整 AI 协作制度，以 `Workflow Source` 对应版本的 `START-HERE.md` 为入口，不依赖 ChatGPT / Codex 的长期记忆。
+如果需要恢复完整 AI 协作制度，以 `Workflow Source` 的已记录 `Workflow Version + Workflow Revision` 对应 `START-HERE.md` 为入口，不依赖 ChatGPT / Codex 的长期记忆，也不静默切换到最新 `main`。
 
 ## 项目概况
 
