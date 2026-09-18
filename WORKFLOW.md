@@ -209,16 +209,16 @@ Child Conversation 返回结果后，Primary Conversation 不得只依赖历史 
 
 ### 3.7 Project Knowledge Re-Anchor
 
-项目启用 Notion 时，所有长期对话都不得只靠历史聊天或 Memory 维持项目规则。
+项目启用 Notion 时，长期对话不得只靠历史聊天或 Memory 维持项目规则。
 
-Primary 与 Child 按角色文件中的事件触发规则执行 Re-Anchor：
+Re-Anchor 的 canonical Trigger：
 
-- Primary：重要产品 / 架构决定、Child 回归、正式写 Notion、恢复或冲突时重新读取 Core Rules / Current State / relevant Decisions；
-- Child：新阶段、新的非简单 Task、Scope / Contract / Architecture 冲突、Return to Primary、恢复或明显漂移时重新读取相关项目知识。
+- Primary → `PRIMARY-CONVERSATION.md`
+- Child → `CHILD-CONVERSATION.md`
 
-每次只读取 Minimum Sufficient Knowledge。详细规则见 `KNOWLEDGE-MANAGEMENT.md`。
+Project Root 隔离、Notion 写权限、Knowledge Update Candidate 与 Minimum Sufficient Knowledge 的 canonical 规则统一见 `KNOWLEDGE-MANAGEMENT.md`。
 
-Notion Project Root 必须绑定 Current Project。默认禁止把 workspace-wide 搜索结果直接视为当前项目事实；跨项目知识只能由 Primary 明确引入。
+本文件只定义它属于标准开发流程，不复制角色 Trigger，避免同一规则在多个文件独立演化。
 
 ## 4. Codex Preflight
 
