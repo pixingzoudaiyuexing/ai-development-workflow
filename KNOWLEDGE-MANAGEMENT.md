@@ -38,7 +38,7 @@ Chat / Project Memory 只用于讨论和辅助上下文，不作为长期项目�
 - 明确的职责边界和禁止事项；
 - 不应随着普通实现任务随意改变的核心定位。
 
-不要复制整个 Workflow。页面顶部只需要记录当前 Workflow 来源与版本。
+不要复制整个 Workflow。页面顶部只需要记录当前 Workflow Source、Workflow Version 与 **Workflow Revision（具体 commit SHA）**。项目默认固定到该 Revision；除非 Primary 明确执行升级，不把 `main` 的后续变化静默当作当前项目规则。
 
 ### Current State
 
@@ -106,6 +106,15 @@ Child、Codex、Gemini 不得自行把建议宣布成项目级新事实。
 
 它们通过 `Knowledge Update Candidate` 把可能需要长期保存的变化交给 Primary。Primary 负责接受、拒绝或要求进一步验证。
 
+Primary 能直接写 Notion 时，完成校准后直接写入；如果当前环境不能直接写，不得只说“请更新 Notion”，而应生成：
+
+- 要更新的具体页面；
+- 完整可复制 / 可替换文本；
+- 必须保留的旧内容或 pointer；
+- 更新完成后应看到的目标状态。
+
+用户只负责执行最小复制粘贴，不负责重新总结或决定写什么。
+
 ## 5. Re-Anchor：用 Notion 给长对话重新校准
 
 Notion 不只是知识存储，也是长期对话的 Re-Anchor 点。
@@ -120,6 +129,8 @@ Re-Anchor 采用**事件触发**，不是按消息数量、时间间隔或 token
 本文件不重复维护两套 Trigger，避免 Workflow 自身出现规则漂移。
 
 每次 Re-Anchor 都遵循 **Minimum Sufficient Knowledge**：只读取当前角色与当前问题需要的 Core Rules、Current State 和相关 Decisions，不因为 Re-Anchor 就加载整个 Notion 项目知识库。
+
+Re-Anchor 是保护，不是无限延长旧对话的理由。如果同一问题已经出现多个互相矛盾的历史、对话经历多次重大方向变化，或 Re-Anchor 后行为仍与当前规则不一致，应优先使用**新 Conversation + 完整 Handoff**，而不是在旧对话中反复 Re-Anchor。具体角色判断见 `PRIMARY-CONVERSATION.md` / `CHILD-CONVERSATION.md`。
 
 ## 6. Knowledge Update Candidate
 
@@ -160,6 +171,18 @@ Status: NONE
 
 因此普通 Bug、CSS 微调、局部重构、一次性调试过程通常都应为 `NONE`。
 
+Primary 对 `PROPOSED` 的裁决与同步状态分开记录：
+
+```text
+Primary Decision:
+ACCEPTED | REJECTED | NEEDS_EVIDENCE
+
+Knowledge Sync:
+SYNCED | PENDING        # 仅 ACCEPTED 时需要
+```
+
+`ACCEPTED` 表示“这个长期知识变化成立”；`SYNCED` 才表示“它已经真正进入 Project Knowledge”。两者不得混为一谈。
+
 ## 7. 更新前先校准
 
 Primary 准备写 Notion 前必须：
@@ -168,9 +191,10 @@ Primary 准备写 Notion 前必须：
 2. 读取与本次更新有关的 ACTIVE / REJECTED / SUPERSEDED Decisions；
 3. 检查新内容是否与当前规则冲突；
 4. 如有冲突，先做 Ground Truth Verification 或明确产品裁决；
-5. 再更新 Notion。
+5. 检查 Current State 的 `Last Updated / Last Verified` 是否明显落后于已知的最近长期裁决；如明显过时，先提示并核实；
+6. 再更新 Notion，并更新相应的 `Last Updated / Last Verified`。
 
-这样可以防止长对话在已经漂移后把错误状态写进知识库。
+这样可以防止长对话在已经漂移后把错误状态写进知识库，也能被动发现“Primary 已经裁决，但知识库实际没有更新”的情况。
 
 ## 8. Git 与 Notion 冲突
 
@@ -213,4 +237,8 @@ Technical work: complete
 Knowledge Sync: PENDING
 ```
 
-把 `Knowledge Update Candidate` 保留在 Return Package / Handoff 中。Primary 在后续依赖这些新知识继续编排前，应优先完成同步或把 Pending Candidate 明确带入下一次 Handoff。
+把 `Knowledge Update Candidate` 保留在 Return Package / Handoff 中，并明确 `Knowledge Sync: PENDING`。
+
+- 与该 Pending 事实无关的工作可以继续；
+- 任何设计、路由或后续 Task 如果依赖该事实，在继续前必须先完成同步，或由 Primary 显式重新验证并把完整事实带入 Handoff；
+- 不允许多个依赖同一 Pending 事实的任务继续滚动，把“暂缓同步”变成永久丢失状态。
