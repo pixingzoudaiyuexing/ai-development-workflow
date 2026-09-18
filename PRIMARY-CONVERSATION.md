@@ -22,10 +22,11 @@ Primary 不应成为默认代码实施者。
 新的 Primary 或接班 Primary：
 
 1. 从 `START-HERE.md` 进入；
-2. 读取本文件与必要的通用 Workflow；
-3. 如果项目启用了 Notion，确认 Current Project 与 Notion Project Root；
-4. 执行 Primary Re-Anchor；
-5. 再按当前任务读取相关 Repo / Git 文档。
+2. 确认项目记录的 Workflow Version + Workflow Revision；如果已固定 Revision，按该 Revision 读取规则，不静默切到最新 `main`；
+3. 读取本文件与必要的通用 Workflow；
+4. 如果项目启用了 Notion，确认 Current Project 与 Notion Project Root；
+5. 执行 Primary Re-Anchor；
+6. 再按当前任务读取相关 Repo / Git 文档。
 
 不得只凭 Project Memory 或旧聊天摘要恢复长期项目。
 
@@ -52,6 +53,14 @@ Primary 不应成为默认代码实施者。
 
 需要真实实现事实时，再核对 Git / Runtime / Tests / Evidence。
 
+如果出现以下任一信号，Primary 应优先准备完整 Handoff 并建议切换到新的 Primary，而不是继续在旧对话中反复 Re-Anchor：
+
+- 同一问题的上下文里已经存在多套互相矛盾的历史方案；
+- 当前对话经历过多次重大产品 / 架构方向变化；
+- Re-Anchor 后的实际判断仍持续违背刚读取的 Core Rules / Decisions。
+
+是否换对话由 Primary 判断，用户不需要根据 token、轮数或对话长度自行估计。
+
 ## 4. Notion 写权限
 
 Primary 是项目级 Notion 的语义裁决者。
@@ -61,12 +70,16 @@ Child / Codex / Gemini 可以提交 `Knowledge Update Candidate`，但 Primary �
 ```text
 Re-Anchor
 ↓
-Accept / Reject / Needs Evidence
+ACCEPTED / REJECTED / NEEDS_EVIDENCE
 ↓
 必要时 Ground Truth Verification
 ↓
-Write Notion
+ACCEPTED → SYNCED / PENDING
 ```
+
+`ACCEPTED` 不等于已经写入。只有成功进入 Project Knowledge 才标记 `SYNCED`。
+
+如果 Primary 当前不能直接写 Notion，必须生成完整的可复制更新文本（页面、正文、保留项、目标结果），用户只执行最小粘贴；不得要求用户自己总结。
 
 不要把“某个 AI 建议了什么”直接写成正式项目事实。
 
@@ -91,3 +104,28 @@ Primary 创建 Child 时必须明确：
 - Expected Return Package。
 
 Child 必须知道自己是“被 Primary 编排的 Repo / Domain 工作区”，而不是新的项目级 Primary。
+
+
+## 7. Affected Active Children
+
+Primary 批准以下变化后，必须判断是否存在已经打开、仍可能继续工作的受影响 Child：
+
+- shared / cross-repo Contract；
+- Project Core Rule；
+- project-level Decision；
+- 另一个 Child 的 Scope / 关键设计假设。
+
+如果存在，Primary 必须列出：
+
+```text
+Affected Active Children:
+- <name>
+
+Update Handoff:
+- What changed:
+- Re-Anchor:
+- Git Re-Sync:
+- Before continuing:
+```
+
+受影响 Child 在继续相关工作前先完成这次 Update Handoff。不要假设 Notion / Memory 会自动把变化推送进已经存在的对话。
