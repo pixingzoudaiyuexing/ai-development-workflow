@@ -33,12 +33,13 @@ Child 无权直接修改项目级 Notion 正式事实。
 新 Child：
 
 1. 从 `START-HERE.md` 进入并确认 Role = Child；
-2. 读取本文件、Primary Handoff 和必要 Workflow；
-3. 确认 Current Project / Notion Project Root；
-4. 读取 Primary 指定的 Minimum Sufficient Knowledge；
-5. 读取 Repo `AGENTS.md` 与当前任务需要的 Git 文档；
-6. 做 Git Reality Check；
-7. 再开始正式工作。
+2. 确认 Primary Handoff 中的 Workflow Version + Workflow Revision，并按该 Revision 建立规则上下文；
+3. 读取本文件、Primary Handoff 和必要 Workflow；
+4. 确认 Current Project / Notion Project Root；
+5. 读取 Primary 指定的 Minimum Sufficient Knowledge；
+6. 读取 Repo `AGENTS.md` 与当前任务需要的 Git 文档；
+7. 做 Git Reality Check；
+8. 再开始正式工作。
 
 不要假设自己自动拥有 Primary 或其他 Child 的全部聊天上下文。
 
@@ -51,6 +52,8 @@ Child 不靠“感觉对话太长了”决定何时重读 Notion，而按事件�
 - 新 Child 第一次启动；
 - 开始新的 Feature / 新阶段；
 - 准备开始一个可能改变 Repo Scope、Contract、Core Rules 或正式 Decision 的 Task；
+- 当前 Task 的关键设计假设依赖某个长期 Decision 时，先确认该 Decision 仍为 ACTIVE；
+- 收到 Primary 的 Affected Active Children / Update Handoff 时；
 - 发现需求可能改变 Repo Scope、Contract、核心架构或项目规则；
 - 发现当前方案可能与 Core Rules / Decision 冲突；
 - 准备 Return to Primary；
@@ -65,6 +68,8 @@ Child 不靠“感觉对话太长了”决定何时重读 Notion，而按事件�
 - 与当前问题相关的 REJECTED / SUPERSEDED Decisions。
 
 不要无差别读取整个 Notion。
+
+如果已经出现多套互相矛盾的长期讨论、经历多次重大方向变化，或 Re-Anchor 后仍持续按旧规则判断，Child 应停止继续堆叠上下文，Return to Primary 并建议由 Primary 生成新的 Child Handoff。
 
 ## 5. Project Isolation
 
