@@ -10,8 +10,10 @@
 
 1. `BOOTSTRAP.md`
 2. `WORKFLOW.md`
-3. 必要时 `RISK-GATES.md`
-4. 需要跨上下文交接或独立审查时再读取 `HANDOFF.md`
+3. `PRIMARY-CONVERSATION.md`
+4. 项目启用 Notion Project Knowledge 时读取 `KNOWLEDGE-MANAGEMENT.md`
+5. 必要时 `RISK-GATES.md`
+6. 需要跨上下文交接或独立审查时再读取 `HANDOFF.md`
 
 在 Project Discovery 完成前：
 
@@ -22,14 +24,18 @@
 
 初始 Project Discovery 对话默认作为 Primary Conversation。Project Discovery 基本完成后，由 Primary Conversation 判断是否需要 Child Conversation，并直接生成 Conversation Topology 与可复制启动消息；不要让零代码用户自己决定前端 / 后端 / Repo 路由。
 
+对于长期复杂、多 Repo 或多 Conversation 项目，Primary 同时判断是否启用 Notion Project Knowledge。启用后必须绑定 Current Project 与独立 Notion Project Root；不得依赖 workspace-wide 搜索恢复项目事实。
+
 ## 2. Primary Conversation 创建或调度 Child Conversation
 
 读取：
 
-1. `WORKFLOW.md` 的 Conversation Orchestration
-2. `HANDOFF.md` 的 Conversation Handoff
-3. `templates/CONVERSATION-HANDOFF.template.md`
-4. 当前项目相关 Git 文档
+1. `PRIMARY-CONVERSATION.md`
+2. `WORKFLOW.md` 的 Conversation Orchestration
+3. `HANDOFF.md` 的 Conversation Handoff
+4. `templates/CONVERSATION-HANDOFF.template.md`
+5. 项目启用 Notion 时读取 `KNOWLEDGE-MANAGEMENT.md`
+6. 当前项目相关 Git 文档
 
 Primary Conversation 负责决定：复用现有子对话、新建子对话、留在主对话分析，还是拆成多个有顺序的任务。
 
@@ -37,14 +43,18 @@ Primary Conversation 负责决定：复用现有子对话、新建子对话、�
 
 先读取 Primary Conversation 提供的 Handoff，然后按 Handoff 指定内容读取：
 
-1. 当前项目根目录 `AGENTS.md`
-2. 与任务相关的项目文档
-3. `WORKFLOW.md`
-4. `RISK-GATES.md`
+1. `CHILD-CONVERSATION.md`
+2. 项目启用 Notion 时，读取 Handoff 指定的 Project Root / Core Rules / Current State / relevant Decisions
+3. 当前项目根目录 `AGENTS.md`
+4. 与任务相关的项目文档
+5. `WORKFLOW.md`
+6. `RISK-GATES.md`
 
 然后完成 Task Risk 判断，再决定是否进入 Codex 或先做 Gemini Design Review。
 
 Child Conversation 不应自行扩大产品 / 架构 / 跨 Repo 决策范围；命中 Handoff 中的 Escalation Trigger 时返回 Primary Conversation。
+
+项目启用 Notion 时，Child 按 `CHILD-CONVERSATION.md` 的事件触发 Re-Anchor：新阶段、新的非简单 Task、边界冲突、Return to Primary、长时间恢复或明显漂移时重新读取相关项目知识。Child 只读项目级 Notion，不直接修改正式项目事实。
 
 ## 4. 跨 AI 交接 / Gemini 独立审查
 
@@ -80,6 +90,9 @@ Hotfix 可以延后部分流程，但不能永久跳过流程。
 - Codex：默认唯一代码实施者，负责代码、测试、构建、Git 与证据收集。
 - Gemini：默认独立审阅者，按 Risk Gate 做 Design/Code Review，默认不直接改代码。
 - 用户：定义“我要什么”和“是否上线”，不负责技术争议裁决、Conversation 路由或 Repo 路由。
-- Project Memory 只作为辅助；长期事实以 Git 文档为锚点。
+- Project Memory 只作为辅助；不得用它替代正式恢复流程。
+- GitHub Workflow 定义“AI 应该怎么工作”；启用 Notion 时，Notion 保存“项目现在怎么定”；Git / Runtime / Tests 保存“技术上现在实际是什么”。
+- 项目级 Notion 正式写入由 Primary 裁决；Child / Codex / Gemini 只提交 Knowledge Update Candidate。
+- 同一 Notion 账号可包含多个项目，但 Primary / Child 默认只能在当前 Project Root 内读取和搜索。
 - 发生重大 AI 分歧时，进入 Evidence Gate，不继续无限理论争论。
 - 任何跨 AI / 跨 Conversation 箭头都必须有 Handoff。
