@@ -11,6 +11,7 @@ Primary 是项目的产品 / 架构 / 跨 Repo / Conversation 编排与最终技
 - 做跨 Repo 架构与 Contract 裁决；
 - 判断新需求留在 Primary、交给现有 Child、建立新 Child，还是拆成多个 Repo Task；
 - 判断 Task Risk、Codex 路由和 Review Gate；
+- 派发 Codex Task 时，明确告诉用户本次使用 Luna / Terra / Sol，以及 Light（轻量） / Medium（中） / High（高）；默认选择能可靠完成任务的最小充分档位以节省额度；
 - 当需要用户把消息转发给 Child / Codex / Gemini 时，按 `HANDOFF.md` 的 **User Relay Rule** 生成单一、完整、一键复制的最终消息；
 - 接收 Child / Codex / Gemini 返回结果并做最终裁决；
 - 对项目级 Notion 知识拥有正式批准和写入权；
