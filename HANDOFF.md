@@ -34,7 +34,8 @@ Project Memory 可以辅助上下文恢复，但不是正式 Handoff 的替代�
 7. 跨 AI Pack 是否经过敏感信息过滤；
 8. 上下文是否在接收方可处理范围内；
 9. 接收方如果不能直接访问 Repo，是否已有替代材料；
-10. 结果返回格式与返回位置是否明确。
+10. 结果返回格式与返回位置是否明确；
+11. 项目启用 Notion 时，Current Project / Project Root / Required Knowledge / Re-Anchor Scope 是否明确。
 
 Gate 的目标是防止断链，不要求每次由用户手工打勾。
 
@@ -52,6 +53,9 @@ Gate 的目标是防止断链，不要求每次由用户手工打勾。
 - Workflow Source
 - Workflow Docs to Read
 - Project Docs to Read
+- Project Knowledge Root（如启用 Notion）
+- Notion Knowledge to Read（如启用）
+- Re-Anchor Scope / Triggers
 - Context Budget / Do Not Preload
 - Current Task
 - Scope
@@ -62,6 +66,8 @@ Gate 的目标是防止断链，不要求每次由用户手工打勾。
 启动消息应明确要求新对话先从 Workflow `START-HERE.md` 建立规则上下文，再按给定 Repo / 项目文档恢复事实上下文。
 
 如果 Project / Repo 文档尚未建立，必须明确说明当前哪些事实来自 Primary Conversation Handoff、哪些仍待写入 Git；不要假装 Git 中已经存在。
+
+项目启用 Notion 时，Handoff 必须绑定明确的 Current Project 与 Notion Project Root。Child 不得用 workspace-wide 搜索替代这个 Scope，也不得直接修改项目级正式 Notion。
 
 ### Context Truncation
 
@@ -93,11 +99,14 @@ Child Conversation 发现以下情况时应返回 Primary Conversation，而不�
 - 本次更新或影响到的 Git 核心文档列表（没有则写 None）；
 - 新形成或需要确认的长期决定；
 - 对其他 Repo / 产品边界的影响；
-- Blockers / 下一步建议。
+- Blockers / 下一步建议；
+- Knowledge Update Candidate：`NONE` 或 `PROPOSED`，如为 PROPOSED 列出需要 Primary 检查的 Core Rule / State / Decision / Superseded 信息。
 
 用户只负责把结果带回主对话，不负责重新整理或技术裁决。
 
 Primary 收到返回包后，如果下一步任务依赖该 Child 的真实实现、架构、Contract 或长期文档变化，必须先执行 Re-Sync：读取返回的 commit anchor 和受影响 Git 文档，再进行下一次 Task 编排。
+
+项目启用 Notion 且 Knowledge Update Candidate = PROPOSED 时，Primary 在正式写入前必须先按 `KNOWLEDGE-MANAGEMENT.md` 执行 Re-Anchor，再做 ACCEPT / REJECT / NEEDS_EVIDENCE。
 
 如果 Primary 无法直接访问对应 Repo，不得要求零代码用户手工寻找 diff / 文档；应让 Child / Codex 输出精确文件内容、diff 或结构化返回包。
 
