@@ -122,6 +122,8 @@ Chat / Memory    = 讨论与临时上下文
 
 用户不负责判断“应该开几个对话、属于前端还是后端、是否跨 Repo”。这些属于主对话的编排职责。
 
+凡是 ChatGPT 需要用户把消息转发给另一个 Conversation、Codex 或 Gemini，必须按 `HANDOFF.md` 的 **User Relay Rule** 输出一个单一、完整、自包含的一键复制 Transfer Block。用户只负责搬运，不负责从解释正文中挑选、拼接或修改技术内容。
+
 ### 3.3 Child Conversation
 
 Child Conversation（子对话）是有明确工作边界的长期或阶段性工作区。详细角色边界与 Re-Anchor 规则见 `CHILD-CONVERSATION.md`。例如：
@@ -190,7 +192,7 @@ Primary Conversation 负责选择：
 
 如果用户已经处于某个子对话，并且需求明显属于该子对话的既有 Scope，可以直接处理；一旦发现跨产品 / 架构 / Repo 边界，再升级回 Primary Conversation。
 
-不要要求零代码用户充当人工路由器。
+不要要求零代码用户充当人工路由器，也不要要求用户充当 Handoff 编辑器。任何需要用户转发的 ChatGPT 消息都必须由发送方 ChatGPT 整理成最终可发送版本。
 
 ### 3.6 Primary Re-Sync Gate
 

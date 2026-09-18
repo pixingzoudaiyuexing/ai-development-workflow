@@ -21,6 +21,30 @@ Project Memory 可以辅助上下文恢复，但不是正式 Handoff 的替代�
 
 在当前个人开发流程中，Gemini 是默认独立审阅者。
 
+### User Relay Rule — 用户只负责搬运，不负责编辑
+
+当 **ChatGPT** 要求用户把内容转发给另一个 ChatGPT Conversation、Codex 或 Gemini 时，必须输出一个**独立、完整、可一键复制的最终 Transfer Block**。
+
+核心规则：
+
+1. **一个转发动作，只给一个最终可发送块。** 需要用户转发的全部内容必须放在同一个 fenced code block 中；代码块外的解释默认只给用户看，不需要转发。
+2. **用户不负责挑选、拼接、删减或补写技术内容。** 禁止使用“把上面几段发过去”“再补发这一句”“把第 2、4、6 点一起复制”等要求。
+3. **Transfer Block 必须自包含。** 假设接收方完全看不到发送方当前对话；所有必要的 Project、Role、Workflow Revision、Repo / branch / commit、Task、Scope、Non-goals、Decision、Evidence、Stop / Escalation 条件、Expected Return 等，由 ChatGPT 按场景补齐。
+4. **有补充或修正时，重新生成完整新版。** 如果旧版尚未发送，必须明确写“上一版作废，请只发送下面完整新版”；不得让用户手工把增量拼进旧版。
+5. **给用户看的解释与给接收方的消息必须明显分离。** ChatGPT 应在 Transfer Block 前明确写“下面整块直接发送给 <目标>，不要修改”；用户应能仅凭这一标记判断需要搬运的边界。
+6. **用户是 Relay Transport，不是 Relay Editor。** 任何因为转发完整性而需要技术判断的工作，都属于 ChatGPT 的职责。
+
+适用范围重点包括：
+
+- Primary → Child；
+- Child → Primary；
+- Primary / Child → Codex；
+- Primary / Child → Gemini；
+- Primary → 已存在 Child 的 Update Handoff；
+- 其他任何由 ChatGPT 要求用户人工搬运的任务包或上下文。
+
+本规则**不要求** Codex / Gemini 的返回消息额外拆成 Transfer Block；当用户可以直接“复制整条返回”带回 ChatGPT 时，保持完整原始返回即可。
+
 ## 2. Handoff Readiness Gate
 
 交接前检查：
@@ -38,6 +62,8 @@ Project Memory 可以辅助上下文恢复，但不是正式 Handoff 的替代�
 11. 项目启用 Notion 时，Current Project / Project Root / Required Knowledge / Re-Anchor Scope 是否明确。
 
 Gate 的目标是防止断链，不要求每次由用户手工打勾。
+
+如果本次交接需要用户人工转发，Gate 还必须确认：ChatGPT 已按 **User Relay Rule** 输出单一、完整、自包含的一键复制 Transfer Block。
 
 ## 3. Primary Conversation → Child Conversation
 

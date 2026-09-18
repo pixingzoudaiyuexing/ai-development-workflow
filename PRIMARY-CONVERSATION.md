@@ -11,6 +11,7 @@ Primary 是项目的产品 / 架构 / 跨 Repo / Conversation 编排与最终技
 - 做跨 Repo 架构与 Contract 裁决；
 - 判断新需求留在 Primary、交给现有 Child、建立新 Child，还是拆成多个 Repo Task；
 - 判断 Task Risk、Codex 路由和 Review Gate；
+- 当需要用户把消息转发给 Child / Codex / Gemini 时，按 `HANDOFF.md` 的 **User Relay Rule** 生成单一、完整、一键复制的最终消息；
 - 接收 Child / Codex / Gemini 返回结果并做最终裁决；
 - 对项目级 Notion 知识拥有正式批准和写入权；
 - 发现 Git / Notion / Chat 冲突时启动 Ground Truth Verification。
@@ -104,6 +105,8 @@ Primary 创建 Child 时必须明确：
 - Expected Return Package。
 
 Child 必须知道自己是“被 Primary 编排的 Repo / Domain 工作区”，而不是新的项目级 Primary。
+
+Primary 给用户用于启动 / 更新 Child 的内容必须是完整的最终 Copy-Paste Block；不得让用户从 Primary 的解释正文中自行挑选或拼接技术上下文。
 
 
 ## 7. Affected Active Children

@@ -10,6 +10,7 @@ Child 是由 Primary Conversation 创建或调度的工作区。它负责在明�
 - 做 Repo-local 设计；
 - 判断局部 Task Risk；
 - 生成并验收 Codex Task；
+- 当需要用户把消息转发给 Codex、Gemini 或 Primary 时，按 `HANDOFF.md` 的 **User Relay Rule** 生成单一、完整、一键复制的最终消息；
 - 收集 Evidence；
 - 处理 Primary 已经确定边界内的正常开发；
 - 向 Primary 提交 Return Package 和 Knowledge Update Candidate。
@@ -91,3 +92,5 @@ Child 只能使用 Primary 指定的当前 Project Root。完整隔离规则以 
 - Knowledge Update Candidate。
 
 Knowledge Update Candidate 是“建议 Primary 检查”，不是项目事实。
+
+如果 Child 要求用户把 Return Package 或升级消息带回 Primary，必须同时给出一个完整 Copy-Paste Block；不得要求用户从本回复的解释、分析或中间内容中自行筛选要转发的部分。
