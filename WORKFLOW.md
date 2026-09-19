@@ -248,7 +248,37 @@ Before continuing related work:
 
 不受影响的 Child 不需要机械同步。不要建立实时广播系统；遵守 `HANDOFF.md` 的 No Magic Arrows。
 
-## 4. Codex Preflight
+## 4. Recovery Safety Gate / Duplicate Execution Guard
+
+Primary succession、Emergency recovery 或任何“执行状态可能不完整”的场景，在开始新的 mutation 前必须先回答：
+
+- 是否存在仍在运行或状态未知的 Codex / Child / Gemini / CI / deploy / migration / production operation；
+- Remote Git、local / Codex workspace、Runtime / Production 是否可能不同步；
+- working tree 是否 dirty / unknown；
+- 是否存在 `ACCEPTED + Knowledge Sync: PENDING`；
+- 是否存在 `UNRECONCILED HOTFIX` 或其他不可逆操作状态。
+
+核心规则：
+
+> **STOP mutation, continue verification.**
+
+以下任一情况存在时，不得开始可能冲突或重复的 mutation：
+
+- 旧 Codex Task 可能仍在运行，而重复执行可能有 side effect；
+- working tree dirty state 无法确认，且下一 Task 会修改同一 Repo / 区域；
+- 无法区分现有未提交修改与新 Task 修改；
+- migration / deploy / destructive operation 执行状态不明确；
+- production 与 Git 状态不一致且尚未解释；
+- `UNRECONCILED HOTFIX` 尚未 reconcile；
+- security / auth / payment / data-loss 类高风险变化的真实执行状态未知。
+
+允许继续的操作包括：读取 docs、查询 task/status、`git status`、查看 branch / HEAD / diff、读取 CI/runtime evidence、执行其他明确只读核验。
+
+**Duplicate Execution Guard：** 不知道旧任务是否完成时，不能把“没有看到 Git 变化”解释成“任务没有运行”。如果原 execution state 无法确认，先标记 `UNKNOWN` 并调查；不得自动取消、重跑或重新派发同一个可能有副作用的 Task。
+
+只有确认 Safe Resume Point 后，才恢复正常开发。
+
+## 5. Codex Preflight
 
 开始非简单任务前至少确认：
 
@@ -269,7 +299,7 @@ git rev-parse HEAD
 
 Remote Sync Check（例如 `git fetch`）是条件式操作：仅在存在远端依赖、网络与权限可用且当前任务需要确认远端状态时执行。
 
-## 5. Codex Model Routing
+## 6. Codex Model Routing
 
 正式 Codex Task 必须包含：
 
@@ -304,7 +334,7 @@ Risk 与模型不是一一对应：高风险但机械的实现未必必须 Sol�
 
 用户不需要自己从 Task 内容推断应该选哪一档。
 
-## 6. Claims vs Evidence
+## 7. Claims vs Evidence
 
 AI 的“我已经修复”“测试通过”“没有兼容问题”属于 Claim。
 
@@ -322,7 +352,7 @@ Evidence 可以包括：
 
 统一原则：**任务风险越高，越必须依赖独立、可重复的验证，而不是 Agent 自述。**
 
-## 7. Acceptance Evidence
+## 8. Acceptance Evidence
 
 每个正式 Task 的 Acceptance Criteria 应尽量对应可验证 Evidence。
 
@@ -338,7 +368,7 @@ Evidence 可以包括：
 
 没有实际运行的验证，不得写成“已通过”。
 
-## 8. Ground Truth Verification
+## 9. Ground Truth Verification
 
 代码、文档、测试、运行行为、已确认产品要求和安全边界都只是事实来源的一部分。
 
@@ -365,7 +395,7 @@ STOP
 
 用户不负责判断代码、架构或验证方法，只负责确认真正的产品意图变化。
 
-## 9. Evidence Gate
+## 10. Evidence Gate
 
 当 ChatGPT 与 Gemini 出现会影响实施方向的重大、无法靠已有材料解决的分歧时：
 
@@ -380,7 +410,7 @@ STOP
 
 如果实验需要生产环境、可能破坏数据或无法安全执行，必须先停下并改用安全的 staging、dry-run、只读验证或其他替代证据。
 
-## 10. Multi-Repo 最小支持
+## 11. Multi-Repo 最小支持
 
 一个产品可以对应多个 Git Repo，一个 ChatGPT Project 也可以讨论这个产品的多个 Repo。
 
@@ -391,7 +421,7 @@ STOP
 - 明确 cross-repo contract 与验收标准；
 - v1 不做复杂的多仓库自动编排。
 
-## 11. 完成定义
+## 12. 完成定义
 
 代码写完不等于任务完成。
 
