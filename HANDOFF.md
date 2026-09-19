@@ -21,6 +21,8 @@ Project Memory 可以辅助上下文恢复，但不是正式 Handoff 的替代�
 
 在当前个人开发流程中，Gemini 是默认独立审阅者。
 
+**应急接班例外**：旧 Primary 已无法回复时，不要求其先生成 Handoff；由新的 Primary 按本文件的 **Emergency Succession** 从可访问证据反向恢复。此例外不解除恢复核验、User Relay Rule 或后续正常交接要求。
+
 ### User Relay Rule — 用户只负责搬运，不负责编辑
 
 当 **ChatGPT** 要求用户把内容转发给另一个 ChatGPT Conversation、Codex 或 Gemini 时，必须输出一个**独立、完整、可一键复制的最终 Transfer Block**。
@@ -155,6 +157,31 @@ Before Continuing Related Work:
 ```
 
 只发送给真正受影响的 Active Child。接收方在继续相关工作前完成 Re-Anchor / Re-Sync；无关 Child 不机械刷新。
+
+## 3.1 Primary → New Primary（正常换届）
+
+由旧 Primary 在安全停止点生成**一个完整、自包含的一键复制块**，用户只需原样发送给新的 Primary，不负责重新整理历史。
+
+内容至少包含：Project / Current Project Root、Workflow Source + Version + pinned Revision、产品目标与相关正式决定的定位指针、Current State 的定位和新旧核验时间、受影响 Repo / branch / last known commit（明确只是锚点）、Active Child / Codex / Gemini / CI / production work 的位置与已知执行状态、Pending Formal Delta（ACCEPTED + Knowledge Sync: PENDING）及证据位置、存在的 dirty / Hotfix / destructive-operation 风险、已验证事项、缺失或冲突事项、下一步安全动作与禁止重复执行项。
+
+旧 Primary 在交接前只做能够安全完成的状态收尾；存在正在运行的外部任务时如实登记，不自行重派、取消或声称已经完成。新 Primary 按 `PRIMARY-CONVERSATION.md` 初始化，并按 `WORKFLOW.md` 的 Recovery Safety Gate 核验后再派新任务。不能把旧 Handoff 中的 last known commit 直接当成最新技术事实。
+
+## 3.2 Emergency Succession — Old Primary Unavailable
+
+当旧 Primary 因平台限制或其他原因无法继续回复、无法生成最终 Handoff 时，用户可直接开启新 Primary 并说明“旧 Primary 无法回复，请执行 Emergency Succession”。**不得要求用户先返回无法使用的旧 Primary 取得 Handoff**。
+
+新 Primary 的恢复顺序：
+
+1. 确认 Project 身份及其已固定的 Workflow Version + Revision；若未知，从现有 Project Knowledge、Repo `AGENTS.md` 或可访问的 Handoff 查找，仍未知则标记待核实，不得默认按最新 `main` 覆盖既有项目规则。
+2. 先暂停涉及受影响范围的新写入 / 部署 / 迁移；继续安全的只读恢复与核验。已有救火工作依 `EMERGENCY.md` 处理，不因为换对话自动结束 Hotfix。
+3. 如启用且可访问，读取当前 Project Root 内的 Core Rules、Current State、相关 Decisions，以及最新的 Continuity Pointer（若存在）。Pointer 只用作查找线索，不作为已核验事实。
+4. 从可直接访问的 Child / Codex / Gemini / PR / CI / workspace / runtime 等记录盘点活跃、已完成及**执行状态 UNKNOWN**的外部任务。**Git 无改动并不证明没有正在运行的任务**；远端 Git 不代表本地 working tree 或生产状态。
+5. 对相关 Repo 核验 branch、HEAD、未提交修改和已有 Evidence；如需 Codex 协助，只派**只读 Recovery Preflight**，明确禁止修改文件、取消或重跑旧任务、reset、checkout 覆盖工作树、部署、迁移及其他外部副作用。若原 Codex 任务可能仍在同一 workspace 运行，应先查原任务状态，不能派第二个会干扰它的任务。
+6. 将恢复材料逐项标为 `VERIFIED / UNVERIFIED / MISSING / CONFLICTING`（仅供本次恢复，不是永久状态机）。标明来源、时间 / commit 锚点和影响；按现有 Ground Truth Verification 处理冲突。注意已 ACCEPTED 但 PENDING 的决定可能不在旧 Notion 中：如找到线索，核验原用户确认、Return Package 或其他证据并同步；无法核实时不能自行撤销或重新裁决用户原有产品意图，后续依赖它的修改须暂停并请用户确认产品意图。
+7. 只有关键材料无法直接访问时，才请用户**原样搬运具体一份已存在的完整消息或文件**；不得要求用户判断哪条 Commit 正确、哪个 Task 要重跑、哪个工作树可覆盖。
+8. 进入 `WORKFLOW.md` 的 Recovery Safety Gate。执行状态不明时：**STOP mutation, continue verification**。受影响范围安全核验完成后，建立新的 Primary 并从现有进度继续；不重做已完成工作、不机械重建所有 Child。
+
+即使缺少旧 Handoff、Notion 或 Continuity Pointer，也允许**启动只读恢复**；不能把缺失信息脑补为 None。实际无法找回且会影响下一步执行的事实，必须明确告知恢复缺口和当前安全边界，不得承诺百分之百无损接班。
 
 ## 4. ChatGPT → Codex
 
