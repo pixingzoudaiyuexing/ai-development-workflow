@@ -45,6 +45,14 @@ Project Memory 可以辅助上下文恢复，但不是正式 Handoff 的替代�
 
 本规则**不要求** Codex / Gemini 的返回消息额外拆成 Transfer Block；当用户可以直接“复制整条返回”带回 ChatGPT 时，保持完整原始返回即可。
 
+### Emergency Succession Exception
+
+“No Magic Arrows” 的正常规则仍然有效，但存在一个受限例外：
+
+> 当旧 Primary 已经因平台限制或其他原因物理上无法继续回复、因此不可能再生成 Handoff 时，允许新 Primary 以 **Emergency Succession** 直接启动 receiver-driven recovery。
+
+这不是“跳过 Handoff”，而是发送方已经不可用时由接收方从剩余 Evidence 反向重建。Emergency Succession 必须执行本文件的恢复流程与 `WORKFLOW.md` 的 Recovery Safety Gate。
+
 ## 2. Handoff Readiness Gate
 
 交接前检查：
@@ -156,7 +164,54 @@ Before Continuing Related Work:
 
 只发送给真正受影响的 Active Child。接收方在继续相关工作前完成 Re-Anchor / Re-Sync；无关 Child 不机械刷新。
 
-## 4. ChatGPT → Codex
+## 4. Primary → New Primary
+
+正常 planned succession 时，旧 Primary 必须生成一个按 User Relay Rule 可一键复制的完整 Transfer Block，至少包含：
+
+- Project / Current Project Root；
+- Workflow Version + exact Revision；
+- 当前阶段 / 当前主要目标；
+- relevant ACTIVE / REJECTED / SUPERSEDED Decisions；
+- 相关 Repo / branch / known commit anchors；
+- Active Child / Codex / Gemini work pointers；
+- Knowledge Sync: PENDING 的正式变化（如有）；
+- 已知 dirty workspace / deploy / migration / Hotfix / production risk；
+- 已验证 Evidence / Unverified Gaps；
+- Next Safe Action；
+- 新 Primary 必读的 Notion / Git / Handoff 材料。
+
+旧 Primary 应先完成 Re-Anchor / 必要 Re-Sync，并尽量在 Safe Stop Point 交接。Handoff 不复制完整聊天历史。
+
+### Emergency Succession — Old Primary Unavailable
+
+当旧 Primary 已无法回复时，新 Primary 不要求用户先取得旧 Primary Handoff，而按以下顺序恢复：
+
+1. 确认 Project、Workflow Version + Revision；
+2. 读取 `PRIMARY-CONVERSATION.md`；
+3. 项目启用 Notion 时读取 Core Rules / Current State / relevant Decisions，以及 Primary Continuity Pointer（如存在）；
+4. 读取可直接访问的 Git / PR / CI / Runtime / Production Evidence；
+5. 读取可直接访问的 Child / Codex / Gemini task / report records；
+6. 识别 `ACCEPTED + Knowledge Sync: PENDING`、active/unknown external work、dirty workspace、Hotfix、migration / deploy 等风险；
+7. 建立本次临时 Recovery Ledger：
+
+```text
+Claim:
+Fact Type:
+Source:
+Anchor / timestamp:
+Status: VERIFIED | UNVERIFIED | MISSING | CONFLICTING
+Impact:
+```
+
+8. 执行 `WORKFLOW.md` 的 Recovery Safety Gate / Duplicate Execution Guard；
+9. 只有在仍缺关键材料时，才让用户按 User Relay Rule 原样搬运一个明确指定的完整 Child / Codex / Gemini 返回；
+10. 输出 `Recovered / Unverified / Conflicts / Next Safe Action`，确认 Safe Resume Point 后再继续 mutation。
+
+`VERIFIED / UNVERIFIED / MISSING / CONFLICTING` 只属于这次恢复报告，不成为项目永久状态。
+
+无法确认某个 external task 是否仍在运行时，默认 `Execution State: UNKNOWN`，不得重派相同任务、reset/checkout 覆盖工作树、重复 migration、重复 deploy 或执行其他可能造成 side effect 的操作。
+
+## 5. ChatGPT → Codex
 
 ### Codex Runtime Banner
 
@@ -197,7 +252,7 @@ Why: <一句话说明为什么这个档位足够>
 
 如果重要决定仍只存在于聊天、尚未进入 Git，应先将其整理为当前 Task 的明确 Context，必要时在完成后按 `DOCUMENTATION.md` 沉淀。
 
-## 5. Codex → ChatGPT
+## 6. Codex → ChatGPT
 
 最小结果包：
 
@@ -212,7 +267,7 @@ Why: <一句话说明为什么这个档位足够>
 
 报告中的文字判断是 Claim；命令输出、CI、runtime 结果等才是 Evidence。
 
-## 6. Gemini Design Review Pack
+## 7. Gemini Design Review Pack
 
 Design Review 至少包含：
 
@@ -227,7 +282,7 @@ Design Review 至少包含：
 
 不要无差别上传整个项目知识库。
 
-## 7. Gemini Code Review Pack
+## 8. Gemini Code Review Pack
 
 **Codex 是 Review Pack 的唯一默认生成责任方。**
 
@@ -272,7 +327,7 @@ High Risk Code Review 优先使用明确的 **base commit → review commit** �
 - `MANIFEST.md` 必须记录打包时的 working tree state；
 - 不得把“工作树是 dirty”与“Review Pack 已包含这些修改”混为一谈。
 
-## 8. Context Selection
+## 9. Context Selection
 
 目标是 Minimum Sufficient Context。
 
@@ -291,7 +346,7 @@ Relevant files 的选择应由 Codex / ChatGPT 依据 diff 与调用链完成，
 
 如果 changed path 因安全策略、大小或格式限制被排除，必须出现在 `MANIFEST.md` 中。Gemini 应把这种排除视为潜在缺失上下文，而不是默认认为未提供部分不存在问题。
 
-## 9. Security / Redaction
+## 10. Security / Redaction
 
 Review Pack 使用：
 
@@ -318,7 +373,7 @@ Secret Scan 失败或发现疑似凭据时，Pack 生成应 fail closed，并要
 
 当前 v1 helper 只提供基础 secret-pattern 检查，不应被视为专业 Secret / PII Scanner。敏感日志应在进入 Pack 前完成脱敏；Tier 3 项目优先使用独立 secret-scanning 能力。
 
-## 10. Missing Context Declaration
+## 11. Missing Context Declaration
 
 Gemini 材料不足时必须允许输出：
 
@@ -336,7 +391,7 @@ Reason: <why it blocks reliable conclusion>
 
 禁止基于未提供实现假装确定结论。
 
-## 11. Finding Schema
+## 12. Finding Schema
 
 推荐：
 
@@ -364,7 +419,7 @@ G-003 NEEDS_EVIDENCE
 
 Codex Fix Task 必须携带对应 Finding ID，确保发现 → 裁决 → 修复 → 验证可追踪。
 
-## 12. Multi-Repo Handoff
+## 13. Multi-Repo Handoff
 
 跨 Repo Task 至少记录：
 

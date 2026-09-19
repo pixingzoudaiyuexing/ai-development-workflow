@@ -28,7 +28,8 @@ Primary 不应成为默认代码实施者。
 3. 读取本文件与必要的通用 Workflow；
 4. 如果项目启用了 Notion，确认 Current Project 与 Notion Project Root；
 5. 执行 Primary Re-Anchor；
-6. 再按当前任务读取相关 Repo / Git 文档。
+6. 再按当前任务读取相关 Repo / Git 文档；
+7. 如果属于旧 Primary 不可用的 Emergency Succession，按 `HANDOFF.md` 的 receiver-driven recovery 执行，并在开始任何新 mutation 前通过 `WORKFLOW.md` 的 Recovery Safety Gate。
 
 不得只凭 Project Memory 或旧聊天摘要恢复长期项目。
 
@@ -55,13 +56,19 @@ Primary 不应成为默认代码实施者。
 
 需要真实实现事实时，再核对 Git / Runtime / Tests / Evidence。
 
-如果出现以下任一信号，Primary 应优先准备完整 Handoff 并建议切换到新的 Primary，而不是继续在旧对话中反复 Re-Anchor：
+如果出现以下任一信号，Primary 应进入 planned succession，而不是继续在旧对话中反复 Re-Anchor：
 
+- 平台已经明确出现 conversation / context continuity warning；
 - 同一问题的上下文里已经存在多套互相矛盾的历史方案；
 - 当前对话经历过多次重大产品 / 架构方向变化；
-- Re-Anchor 后的实际判断仍持续违背刚读取的 Core Rules / Decisions。
+- Re-Anchor 后的实际判断仍持续违背刚读取的 Core Rules / Decisions；
+- Primary 已不能可靠维持当前 Workflow / Project State 的一致判断。
 
-是否换对话由 Primary 判断，用户不需要根据 token、轮数或对话长度自行估计。
+命中上述 trigger 后，不再开启新的 substantive Task；先把已有工作推进到可验证的 Safe Stop Point，再完成 Primary succession。生产事故 / Hotfix 优先按 `EMERGENCY.md` 恢复服务，不能为了换对话中断必要救火。
+
+在大型 Feature、复杂 Bug、Migration / Review Cycle 或 Milestone 完整关闭后的天然 Safe Stop Point，Primary **可以**建议 planned succession，但不得以“感觉对话很长”为安全判断，也不依赖 token、轮数、时间阈值。
+
+是否需要 planned succession 由 Primary 判断，用户不需要根据 token、轮数或对话长度自行估计。Emergency Succession 独立存在，即使 Primary 从未提前建议换届，也必须能够恢复。
 
 ## 4. Notion 写权限
 
@@ -133,3 +140,38 @@ Update Handoff:
 ```
 
 受影响 Child 在继续相关工作前先完成这次 Update Handoff。不要假设 Notion / Memory 会自动把变化推送进已经存在的对话。
+
+
+## 8. Primary Continuity / Succession
+
+### Continuity Invariant
+
+后续执行会依赖的重要状态，不应长期只存在于一个 Primary Conversation 中。
+
+这不建立第二套 Project Knowledge。长期产品事实仍按 `KNOWLEDGE-MANAGEMENT.md` 进入 Project Knowledge；代码与技术事实仍由 Git / Workspace / Runtime / Tests / Evidence 负责。
+
+项目启用 Notion Project Knowledge 时，Primary 维护一个极小、覆盖更新、非历史化的 `<Project>｜Primary Continuity` Recovery Index。它只保存“去哪里检查”和“现在不能做什么”，字段与触发条件以 `KNOWLEDGE-MANAGEMENT.md` 为准。
+
+### Planned Succession
+
+正常换届时，Primary 应：
+
+1. Re-Anchor；
+2. 对依赖真实代码状态的部分做必要 Re-Sync；
+3. 确认没有未知 destructive operation；
+4. 记录仍在运行的 external work / pending formal delta / recovery risk；
+5. 到达 Safe Stop Point；
+6. 按 `HANDOFF.md` 生成一个完整 Primary → New Primary Transfer Block。
+
+### Emergency Succession
+
+如果旧 Primary 已经无法继续回复：
+
+- Old Primary Handoff = unavailable **不等于** recovery prohibited；
+- 新 Primary 可以直接接管；
+- 先只读恢复和核验；
+- 对 active / unknown Codex、dirty workspace、migration、deploy、Hotfix、生产状态执行 Recovery Safety Gate；
+- 无法确认的信息标为 `VERIFIED | UNVERIFIED | MISSING | CONFLICTING`，这些只用于本次 recovery，不成为永久项目状态机；
+- 只有恢复到明确 Safe Resume Point 后，才开始新的 mutation。
+
+用户不负责判断 branch、commit、dirty tree、重复任务或冲突；缺少材料时，新 Primary 只能请求用户原样搬运明确指定的完整返回内容。

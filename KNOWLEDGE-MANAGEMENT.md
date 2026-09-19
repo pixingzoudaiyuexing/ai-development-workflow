@@ -226,7 +226,77 @@ Git 记：现在实际上做成什么样。
 
 Notion 保存的是当前规则、当前状态、正式决定和必要的历史替代关系，而不是所有过程。
 
-## 10. Notion 暂时不可用
+## 10. Primary Continuity Pointer
+
+对于启用了 Notion Project Knowledge 的长期项目，可以维护一个单页、覆盖更新、非历史化的：
+
+```text
+<Project>｜Primary Continuity
+```
+
+它是 **Recovery Index，不是新的 truth source，也不是第四套项目数据库**。
+
+最小字段：
+
+```text
+Last Updated / Last Verified:
+
+Active External Work:
+- None
+- or <Child / Codex / Gemini / deploy / migration pointer>
+
+Pending Formal Delta:
+- None
+- or <ACCEPTED + Knowledge Sync: PENDING + short statement + evidence/reference pointer>
+
+Recovery Risks:
+- None
+- or <dirty workspace / unknown execution / deployment / migration / UNRECONCILED HOTFIX>
+
+Next Safe Action:
+
+Known Gaps:
+- None
+- or <what remains unverified>
+```
+
+不要保存：
+
+- 完整 Task / Report；
+- 聊天 transcript；
+- source code / diff / logs；
+- brainstorming；
+- 完整 Decision 正文；
+- Git implementation 的镜像。
+
+Pointer 只在下列事件发生实质变化时覆盖更新：
+
+1. 派发一个可能在 Primary 之外继续运行、且接班者需要知道的 Child / Codex / production operation；
+2. 出现 `ACCEPTED + Knowledge Sync: PENDING`；
+3. 出现需要 successor 知道的 dirty / unknown execution / Hotfix / destructive-operation 风险；
+4. 上述 active / pending / risk 状态结束或发生实质变化；
+5. planned Primary succession 前。
+
+普通讨论、普通问答、没有 continuity 影响的小任务不更新。
+
+Pointer 只告诉 successor “去哪里检查”和“现在不能做什么”；Git / Workspace / Runtime / Tests 仍需重新验证，Pointer 不能覆盖真实 Evidence。
+
+如果 Primary 不能直接写 Notion，沿用本文件现有规则：生成完整替换文本，用户最多执行一次复制粘贴，不要求用户总结或判断字段。
+
+如果项目没有启用 Notion，**不要为此单独引入第二套数据库**。Emergency Succession 仍可从 Git / Runtime / task records / Handoff Evidence 做 best-effort recovery；未知执行状态按 `WORKFLOW.md` 的 Recovery Safety Gate 处理。
+
+### PENDING successor semantics
+
+`ACCEPTED + Knowledge Sync: PENDING` 如果被 Continuity Pointer / Return Package / Handoff 发现：
+
+- 不能因为旧 Notion 仍是旧值就自动撤销该决定；
+- successor 应先寻找 Evidence / user confirmation / Return Package；
+- 能验证则恢复该 Pending Delta 并完成同步；
+- 无法验证则标记 `UNVERIFIED`；
+- 如果下一动作依赖它，则 STOP mutation 并继续核验；
+- 无关工作可以继续。
+
+## 11. Notion 暂时不可用
 
 Notion 不可用不能阻塞安全的技术完成、Hotfix 或必要发布。
 
