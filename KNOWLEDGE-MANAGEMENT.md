@@ -115,6 +115,29 @@ Primary 能直接写 Notion 时，完成校准后直接写入；如果当前环�
 
 用户只负责执行最小复制粘贴，不负责重新总结或决定写什么。
 
+## 4.1 Primary Continuity Pointer（接班索引，不是项目事实库）
+
+对已启用 Notion 且可写的长期项目，Primary 可以在**同一个 Project Root** 下维护一份可覆盖更新的 `<Project>｜Primary Continuity` 短页。它只回答“接班时先去哪里核查、哪些执行风险尚未解除”，**不取代** Core Rules / Current State / Decisions，也不镜像 Git / runtime 事实。
+
+最小内容：
+
+```text
+Last Updated / Last Verified:
+Active External Work: None / Child、Codex、Gemini、CI 或生产操作的任务位置和已知状态
+Pending Formal Delta: None / ACCEPTED + Knowledge Sync: PENDING 的简述与原始证据指针
+Recovery Risks: None / 已知 dirty workspace、运行中或未知的部署 / 迁移、UNRECONCILED HOTFIX
+Next Safe Action:
+Known Gaps:
+```
+
+仅在外部任务已派发且可能继续独立运行、已 ACCEPTED 的重要知识仍 PENDING、出现影响接班的执行风险，或这些项目的状态发生实质变化时刷新。**不是每轮聊天、每个普通 Task 或每日备份**；只覆盖最新内容，不存全文 Task、聊天、Git diff、日志或完整报告。Pointer 的“None”必须来自已知事实，无法确认时写 Unknown，绝不能猜成 None。
+
+Primary 有直接写入权限时自行更新；没有直接写入权限时，沿用本文件原有的“完整替换文本 + 最小粘贴”机制，但**不得**把每次普通工作中的人工更新变成项目运行的硬性前置条件。若无法将 Pointer 实际写入，明确记为 unavailable / stale，不得宣称已持久化；继续使用现有可访问的 Git、项目文档、任务记录及 Handoff。任何执行状态不明的范围均遵循 `WORKFLOW.md` 的 Recovery Safety Gate。
+
+Pointer 只是可能过时的发现线索：新 Primary 必须重新核验活跃任务、本地工作树、远端 Git、运行环境和正式决定；Pointer 不具备覆盖这些来源的权威。未启用 Notion 的项目不强制新建 Notion 或额外状态数据库；其应急恢复可以少量缺失且必须如实声明。
+
+`ACCEPTED + PENDING` 的原始决定不因旧 Primary 丢失而自动作废。新 Primary 找到相关指针时应核验原始用户确认 / Return Package；未能核实而后续工作依赖它时，暂停相关变更并向用户重新确认产品意图，不得擅自把旧 Notion 内容当成已否定该决定。
+
 ## 5. Re-Anchor：用 Notion 给长对话重新校准
 
 Notion 不只是知识存储，也是长期对话的 Re-Anchor 点。
