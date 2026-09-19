@@ -82,7 +82,21 @@ Hotfix 可以延后部分流程，但不能永久跳过流程。
 
 恢复长期休眠项目时，先做 Repository Reality Check 与 baseline verification，再相信旧文档。
 
-## 7. 核心不变量
+## 7. Primary 突然不可用 / Emergency Succession
+
+如果旧 Primary 因平台限制、上下文中断或其他原因已经无法继续回复，不要求用户先取得旧 Primary 的最终 Handoff。
+
+读取：
+
+1. `PRIMARY-CONVERSATION.md` 的 Primary Continuity / Succession；
+2. `HANDOFF.md` 的 Primary → New Primary 与 Emergency Succession；
+3. 项目启用 Notion 时读取 `KNOWLEDGE-MANAGEMENT.md` 的 Primary Continuity Pointer；
+4. `WORKFLOW.md` 的 Recovery Safety Gate / Duplicate Execution Guard；
+5. 如涉及生产 Hotfix，再读取 `EMERGENCY.md`。
+
+新 Primary 先恢复和核验，不先重复派发可能仍在运行的任务。无法确认的执行状态一律视为 `UNKNOWN`；**STOP mutation, continue verification**。
+
+## 8. 核心不变量
 
 - ChatGPT：产品、需求、架构、任务拆解、风险判断、技术裁决与 Conversation Orchestration。
 - Primary Conversation：项目级需求入口与调度中心，决定是否创建 / 复用 Child Conversation，并负责上下文交接。
@@ -96,4 +110,4 @@ Hotfix 可以延后部分流程，但不能永久跳过流程。
 - 项目级 Notion 正式写入由 Primary 裁决；Child / Codex / Gemini 只提交 Knowledge Update Candidate。
 - 同一 Notion 账号可包含多个项目，但 Primary / Child 默认只能在当前 Project Root 内读取和搜索。
 - 发生重大 AI 分歧时，进入 Evidence Gate，不继续无限理论争论。
-- 任何跨 AI / 跨 Conversation 箭头都必须有 Handoff。
+- 正常情况下，任何跨 AI / 跨 Conversation 箭头都必须有 Handoff；唯一例外是旧 Primary 已经物理上无法生成 Handoff 的 Emergency Succession，此时由新 Primary 从剩余证据反向恢复。
