@@ -75,6 +75,8 @@ ChatGPT：Accepted / Rejected / Needs Evidence
 仅在 DOCUMENTATION.md 触发条件成立时更新长期文档
 ```
 
+Primary 编排已授权任务时，应遵守 `PRIMARY-CONVERSATION.md` 的 **Anti-Stagnation & Execution Boundaries**：非必要前置依赖不得阻断交付；开发测试不默认承接生产级要求，STOP 后优先恢复未受阻工作。
+
 ## 3. ChatGPT Project 与 Conversation Orchestration
 
 ### 3.1 一个产品，一个 ChatGPT Project
