@@ -83,3 +83,5 @@ Known state > Clean state。不要覆盖未知修改。
 ## Stop Point
 
 完成实现与验证后停止，输出 `CODEX-REPORT` 所需信息。若 Review Gate 要求独立 Code Review，同时输出 Review Pack 或明确说明无法生成的阻塞点。不要未经要求进入下一阶段或额外重构。
+
+> **Anti-Stagnation / STOP 来源：** Primary 增设强制 STOP 时，须在条件旁简短注明其来源（Owner 明确要求、已生效项目约束、实际命中的 Workflow 技术门禁或有具体证据的真实技术阻断）。AI 的一般性担忧、无关外围核验失败及与当前独立测试无直接关系的生产级要求不得阻断任务。实际 STOP 时报告受影响范围；能独立安全完成的已授权工作继续推进，不要求 Owner 额外填表。
