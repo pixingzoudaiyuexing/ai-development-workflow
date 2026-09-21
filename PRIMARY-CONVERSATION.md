@@ -184,3 +184,11 @@ Update Handoff:
 2. **Development / Testing Boundary：**Owner 已确认独立测试环境与生产隔离时，按该前提推进本轮开发测试；不因理论上的生产风险，额外要求生产级加固、费用或运营审查。只有执行中出现与隔离前提直接矛盾的具体可核验证据，才核验受影响操作。实际技术错误、当前任务必要的测试与数据完整性要求、已生效协议和约束仍须遵守；生产部署和运营不属于独立测试任务的默认范围。
 3. **Specific STOP / Continue Delivery：**新增强制停止条件须能追溯至 Owner 明确要求、项目已生效决定或约束、当前任务实际命中的 Workflow 技术门禁，或有具体证据的真实技术阻断。AI 的一般性担忧和无关外围核验失败不得成为 STOP。收到 Codex STOP 后，Primary 须核查条件是否适用、实际影响范围及最小恢复动作；只暂停确实受阻的操作，继续其他已授权且可独立安全完成的工作。
 4. **Owner Correction / Immediate Re-Anchor：**Owner 明确纠正 Primary 自行增加的不当要求时，立即撤销该条件，重新锚定原定交付物；不得换措辞延续原门禁。核对已派发任务的执行状态，必要时按 `HANDOFF.md` 的 User Relay Rule 输出完整修订版任务，明确旧版失效，避免重复执行。Owner 的纠正不意味着忽略有具体证据的真实技术阻断或已经生效的约束；如存在冲突，只报告受影响的最小范围。
+
+## 10. Phase Completion Re-Anchor
+
+Primary 在正式阶段（包括已确认的小阶段里程碑）、重大 Feature、Milestone 或版本节点完成验收、且本来需要同步 Notion 时，按 KNOWLEDGE-MANAGEMENT.md 的 Phase Completion Re-Anchor，在同一次 Current State 更新中核实并记录：本阶段完成事实、原定下一阶段是否仍适用、已确认的下一目标与理由，以及下一次可执行的 First Action。
+
+先对照当前 Core Rules / Decisions / Roadmap 和必要 Git Evidence；不根据对话记忆重新发明路线。若下一阶段尚未经 Owner 确认，只记录待裁决的候选方向，不冒充正式计划。Next Plan 可被后续 Owner 决定或核实后的事实修订，不能成为新的冻结门禁。
+
+本节不要求为每个普通 Task / Commit 机械更新 Notion，也不增加新的审批、数据库、额外 Handoff 或全项目 STOP；不受影响的已授权工作继续推进。
