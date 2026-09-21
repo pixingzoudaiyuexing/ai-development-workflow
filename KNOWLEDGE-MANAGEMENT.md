@@ -312,3 +312,20 @@ Knowledge Sync: PENDING
 - 与该 Pending 事实无关的工作可以继续；
 - 任何设计、路由或后续 Task 如果依赖该事实，在继续前必须先完成同步，或由 Primary 显式重新验证并把完整事实带入 Handoff；
 - 不允许多个依赖同一 Pending 事实的任务继续滚动，把“暂缓同步”变成永久丢失状态。
+
+## 12. Phase Completion Re-Anchor（阶段完成重新锚定）
+
+当一个**正式阶段、小阶段里程碑、重大 Feature、Milestone 或版本节点**已完成验收、并按本文件现有规则同步 Notion 时，Primary 应在同一次 Current State 更新中同时校准**已完成事实与已确认的后续方向**，避免下一阶段仅凭聊天记忆重新规划。对仅属于普通 Codex Task、Commit、小 Bug 或 UI 微调的工作，不新增机械触发；这里也不要求新建数据库、单独报告或额外 Owner 审批。
+
+在写入前，先执行第 7 节的 Re-Anchor / 必要的 Git Reality Check，对照现有 Core Rules、正式 Decisions 与已确认的 Roadmap，确认原定下一阶段是否仍适用。只保留当前恢复开发所需的最小内容：
+
+- **Completed / Current State：**本阶段已验收的结果、可定位的 Git / 测试证据与仍未完成事项；不将计划写成已经完成的事实。
+- **Next Plan / Reason：**下一阶段已确认的目标，以及为何按此顺序推进；标注其依据（Owner 已确认的目标、现行 Decision / Roadmap 或已验证的技术依赖）。不能凭聊天印象自行扩展产品范围。
+- **Keep / Avoid：**仅在与下一阶段有关时，引用**已经生效**的核心边界、保留项或明确拒绝的方向；不凭空创造新的冻结约束或“禁止事项”。
+- **First Action：**下一次进入项目时可直接执行的首个已授权动作，或必须先完成的实际核验。尚无 Owner 批准的下一阶段目标时写明“待 Owner 决定”，不要把 Primary 的候选想法冒充既定路线，也不阻断无关已授权工作。
+
+以上可直接写入现有 Current State 的简短 Next Step / Next Plan 部分；不要求每项都创建独立字段、复制完整历史或维护第二套 Roadmap。现有 Git docs/ROADMAP.md 若有相关正式路线，应保留指针而非在 Notion 另写一份相互竞争的长期计划。
+
+**Next Plan 是记录于当前时点的已确认路线与理由，不是代码事实，也不自动升级为不可更改的冻结 Decision。** Owner 改变需求、正式 Decision 被替代，或验证后的技术事实影响实施路径时，Primary 按现有 Ground Truth Verification / 产品裁决规则更新受影响的计划；旧计划不能压过新决定，也不能仅凭一次 Git 变化自动推定 Owner 改变了产品目标。
+
+如果 Notion 暂不可用，沿用第 11 节的 Knowledge Sync: PENDING 与依赖范围规则；不得凭本节新增全项目 STOP 或为不相关的开发制造等待。
