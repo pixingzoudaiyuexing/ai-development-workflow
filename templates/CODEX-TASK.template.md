@@ -80,6 +80,10 @@ Known state > Clean state。不要覆盖未知修改。
 - Codex 负责生成 Review Pack：运行 `tools/review-pack/`、收集允许的 Evidence、生成 patch / manifest / pack，并输出可直接交给独立审阅者的 ZIP 或结构化 Markdown fallback；
 - 不得要求零代码用户自己制作 patch、提取 exit code、整理 raw logs 或手工拼装 Review Pack。
 
+## Difficult Debugging / Early External Research
+
+遇到非显而易见、可能已有外部先例的故障时，尽早向派发任务的 ChatGPT 返回精简 Diagnostic Return（准确错误、环境 / 版本、已尝试方法及结果、相关证据、Git / 未提交状态）。**即使常规调试持续产生新证据，也可以请求 ChatGPT 同步检索官方文档、GitHub Issues / Discussions 与同类项目**，无需等到失败若干次。对同一问题缺乏新依据的重复修改 / 重试应止损；不冲突的已授权工作可继续。ChatGPT 负责实际检索、核对适用条件，再派发有依据的下一步验证；不要让用户手工搜索、整理技术材料，亦不要直接照搬未核实的第三方脚本。遵循 `PRIMARY-CONVERSATION.md` 的 Difficult Debugging 规则。
+
 ## Stop Point
 
 完成实现与验证后停止，输出 `CODEX-REPORT` 所需信息。若 Review Gate 要求独立 Code Review，同时输出 Review Pack 或明确说明无法生成的阻塞点。不要未经要求进入下一阶段或额外重构。
