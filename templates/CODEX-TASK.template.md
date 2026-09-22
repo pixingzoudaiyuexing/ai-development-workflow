@@ -3,6 +3,7 @@
 ## Task Metadata
 
 - Project: [填写]
+- Recipient Code: [本项目已启用时，自动填写目标接收对话的固定暗号；未启用写 None]
 - Repository: [填写]
 - Expected Branch: [如已知]
 - Base Commit: [如已知]
