@@ -16,6 +16,7 @@
 
 - Project: [填写]
 - Project Tier: [如已确定]
+- Recipient Code: [本项目已启用时，Primary 自动填写目标接收对话的固定暗号；未启用写 None]
 
 ## Purpose
 
@@ -130,6 +131,7 @@ Workflow Revision：[填写具体 commit SHA]
 
 请从该 Workflow Revision 的 START-HERE.md 开始，并按本 Handoff 指定的 Workflow / 项目文档建立上下文。不得因为 main 后续变化而静默切换规则。
 Project：[填写]
+Recipient Code：[已启用时填写目标接收对话固定暗号；未启用写 None]
 Primary Conversation：[填写]
 Role：Child Conversation
 Notion Project Root：[填写 / None]
