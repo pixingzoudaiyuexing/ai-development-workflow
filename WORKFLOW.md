@@ -128,6 +128,8 @@ Chat / Memory    = 讨论与临时上下文
 
 凡是 ChatGPT 需要用户把消息转发给另一个 Conversation、Codex 或 Gemini，必须按 `HANDOFF.md` 的 **User Relay Rule** 输出一个单一、完整、自包含的一键复制 Transfer Block。用户只负责搬运，不负责从解释正文中挑选、拼接或修改技术内容。
 
+已启用 Recipient Code 的项目，还须按 `HANDOFF.md` 的 **Recipient Code — 轻量误投提醒** 在正式 Transfer Block 中自动填写接收方暗号；不要求用户手工管理或逐次确认。
+
 ### 3.3 Child Conversation
 
 Child Conversation（子对话）是有明确工作边界的长期或阶段性工作区。详细角色边界与 Re-Anchor 规则见 `CHILD-CONVERSATION.md`。例如：
