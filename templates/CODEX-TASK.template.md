@@ -79,6 +79,7 @@ Known state > Clean state。不要覆盖未知修改。
 - 不得生成一个会静默遗漏未提交 Task 修改的 Review Pack；
 - 若存在与当前 Task 无关的 dirty state，必须明确记录并确保不会混入审查范围；
 - Codex 负责生成 Review Pack：运行 `tools/review-pack/`、收集允许的 Evidence、生成 patch / manifest / pack，并输出可直接交给独立审阅者的 ZIP 或结构化 Markdown fallback；
+- 在 Review Handoff 中附审核材料目录及关键文件的真实绝对路径，说明路径所在环境与 Mac 本地 Gemini 是否可直接访问；若只有远程路径，须明确标注，不得虚构 Mac 路径。按 `HANDOFF.md` 的 Gemini 桌面客户端审核材料路径规则交接。
 - 不得要求零代码用户自己制作 patch、提取 exit code、整理 raw logs 或手工拼装 Review Pack。
 
 ## Difficult Debugging / Early External Research

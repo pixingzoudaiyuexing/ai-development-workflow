@@ -38,6 +38,10 @@
 ## Review Handoff
 
 - Independent Code Review Required: Yes / No
+- Review Environment: [Mac 本机 / 云端 / 远程 / 其他]
+- Review Directory (absolute path): None / [实际目录绝对路径]
+- Key Review Files (absolute paths): None / [实际文件绝对路径]
+- Mac Gemini Access: Confirmed / Not available / Unknown（不得将远程路径冒充 Mac 本地路径）
 - Review Pack: None / [路径或文件]
 - Review Base Commit: [如适用]
 - Review Commit: [如适用]

@@ -20,10 +20,14 @@
 
 ## Review Materials
 
+- Review Directory (Mac-accessible absolute path): [由 ChatGPT 根据 Codex 核实结果直接填写；无法确认时明确说明，不得编造]
+- Key Files (absolute paths): [由 ChatGPT 填入实际审核文件路径，如 REVIEW.md、MANIFEST.md、diff.patch；无本地路径则说明真实材料位置与访问方式]
 - `diff.patch`
 - `MANIFEST.md`
 - relevant context
 - verification evidence
+
+请先读取上述实际可访问的审核目录 / 文件，再开展审查。不得要求 Owner 从其他消息手动补充路径。
 
 ## Review Focus
 

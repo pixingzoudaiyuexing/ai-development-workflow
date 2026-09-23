@@ -277,6 +277,15 @@ Why: <一句话说明为什么这个档位足够>
 
 报告中的文字判断是 Claim；命令输出、CI、runtime 结果等才是 Evidence。
 
+### Gemini 桌面客户端审核材料路径
+
+Owner 使用 Mac 上的 Gemini 桌面客户端进行独立审核。凡 Codex 产出的材料需要交给 Gemini 审核：
+
+- Codex 在 Review Handoff 中报告审核材料的**真实绝对路径**（优先为审核目录，其次为必要文件及本地仓库目录），明确所在环境以及 Mac 是否可直接访问；能够确认时提供目录及关键文件的实际路径。不得只给相对路径、文件名或臆造 Mac 路径。
+- Primary / Child 在生成给 Gemini 的**同一个完整可复制提示词**时，自动写出 Codex 已核实的审核目录和必要文件的路径，直接指示 Gemini 读取；不要求 Owner 另外查找、复制路径或补填模板。
+- 若 Codex 仅在云端 / 远程环境有文件，不能把远程路径当作 Mac 本地路径。能由执行方实际提供 Mac 可访问的文件位置时使用该位置；否则明确标注访问限制和当前真实材料位置，提供现有可行的审核交接方式，不假装已经在 Mac 上生成文件。
+- 这只是现有 Review Handoff 的路径输出要求，不新建审核门禁、不改变 Review Gate，也不影响无须 Gemini 审核的普通任务。
+
 ## 7. Gemini Design Review Pack
 
 Design Review 至少包含：
