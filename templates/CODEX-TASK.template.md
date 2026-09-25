@@ -70,6 +70,7 @@ Known state > Clean state。不要覆盖未知修改。
 
 - 检查 diff；
 - 不执行 destructive Git operation；
+- PR 默认不是必选步骤；仅在仓库规则 / branch protection、Owner 明确要求、Review Gate 明确需要 PR，或 Primary 基于具体大型/高风险审查需要决定使用时创建 PR。其余情况下，在仓库允许时可完成验证后直接提交目标分支，不为形式机械增加 branch → PR → merge 链路；
 - [是否要求独立 commit]
 
 如果 `Review Gate = Code Review Required`：
