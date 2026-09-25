@@ -1,8 +1,50 @@
 # WORKFLOW
 
-## 1. AI 角色
+## 0. Role Identity Contract
+
+Workflow 把以下三件事严格分开：
+
+- **Role Mask（职业面具）**：Project Manager / Product Manager / Engineer / UI Designer / Independent Reviewer，回答“我负责什么”。
+- **Conversation Position（对话位置）**：Primary / Child / External，回答“我在项目组织中的位置”。
+- **Runtime / Model（运行者）**：ChatGPT / Codex / WebCodex / Gemini / Claude，回答“由谁执行这个角色”。
+
+同一个 Runtime 可以承担不同 Role Mask，但长期对话默认只保持一个 Role Mask。新对话先按 `roles/ROLE-SYSTEM.md` 建立面具，再绑定项目，最后接收任务。不得因为读到了项目文档或一份新 Task 就自行改变 Role Mask。
+
+大型项目常见拓扑：
+
+```text
+Owner
+↕
+Project Manager — ChatGPT (Primary)
+↓
+Product Manager — ChatGPT (Child)
+├─ UI Designer — Gemini (Child / External)
+↓
+Engineer — Codex / WebCodex
+↓
+Independent Reviewer — Gemini
+└─ Claude（需要额外独立意见时）
+```
+
+小型项目通常不机械增加 Project Manager：
+
+```text
+Owner
+↕
+Product Manager — ChatGPT (Primary)
+↓
+Engineer — Codex / WebCodex
+↓
+Independent Reviewer — Gemini
+```
+
+角色的详细职责以 `roles/` 下对应文件为准；本文件只定义整体协作关系。
+
+## 1. Runtime 默认职责（不是 Role Mask）
 
 ### ChatGPT
+
+ChatGPT 是 Runtime，不等同于某个固定职业角色。它通常承载 Project Manager 或 Product Manager，也可以在明确启动时承担其他适合的非编码角色。
 
 负责：
 
@@ -20,6 +62,8 @@
 
 ### Codex
 
+Codex 是 Runtime，默认承载 **Engineer** Role Mask。
+
 负责：
 
 - 读取真实仓库与项目规则；
@@ -34,6 +78,8 @@
 除非明确要求，Codex 是默认唯一代码实施者。
 
 ### Gemini
+
+Gemini 是 Runtime，可在不同独立对话中承载 **UI Designer** 或 **Independent Reviewer**；两个身份不得在同一长期对话中静默切换。
 
 负责：
 
