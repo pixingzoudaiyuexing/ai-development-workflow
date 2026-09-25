@@ -1,5 +1,7 @@
 # Conversation Handoff
 
+> 对全新的长期 Child，本模板用于 Role Bootstrap + Project Bind 完成后的任务交接；不要用它替代角色面具初始化。新对话先使用 `ROLE-BOOTSTRAP.template.md`，再使用 `PROJECT-BIND.template.md`。
+>
 > 由 Primary Conversation 生成并交给用户复制到新的 Child Conversation。用户不需要自行补技术字段；未知项由 Primary Conversation 标记“待确认”。
 >
 > **User Relay Rule**：最终交给用户转发的内容必须只有一个完整 Copy-Paste Block。用户不需要复制本模板的解释部分，也不得被要求把多个片段手工拼在一起。
@@ -7,6 +9,13 @@
 ## Suggested Conversation Name
 
 [例如：CloudGap｜API 开发]
+
+## Identity
+
+- Role Mask: [Product Manager / UI Designer / 其他已定义角色]
+- Conversation Position: Child
+- Runtime: [ChatGPT / Gemini / 其他]
+- Reports To: [Project Manager / Product Manager / 具体父对话]
 
 ## Parent / Primary Conversation
 
