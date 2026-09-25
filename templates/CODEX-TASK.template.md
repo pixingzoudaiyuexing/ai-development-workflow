@@ -2,6 +2,10 @@
 
 ## Task Metadata
 
+- Role Mask: Engineer
+- Conversation Position: External Executor
+- Runtime: Codex / WebCodex
+- Parent / Sender: [Product Manager / Project Manager / 具体对话]
 - Project: [填写]
 - Recipient Code: [本项目已启用时，自动填写目标接收对话的固定暗号；未启用写 None]
 - Repository: [填写]
@@ -20,6 +24,12 @@
 - Recommended Reasoning: Light（轻量） / Medium（中） / High（高）
 - Selection Reason: [说明为什么这是能可靠完成任务的最小充分档位，并兼顾额度]
 - Runtime Principle: Smallest Sufficient Runtime
+
+## Engineer Behavior
+
+默认独立完成工程实现：阅读代码、分析、调试、查资料、做必要实验、测试并修复。普通编程问题、实现选择、测试失败、依赖用法等不应因为“需要确认”而立即返还 Product Manager / Owner。
+
+只有缺少**外部事实或权限**且无法自行取得，或继续执行必须改变已确认产品行为 / 超出授权 Scope 时才升级，例如：缺服务器 IP / 凭据、缺不可推断的业务规则、需要未授权系统访问。不要把正常工程判断转嫁给 Owner。
 
 ## Goal
 
