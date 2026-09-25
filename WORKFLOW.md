@@ -305,6 +305,19 @@ git rev-parse HEAD
 
 Remote Sync Check（例如 `git fetch`）是条件式操作：仅在存在远端依赖、网络与权限可用且当前任务需要确认远端状态时执行。
 
+### Pull Request 使用原则
+
+**PR 不是默认步骤。** 在仓库规则允许、Owner 未明确要求 PR、且当前 Task 不依赖 PR Review 的情况下，Codex 可以在完成必要验证后直接提交到目标分支；不得为了“流程看起来完整”机械创建 branch → PR → 等待 CI → merge 的额外链路。
+
+仅在以下情况使用 PR：
+
+- 仓库 branch protection / 项目规则明确要求；
+- Owner 明确要求；
+- 当前 Task 的独立 Code Review 明确需要 PR + Review Context；
+- 大型或高风险变更中，Primary 基于具体审查需要决定 PR 明显有价值。
+
+不用 PR 不等于降低验证要求：仍须按 Task Risk 完成适用测试、diff 检查、Evidence、明确 commit anchor 与 Implementation Report。能直接安全完成的普通修改优先采用更短路径。
+
 ## 6. Codex Model Routing
 
 正式 Codex Task 必须包含：
