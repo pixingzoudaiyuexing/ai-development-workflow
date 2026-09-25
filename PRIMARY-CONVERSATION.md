@@ -1,5 +1,7 @@
 # PRIMARY CONVERSATION
 
+> **Primary 是 Conversation Position，不是职业面具。** 大型项目中 Primary 通常佩戴 `Project Manager`；小型项目可以由 `Product Manager` 直接担任 Primary。具体职业职责先读取 `roles/ROLE-SYSTEM.md` 与对应角色文件，本文件只定义 Primary 位置额外承担的项目级连续性与编排责任。
+
 本文件定义 Primary Conversation 的项目级职责。
 
 Primary 是项目的产品 / 架构 / 跨 Repo / Conversation 编排与最终技术裁决中心。用户不负责替 Primary 做技术路由。
