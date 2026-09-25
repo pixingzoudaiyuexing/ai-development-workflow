@@ -1,5 +1,7 @@
 # CHILD CONVERSATION
 
+> **Child 是 Conversation Position，不是职业面具。** Child 可以是 Product Manager、UI Designer 或其他明确的局部角色；其实际职责必须由 Role Bootstrap 明确，不得仅因为“我是 Child”自行推断。具体职业职责先读取 `roles/ROLE-SYSTEM.md` 与对应角色文件。
+
 本文件定义 Child Conversation 的 Repo / Domain 局部职责。
 
 Child 是由 Primary Conversation 创建或调度的工作区。它负责在明确 Scope 内推进工作，但不拥有整个产品的最终架构裁决权。
