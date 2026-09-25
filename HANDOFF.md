@@ -45,6 +45,30 @@ Project Memory 可以辅助上下文恢复，但不是正式 Handoff 的替代�
 
 本规则**不要求** Codex / Gemini 的返回消息额外拆成 Transfer Block；当用户可以直接“复制整条返回”带回 ChatGPT 时，保持完整原始返回即可。
 
+### Owner Brief — 给 Owner 的人话说明
+
+任何需要 Owner 把正式任务 / Handoff / Review Prompt 转发给另一个 AI 或 Conversation 的场景，发送方都必须在最终 Transfer Block **之前**提供一段简短中文说明，默认控制在 3–6 行：
+
+- 这次要做什么 / 遇到了什么问题；
+- 为什么现在要派发这个任务；
+- 准备采用什么思路解决；
+- 会明显改变什么；如新增安全边界、基础设施、数据库、权限、复杂状态或其他显著复杂度，必须点出来；
+- 当前最值得 Owner 注意的实际风险（没有则明确“无特殊风险”）。
+
+Owner Brief 是给 Owner 看的，不属于接收方提示词；接收方提示词可以使用更适合执行的语言。不得用大段术语淹没人话说明，也不得要求 Owner 通过阅读 Task 自己推断本次在做什么。
+
+### Role-First Handoff
+
+新长期对话首次进入项目时，默认遵循：
+
+`Role Bootstrap → Project Bind → Task Dispatch`
+
+- Role Bootstrap 只建立 Role Mask / Conversation Position / Runtime / 职责边界，使用 `templates/ROLE-BOOTSTRAP.template.md`。
+- Project Bind 再绑定 Project / Recipient Code / Parent / Repo / Domain / Workflow Revision / Project Knowledge，使用 `templates/PROJECT-BIND.template.md`。
+- 前两步完成后才发送正式任务。已绑定的长期对话不要求每个 Task 重复启动流程。
+- 一次性的外部 Reviewer 可以把身份、项目和 Review Task 合并为一个完整 Transfer Block 以减少搬运，但必须在顶部明确 `Role Mask: Independent Reviewer`，不能靠模型名称推断身份。
+- Runtime 不是 Role：Codex / WebCodex 默认是 Engineer；Gemini 可以是 UI Designer 或 Independent Reviewer；Claude 默认仅在明确邀请时作为额外 Independent Reviewer；ChatGPT 根据拓扑佩戴 Project Manager 或 Product Manager。
+
 ### Recipient Code — 轻量误投提醒
 
 此约定只针对**已启用本规则的项目**的正式转发任务 / 启动消息，不影响用户日常聊天，不增加审批或人工检查步骤。
@@ -67,7 +91,7 @@ Project Memory 可以辅助上下文恢复，但不是正式 Handoff 的替代�
 
 交接前检查：
 
-1. 接收方角色和目标是否明确；
+1. 接收方 Role Mask、Conversation Position、Runtime 和目标是否明确；
 2. 当前 Workflow Version + **Workflow Revision（具体 commit SHA）**、Project / Repo / branch / base commit 是否按场景明确；
 3. Task / Scope / Non-goals / Acceptance Criteria 是否明确；
 4. 相关 Architecture / Decision 是否已选择；
