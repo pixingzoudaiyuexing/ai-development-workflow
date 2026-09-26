@@ -29,19 +29,18 @@ Role Mask、Conversation Position、Runtime 是三件不同的事。普通 Task 
 
 + 上一任对话 PDF。
 
-## 3. Project Manager 的第二步
+## 3. Project Manager 项目接入
 
-Project Manager 完成 Role Bootstrap 后，不要求 Owner 填技术型 PROJECT BIND。
+Project Manager 不要求 Owner 填技术型 PROJECT BIND，也不需要第二份 Project Onboarding 文件。
 
-进入：
-
-`PROJECT-ONBOARDING.md`
+`roles/PROJECT-MANAGER.md` 已内置 Role Bootstrap + Project Onboarding。
 
 流程是：
 
 ```text
-Owner Role Bootstrap
-→ Project Onboarding
+Owner
+→ roles/PROJECT-MANAGER.md
+→ Role Bootstrap + Embedded Project Onboarding
 → PM 自主调查 + 引导 Owner
 → Project Baseline
 → Normal Project Work
