@@ -59,15 +59,15 @@ Owner Brief 是给 Owner 看的，不属于接收方提示词；接收方提示�
 
 ### Role-First Handoff
 
-新长期对话首次进入项目时，默认遵循：
+所有长期角色都先由 Owner 完成 Role Bootstrap。
 
-`Owner Role Bootstrap → Project Bind → Task Dispatch`
+Role Bootstrap 之后：
 
-- Role Bootstrap 由 Owner 发起，直接读取 `roles/` 下对应 canonical Role 文件；不再由其他 AI 临时拼装职业身份。
-- Role Bootstrap 只建立稳定职业身份；此时 Project / Recipient Code 均为 UNBOUND。
-- Project Bind 再绑定 Project / Recipient Code / Parent / Repo / Domain / Workflow Revision / Project Knowledge，使用 `templates/PROJECT-BIND.template.md` 或其后续 canonical 版本。
-- 前两步完成后才发送正式任务。已绑定长期对话不要求每个 Task 重复启动。
-- 普通 Task / Handoff 只能验证预期 Role，不能重新定义 Role。
+- **Project Manager**：由 Owner 发送独立 PROJECT BIND，再进入项目工作。
+- **Product Manager / Engineer / UI Designer / Independent Reviewer**：不单独增加 PROJECT BIND；由上位角色的第一份完整 Handoff / Task / Review / Design Prompt 同时建立 Project Context 并开始工作。
+- 第一次项目提示词必须包含足够的 Project / Recipient Code（启用时）/ Sender / Scope / Repo or Review Object / Workflow Revision / Expected Return。
+- 后续任务沿用已建立的 Project Context，只传当前真正需要的上下文并检查身份 / 项目暗号是否一致。
+- 普通 Task / Handoff 只能验证预期 Role，不能重新定义长期 Role。
 - Runtime 不是 Role：Codex / WebCodex 默认是 Engineer；Gemini 可以是 UI Designer 或 Independent Reviewer；Claude 仅在明确邀请时作为额外 Reviewer；ChatGPT 常承载 Project Manager 或 Product Manager。
 
 ### Recipient Code — 轻量误投提醒
@@ -76,7 +76,7 @@ Owner Brief 是给 Owner 看的，不属于接收方提示词；接收方提示�
 
 - 一个项目沿用一个简短、固定的 **Recipient Code（接收暗号）**；同项目的 Primary、Child、Codex 可以共用。Primary 在项目首次启用时确定一次，并在该项目现有 Notion Project Knowledge（如启用）或项目 Git 文档中记录；后续生成任务时自动沿用，不要求用户手工填写。暗号只是便于识别误投的标签，不是密码或权限凭据。
 - 每份正式 Transfer Block 在开头清楚写出 `Recipient Code: <接收方暗号>`。涉及跨仓或跨项目的任务也**填写目标接收对话的暗号**；本次允许操作哪些项目 / 仓库仍由任务的 Scope 决定。暗号相同即可按原有 Workflow 继续正常工作，不为跨项目任务增加额外门禁。
-- 新长期对话不能从普通 Task 自动建立 Recipient Code。它必须先完成 Owner 发起的 Role Bootstrap，再通过 PROJECT BIND 建立 Project / Recipient Code。已经绑定暗号的对话收到新任务时，先与**此前已绑定的暗号**比较：一致则照常处理；不一致则只暂停这份任务并提醒“暗号不一致，可能发错对话”，不自动改绑，也不影响其他正常工作。
+- 新长期对话必须先完成 Owner 发起的 Role Bootstrap。Project Manager 通过 Owner PROJECT BIND 建立 Project / Recipient Code；Product Manager / Engineer / UI Designer / Independent Reviewer 可通过第一份完整的上位 Handoff / Task / Review / Design Prompt 建立 Project / Recipient Code。已经绑定暗号的对话收到新任务时，先与**此前已绑定的暗号**比较：一致则照常处理；不一致则只暂停这份任务并提醒“暗号不一致，可能发错对话”，不自动改绑，也不影响其他正常工作。
 - 若 Owner 明确要求将旧对话改作另一用途，可以明确重新绑定暗号；普通任务里的新暗号本身不代表切换指令。长对话中可依据此前的启动消息 / 历次任务或现有项目记录延续暗号；无须每次查询 Notion，不得仅凭一份突然出现的新暗号覆盖此前已绑定的暗号。
 - 未启用本规则或仍固定旧 Workflow Revision 的项目不因本文件更新而自动采用此约定。原有 Git Preflight 和 Scope 检查照常，不另增身份数据库、工作区校验清单或全项目冻结规则。
 

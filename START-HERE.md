@@ -16,15 +16,31 @@ Owner 不需要复制长 Prompt；只需要让新对话读取对应 canonical Ro
 - `roles/UI-DESIGNER.md`
 - `roles/INDEPENDENT-REVIEWER.md`
 
-顺序固定为：
+Role Bootstrap 完成后，项目上下文按角色建立：
 
-1. **Role Bootstrap**：只建立稳定职业身份。此时 Project / Recipient Code 均为 UNBOUND，不分析具体项目。
-2. **Project Bind**：由 Owner 再发送项目绑定信息，绑定 Project / Recipient Code / Domain / Repo / Workflow Revision / Project Knowledge。
-3. **Task Dispatch**：Role + Project 都确认后才进入具体工作。
+### Project Manager
 
-其他 AI 可以建议建立新角色并准备启动材料，但不能通过普通 Task 给另一个长期对话重新赋予身份。
+```text
+Role Bootstrap
+→ Owner PROJECT BIND
+→ Project Work
+```
 
-已经完成 Role + Project Bind 的长期对话，后续普通任务不重复 Bootstrap。
+Project Manager 是 Owner 的长期项目入口，因此保留独立 PROJECT BIND。
+
+### Product Manager / Engineer / UI Designer / Independent Reviewer
+
+```text
+Role Bootstrap
+→ 第一份完整的上位 Handoff / Task / Review / Design Prompt
+→ 建立 Project Context + 开始工作
+```
+
+不再为这四类角色单独增加一轮 PROJECT BIND。
+
+第一份正式提示词必须同时提供该角色完成当前工作所需的最小项目绑定信息；后续任务只校验并沿用已有 Project Context。
+
+Product Manager 接班时，Conversation Succession + PDF 可以作为首次 Project Context Establishment 的一部分。
 
 ## 1. 新项目 / Primary Conversation
 

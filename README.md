@@ -25,7 +25,7 @@ v0.2.0-dev 采用 **Owner Role First**。
 - [UI Designer](./roles/UI-DESIGNER.md)
 - [Independent Reviewer](./roles/INDEPENDENT-REVIEWER.md)
 
-Role 确认后停止，再由 Owner 发送 PROJECT BIND；完成项目绑定后才进入 Task / Handoff。
+Role 确认后停止。Project Manager 再由 Owner 发送 PROJECT BIND；Product Manager / Engineer / UI Designer / Independent Reviewer 则由第一份完整的上位 Handoff / Task / Review / Design Prompt 同时建立 Project Context 并开始工作，不额外增加一轮 PROJECT BIND。
 
 旧项目如果 pinned 到 v0.1.0 / 旧 Workflow Revision，不会因 `main` 更新自动迁移。
 

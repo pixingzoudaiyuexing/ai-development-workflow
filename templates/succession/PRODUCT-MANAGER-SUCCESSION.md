@@ -3,12 +3,11 @@
 【提示词类型】
 Conversation Succession / 长对话接班恢复
 
-你已经完成：
-
-- Product Manager Role Bootstrap
-- 当前项目 PROJECT BIND
+你已经完成 Product Manager Role Bootstrap。
 
 现在请接管上一任 Product Manager。
+
+如果这是你在本项目中的第一份正式工作，本次 Conversation Succession 本身可以作为首次 Project Context Establishment：请从当前消息、可访问的项目环境与上一任对话 PDF 中恢复完成当前接班所需的最小 Project / Scope / Sender / Recipient Code / Workflow Revision；缺失时不要猜测。
 
 本对话中同时提供了一份：
 
