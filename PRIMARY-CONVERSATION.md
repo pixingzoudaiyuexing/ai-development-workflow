@@ -24,8 +24,9 @@ Primary 的位置意义：
 新的 Project Manager Primary：
 
 ```text
-Role Bootstrap
-→ PROJECT-ONBOARDING.md
+roles/PROJECT-MANAGER.md
+→ Role Bootstrap
+→ Embedded Project Onboarding
 → Project Baseline
 → Project Work
 ```
