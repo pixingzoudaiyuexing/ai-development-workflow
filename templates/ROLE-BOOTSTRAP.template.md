@@ -1,23 +1,25 @@
 # Role Bootstrap Template — DEPRECATED ON main
 
-> `main` 已进入 v0.2.0-dev。
-> 旧的“由发送方 AI 填写一份 Role Bootstrap 模板”方式已停止作为新工作流入口。
+旧的“由发送方 AI 临时填写 Role Bootstrap 模板”方式已停止使用。
 
-Owner 新建长期对话时，直接让接收方读取对应的 canonical Role Bootstrap：
+Owner 新建长期对话时，直接发送对应 canonical Role Bootstrap：
 
-- Project Manager: `roles/PROJECT-MANAGER.md`
-- Product Manager: `roles/PRODUCT-MANAGER.md`
-- Engineer: `roles/ENGINEER.md`
-- UI Designer: `roles/UI-DESIGNER.md`
-- Independent Reviewer: `roles/INDEPENDENT-REVIEWER.md`
+- Project Manager → `roles/PROJECT-MANAGER.md`
+- Product Manager → `roles/PRODUCT-MANAGER.md`
+- Engineer → `roles/ENGINEER.md`
+- UI Designer → `roles/UI-DESIGNER.md`
+- Independent Reviewer → `roles/INDEPENDENT-REVIEWER.md`
 
-固定顺序：
+下一步：
 
 ```text
-Owner → Role Bootstrap
-→ ROLE CONFIRMATION
-→ Owner → PROJECT BIND
-→ Task / Handoff
+Project Manager
+Role Bootstrap
+→ Project Onboarding
+
+Product Manager / Engineer / UI Designer / Independent Reviewer
+Role Bootstrap
+→ 第一份完整上位 Handoff / Task / Review / Design Prompt
 ```
 
-旧项目如 pinned 到 v0.1.0 / 旧 Revision，继续按其固定版本执行。
+旧项目 pinned 到旧 Workflow Revision 时继续按旧版本执行。

@@ -1,476 +1,154 @@
-# CROSS-CONTEXT HANDOFF PROTOCOL
+# CROSS-CONTEXT HANDOFF
 
 ## 1. No Magic Arrows
 
-任何 AI → AI、Conversation → Conversation 的交接都必须回答：
+不同 Conversation / Runtime 之间不会自动共享完整上下文。
 
-- 传什么；
-- 谁生成；
-- 什么格式；
-- 从哪里取得；
-- 接收方是否能访问；
-- 访问不了怎么办；
-- 是否包含足够但不过量的上下文；
-- 是否完成脱敏；
-- 如何确认交接完整；
-- 结果如何返回并可追踪。
+发送方必须提供 Minimum Sufficient Context。
 
-不要假设另一个 AI 或同一 Project 中的另一个对话自动拥有当前会话、本地仓库、私有 GitHub、工作树、日志、附件或工具权限。
+Owner 只负责搬运完整 Prompt，不负责重新整理技术内容。
 
-Project Memory 可以辅助上下文恢复，但不是正式 Handoff 的替代品。
+## 2. User Relay Rule
 
-在当前个人开发流程中，Gemini 是默认独立审阅者。
+需要 Owner 转发时：
 
-### User Relay Rule — 用户只负责搬运，不负责编辑
+- 一个转发动作只给一个最终可发送块；
+- 用户不负责挑选、拼接、删减或补字段；
+- 修正时重新生成完整新版；
+- 技术判断、Repo 路由、模型选择由 AI 完成。
 
-当 **ChatGPT** 要求用户把内容转发给另一个 ChatGPT Conversation、Codex 或 Gemini 时，必须输出一个**独立、完整、可一键复制的最终 Transfer Block**。
+## 3. Owner Brief
 
-核心规则：
+正式 Transfer Block **之后**给 Owner 3–6 行中文说明：
 
-1. **一个转发动作，只给一个最终可发送块。** 需要用户转发的全部内容必须放在同一个 fenced code block 中；代码块外的解释默认只给用户看，不需要转发。
-2. **用户不负责挑选、拼接、删减或补写技术内容。** 禁止使用“把上面几段发过去”“再补发这一句”“把第 2、4、6 点一起复制”等要求。
-3. **Transfer Block 必须自包含。** 假设接收方完全看不到发送方当前对话；所有必要的 Project、Role、Workflow Revision、Repo / branch / commit、Task、Scope、Non-goals、Decision、Evidence、Stop / Escalation 条件、Expected Return 等，由 ChatGPT 按场景补齐。
-4. **有补充或修正时，重新生成完整新版。** 如果旧版尚未发送，必须明确写“上一版作废，请只发送下面完整新版”；不得让用户手工把增量拼进旧版。
-5. **给用户看的解释与给接收方的消息必须明显分离。** ChatGPT 应在 Transfer Block 前明确写“下面整块直接发送给 <目标>，不要修改”；用户应能仅凭这一标记判断需要搬运的边界。
-6. **用户是 Relay Transport，不是 Relay Editor。** 任何因为转发完整性而需要技术判断的工作，都属于 ChatGPT 的职责。
+- 发给谁；
+- 做什么；
+- 为什么现在做；
+- 大概怎么处理；
+- 是否增加明显复杂度 / 安全 / DB / 基础设施；
+- 做完返回哪里。
 
-适用范围重点包括：
+## 4. First Project Context
 
-- Primary → Child；
-- Child → Primary；
-- Primary / Child → Codex；
-- Primary / Child → Gemini；
-- Primary → 已存在 Child 的 Update Handoff；
-- 其他任何由 ChatGPT 要求用户人工搬运的任务包或上下文。
+### Project Manager
 
-本规则**不要求** Codex / Gemini 的返回消息额外拆成 Transfer Block；当用户可以直接“复制整条返回”带回 ChatGPT 时，保持完整原始返回即可。
+Project Manager 不通过 Handoff 建立项目。
 
-### Owner Brief — 给 Owner 的人话说明
-
-任何需要 Owner 把正式任务 / Handoff / Review Prompt 转发给另一个 AI 或 Conversation 的场景，发送方都必须在最终 Transfer Block **之后**提供一段简短中文说明，默认控制在 3–6 行：
-
-- 这次要做什么 / 遇到了什么问题；
-- 为什么现在要派发这个任务；
-- 准备采用什么思路解决；
-- 会明显改变什么；如新增安全边界、基础设施、数据库、权限、复杂状态或其他显著复杂度，必须点出来；
-- 当前最值得 Owner 注意的实际风险（没有则明确“无特殊风险”）。
-
-Owner Brief 是给 Owner 看的，不属于接收方提示词；接收方提示词可以使用更适合执行的语言。不得用大段术语淹没人话说明，也不得要求 Owner 通过阅读 Task 自己推断本次在做什么。
-
-### Role-First Handoff
-
-所有长期角色都先由 Owner 完成 Role Bootstrap。
-
-Role Bootstrap 之后：
-
-- **Project Manager**：由 Owner 发送独立 PROJECT BIND，再进入项目工作。
-- **Product Manager / Engineer / UI Designer / Independent Reviewer**：不单独增加 PROJECT BIND；由上位角色的第一份完整 Handoff / Task / Review / Design Prompt 同时建立 Project Context 并开始工作。
-- 第一次项目提示词必须包含足够的 Project / Recipient Code（启用时）/ Sender / Scope / Repo or Review Object / Workflow Revision / Expected Return。
-- 后续任务沿用已建立的 Project Context，只传当前真正需要的上下文并检查身份 / 项目暗号是否一致。
-- 普通 Task / Handoff 只能验证预期 Role，不能重新定义长期 Role。
-- Runtime 不是 Role：Codex / WebCodex 默认是 Engineer；Gemini 可以是 UI Designer 或 Independent Reviewer；Claude 仅在明确邀请时作为额外 Reviewer；ChatGPT 常承载 Project Manager 或 Product Manager。
-
-### Recipient Code — 轻量误投提醒
-
-此约定只针对**已启用本规则的项目**的正式转发任务 / 启动消息，不影响用户日常聊天，不增加审批或人工检查步骤。
-
-- 一个项目沿用一个简短、固定的 **Recipient Code（接收暗号）**；同项目的 Primary、Child、Codex 可以共用。Primary 在项目首次启用时确定一次，并在该项目现有 Notion Project Knowledge（如启用）或项目 Git 文档中记录；后续生成任务时自动沿用，不要求用户手工填写。暗号只是便于识别误投的标签，不是密码或权限凭据。
-- 每份正式 Transfer Block 在开头清楚写出 `Recipient Code: <接收方暗号>`。涉及跨仓或跨项目的任务也**填写目标接收对话的暗号**；本次允许操作哪些项目 / 仓库仍由任务的 Scope 决定。暗号相同即可按原有 Workflow 继续正常工作，不为跨项目任务增加额外门禁。
-- 新长期对话必须先完成 Owner 发起的 Role Bootstrap。Project Manager 通过 Owner PROJECT BIND 建立 Project / Recipient Code；Product Manager / Engineer / UI Designer / Independent Reviewer 可通过第一份完整的上位 Handoff / Task / Review / Design Prompt 建立 Project / Recipient Code。已经绑定暗号的对话收到新任务时，先与**此前已绑定的暗号**比较：一致则照常处理；不一致则只暂停这份任务并提醒“暗号不一致，可能发错对话”，不自动改绑，也不影响其他正常工作。
-- 若 Owner 明确要求将旧对话改作另一用途，可以明确重新绑定暗号；普通任务里的新暗号本身不代表切换指令。长对话中可依据此前的启动消息 / 历次任务或现有项目记录延续暗号；无须每次查询 Notion，不得仅凭一份突然出现的新暗号覆盖此前已绑定的暗号。
-- 未启用本规则或仍固定旧 Workflow Revision 的项目不因本文件更新而自动采用此约定。原有 Git Preflight 和 Scope 检查照常，不另增身份数据库、工作区校验清单或全项目冻结规则。
-
-### Emergency Succession Exception
-
-“No Magic Arrows” 的正常规则仍然有效，但存在一个受限例外：
-
-> 当旧 Primary 已经因平台限制或其他原因物理上无法继续回复、因此不可能再生成 Handoff 时，允许新 Primary 以 **Emergency Succession** 直接启动 receiver-driven recovery。
-
-这不是“跳过 Handoff”，而是发送方已经不可用时由接收方从剩余 Evidence 反向重建。Emergency Succession 必须执行本文件的恢复流程与 `WORKFLOW.md` 的 Recovery Safety Gate。
-
-## 2. Handoff Readiness Gate
-
-交接前检查：
-
-1. 接收方 Role Mask、Conversation Position、Runtime 和目标是否明确；
-2. 当前 Workflow Version + **Workflow Revision（具体 commit SHA）**、Project / Repo / branch / base commit 是否按场景明确；
-3. Task / Scope / Non-goals / Acceptance Criteria 是否明确；
-4. 相关 Architecture / Decision 是否已选择；
-5. 需要的 Diff / Patch / Changed Files 是否准备；
-6. Evidence 与 Unverified Gaps 是否准备；
-7. 跨 AI Pack 是否经过敏感信息过滤；
-8. 上下文是否在接收方可处理范围内；
-9. 接收方如果不能直接访问 Repo，是否已有替代材料；
-10. 结果返回格式与返回位置是否明确；
-11. 项目启用 Notion 时，Current Project / Project Root / Required Knowledge / Re-Anchor Scope 是否明确。
-
-Gate 的目标是防止断链，不要求每次由用户手工打勾。
-
-如果本次交接需要用户人工转发，Gate 还必须确认：ChatGPT 已按 **User Relay Rule** 输出单一、完整、自包含的一键复制 Transfer Block。
-
-## 3. Primary Conversation → Child Conversation
-
-当 Primary Conversation 判断需要新建子对话时，必须生成用户可直接复制的 Conversation Handoff，而不是让用户自己描述技术职责。
-
-使用 `templates/CONVERSATION-HANDOFF.template.md`，至少包含：
-
-- Suggested Conversation Name
-- Parent / Primary Conversation
-- Project
-- Purpose
-- Repository / Domain
-- Workflow Source + Workflow Version + exact Workflow Revision
-- Workflow Docs to Read
-- Project Docs to Read
-- Project Knowledge Root（如启用 Notion）
-- Notion Knowledge to Read（如启用）
-- Re-Anchor Scope / Triggers
-- Context Budget / Do Not Preload
-- Current Task
-- Scope
-- Non-goals
-- Escalation Triggers
-- Expected Return Package
-
-启动消息应明确要求新对话先从 Workflow `START-HERE.md` 建立规则上下文，再按给定 Repo / 项目文档恢复事实上下文。
-
-如果 Project / Repo 文档尚未建立，必须明确说明当前哪些事实来自 Primary Conversation Handoff、哪些仍待写入 Git；不要假装 Git 中已经存在。
-
-项目启用 Notion 时，Handoff 必须绑定明确的 Current Project 与 Notion Project Root；隔离和写权限按 `KNOWLEDGE-MANAGEMENT.md` 执行。
-
-### Context Truncation
-
-Conversation Handoff 遵循 **Minimum Sufficient Context**：
-
-- Primary 只指定当前 Child 真正需要读取的 Workflow / 项目文档；
-- 不要因为“以后可能有用”而预加载整个项目知识库；
-- 对明显无关的领域或文档，Primary 应在 Handoff 中明确写入 `Do Not Preload`；
-- 如果 Child 后续缺少关键上下文，应请求具体文件 / Contract / Evidence，而不是自动扩大到全项目读取。
-
-### Escalation Triggers
-
-Child Conversation 发现以下情况时应返回 Primary Conversation，而不是自行扩大决策范围：
-
-- 需求改变产品目标、非目标或核心业务规则；
-- 需要修改另一个 Repo；
-- 需要改变跨 Repo Contract / API Contract；
-- 需要改变核心架构或安全边界；
-- 当前 Task 与 Handoff Scope 明显冲突；
-- 发现一个会影响其他工作流的重要长期决定。
-
-### Child Conversation → Primary Conversation
-
-完成阶段性工作或触发升级时，返回包至少包含：
-
-- 当前任务结果摘要；
-- 相关 Repo / branch / commit（若发生代码变更）；
-- 已验证 Evidence / 未验证项；
-- 本次更新或影响到的 Git 核心文档列表（没有则写 None）；
-- 新形成或需要确认的长期决定；
-- 对其他 Repo / 产品边界的影响；
-- Blockers / 下一步建议；
-- Knowledge Update Candidate：`NONE` 或 `PROPOSED`，如为 PROPOSED 列出需要 Primary 检查的 Core Rule / State / Decision / Superseded 信息。
-
-用户只负责把结果带回主对话，不负责重新整理或技术裁决。
-
-Primary 收到返回包后，如果下一步任务依赖该 Child 的真实实现、架构、Contract 或长期文档变化，必须先执行 Re-Sync：读取返回的 commit anchor 和受影响 Git 文档，再进行下一次 Task 编排。
-
-项目启用 Notion 且 Knowledge Update Candidate = PROPOSED 时，Primary 在正式写入前必须先按 `KNOWLEDGE-MANAGEMENT.md` 执行 Re-Anchor，再做 ACCEPT / REJECT / NEEDS_EVIDENCE。
-
-如果 Primary 无法直接访问对应 Repo，不得要求零代码用户手工寻找 diff / 文档；应让 Child / Codex 输出精确文件内容、diff 或结构化返回包。
-
-### Primary → 已存在 Child 的 Update Handoff
-
-当 Primary 批准了会影响已经存在 Child 的 shared Contract、Core Rule、project-level Decision 或 Scope 变化时，不允许假设对方会自动知道。
-
-Primary 生成最小 Update Handoff：
+由 Owner：
 
 ```text
-Project:
-Affected Child:
-Workflow Revision:
-What Changed:
-Relevant Decision / Core Rule:
-Git / Contract Anchor:
-Required Re-Anchor:
-Required Re-Sync:
-Before Continuing Related Work:
+Role Bootstrap
+→ Project Onboarding
+→ Project Baseline
 ```
 
-只发送给真正受影响的 Active Child。接收方在继续相关工作前完成 Re-Anchor / Re-Sync；无关 Child 不机械刷新。
+### Other Roles
 
-## 4. Primary → New Primary
+Product Manager / Engineer / UI Designer / Independent Reviewer 的第一份完整上位 Prompt 同时建立 Project Context。
 
-正常 planned succession 时，旧 Primary 必须生成一个按 User Relay Rule 可一键复制的完整 Transfer Block，至少包含：
+至少按需包含：
 
-- Project / Current Project Root；
-- Workflow Version + exact Revision；
-- 当前阶段 / 当前主要目标；
-- relevant ACTIVE / REJECTED / SUPERSEDED Decisions；
-- 相关 Repo / branch / known commit anchors；
-- Active Child / Codex / Gemini work pointers；
-- Knowledge Sync: PENDING 的正式变化（如有）；
-- 已知 dirty workspace / deploy / migration / Hotfix / production risk；
-- 已验证 Evidence / Unverified Gaps；
-- Next Safe Action；
-- 新 Primary 必读的 Notion / Git / Handoff 材料。
-
-旧 Primary 应先完成 Re-Anchor / 必要 Re-Sync，并尽量在 Safe Stop Point 交接。Handoff 不复制完整聊天历史。
-
-### Emergency Succession — Old Primary Unavailable
-
-当旧 Primary 已无法回复时，新 Primary 不要求用户先取得旧 Primary Handoff，而按以下顺序恢复：
-
-1. 确认 Project、Workflow Version + Revision；
-2. 读取 `PRIMARY-CONVERSATION.md`；
-3. 项目启用 Notion 时读取 Core Rules / Current State / relevant Decisions，以及 Primary Continuity Pointer（如存在）；
-4. 读取可直接访问的 Git / PR / CI / Runtime / Production Evidence；
-5. 读取可直接访问的 Child / Codex / Gemini task / report records；
-6. 识别 `ACCEPTED + Knowledge Sync: PENDING`、active/unknown external work、dirty workspace、Hotfix、migration / deploy 等风险；
-7. 建立本次临时 Recovery Ledger：
-
-```text
-Claim:
-Fact Type:
-Source:
-Anchor / timestamp:
-Status: VERIFIED | UNVERIFIED | MISSING | CONFLICTING
-Impact:
-```
-
-8. 执行 `WORKFLOW.md` 的 Recovery Safety Gate / Duplicate Execution Guard；
-9. 只有在仍缺关键材料时，才让用户按 User Relay Rule 原样搬运一个明确指定的完整 Child / Codex / Gemini 返回；
-10. 输出 `Recovered / Unverified / Conflicts / Next Safe Action`，确认 Safe Resume Point 后再继续 mutation。
-
-`VERIFIED / UNVERIFIED / MISSING / CONFLICTING` 只属于这次恢复报告，不成为项目永久状态。
-
-无法确认某个 external task 是否仍在运行时，默认 `Execution State: UNKNOWN`，不得重派相同任务、reset/checkout 覆盖工作树、重复 migration、重复 deploy 或执行其他可能造成 side effect 的操作。
-
-## 5. ChatGPT → Codex
-
-### Codex Runtime Banner
-
-当 ChatGPT 要求用户把 Task 发送给 Codex 时，除了按 **User Relay Rule** 给出完整一键复制 Task Block，还必须在代码块**之前**单独告诉用户本次建议使用：
-
-```text
-Codex Model: Luna | Terra | Sol
-Reasoning: Light（轻量） | Medium（中） | High（高）
-Why: <一句话说明为什么这个档位足够>
-```
-
-这个 Banner 是给用户选择 Codex 运行档位看的，不要求用户自己根据技术内容判断模型。
-
-默认采用 **Smallest Sufficient Runtime**：在能够可靠完成当前任务的前提下，优先选择更低的模型 / Reasoning 档位以节省额度；不要因为 Task Risk 高就机械使用 Sol / High，也不要为了省额度把明显高复杂度任务压到不足的档位。
-
-同一份 Codex Task Block 内仍必须保留 Recommended Model / Recommended Reasoning / Selection Reason，确保任务本身也能独立理解推荐运行档位。
-
-最小 Task 包：
-
+- 【发给谁】
+- 【发送方】
+- 【提示词类型】
+- 【项目】
+- 【Recipient Code】
+- 【负责范围 / Scope】
+- 【Repository / Review Object】
+- 【Workflow Version / Revision】
 - Goal
-- Background
-- Scope
+- Confirmed Facts
 - Non-goals
-- Relevant Context / 文档指针
-- Acceptance Criteria + Evidence Expectations
-- Task Risk
-- Git / Preflight 要求
-- Recommended Codex Model
-- Recommended Reasoning Level
+- Relevant Context
+- Expected Return
+- Escalation Boundary
+
+后续 Prompt 只携带当前真正需要的上下文，并校验 Project / Recipient Code 一致性。
+
+## 5. Recipient Code
+
+Recipient Code 是轻量误投提醒，不是权限凭据。
+
+- 一个项目可以使用一个固定 Recipient Code；
+- Project Manager 在 Project Onboarding / Baseline 中建立；
+- 其他角色在第一份完整项目 Prompt 中建立；
+- 已绑定对话收到不一致 Code 时，只暂停该任务并提示可能误投；
+- 普通任务中的新 Code 不能静默改绑。
+
+## 6. Role-to-Role Routing
+
+Finding / Return 按问题性质回到真正负责的角色：
+
+- Project / Architecture Boundary → Project Manager
+- Product Behavior → Product Manager
+- Engineering Defect → Engineer
+- UI / UX → UI Designer / Product Manager
+- Business Decision → Owner
+
+明确工程缺陷允许：
+
+Engineer → Fix → Reviewer Verify
+
+不机械绕路。
+
+## 7. Engineer Task
+
+发给 Engineer 时，除完整 Task 外，还要给 Owner 可见的：
+
+- Recommended Model
+- Recommended Reasoning
 - Selection Reason
-- Review / Stop Point
 
-对于已有仓库，尽量附：
+Task 以 Coherent Work Unit 为单位。
 
-- expected repo
-- expected branch（若已知）
-- base commit（若已知且稳定）
+内部 inspect / research / implement / debug / review / test / commit 不构成 Owner Relay Gate。
 
-如果重要决定仍只存在于聊天、尚未进入 Git，应先将其整理为当前 Task 的明确 Context，必要时在完成后按 `DOCUMENTATION.md` 沉淀。
+## 8. Independent Review Handoff
 
-## 6. Codex → ChatGPT
+Formal Review 必须提供足够 Evidence / Review Object。
 
-最小结果包：
+如果审核依赖本地文件 / Review Pack：
 
-- Implementation Report
-- Changed Files
-- Git diff summary / commit
-- Tests / build / lint / typecheck 实际执行情况
-- Verifiable Evidence
-- Unverified Gaps
-- Risk Assessment
-- 是否建议独立 Review 及原因
+- 使用真实可访问路径；
+- 不虚构 Mac 本地路径；
+- 远程材料明确标注环境；
+- 不要求 Owner 手工制作 patch / logs / manifest。
 
-报告中的文字判断是 Claim；命令输出、CI、runtime 结果等才是 Evidence。
+Reviewer 缺上下文时输出 NEEDS_CONTEXT，而不是猜。
 
-### Gemini 桌面客户端审核材料路径
+## 9. Succession
 
-Owner 使用 Mac 上的 Gemini 桌面客户端进行独立审核。凡 Codex 产出的材料需要交给 Gemini 审核：
+Project Manager：
 
-- Codex 在 Review Handoff 中报告审核材料的**真实绝对路径**（优先为审核目录，其次为必要文件及本地仓库目录），明确所在环境以及 Mac 是否可直接访问；能够确认时提供目录及关键文件的实际路径。不得只给相对路径、文件名或臆造 Mac 路径。
-- Primary / Child 在生成给 Gemini 的**同一个完整可复制提示词**时，自动写出 Codex 已核实的审核目录和必要文件的路径，直接指示 Gemini 读取；不要求 Owner 另外查找、复制路径或补填模板。
-- 若 Codex 仅在云端 / 远程环境有文件，不能把远程路径当作 Mac 本地路径。能由执行方实际提供 Mac 可访问的文件位置时使用该位置；否则明确标注访问限制和当前真实材料位置，提供现有可行的审核交接方式，不假装已经在 Mac 上生成文件。
-- 这只是现有 Review Handoff 的路径输出要求，不新建审核门禁、不改变 Review Gate，也不影响无须 Gemini 审核的普通任务。
+`templates/succession/PROJECT-MANAGER-SUCCESSION.md`
 
-## 7. Gemini Design Review Pack
+Product Manager：
 
-Design Review 至少包含：
+`templates/succession/PRODUCT-MANAGER-SUCCESSION.md`
 
-- 项目目标 / 非目标的相关部分；
-- 当前架构相关部分；
-- 相关 Decision / ADR；
-- 当前 Task；
-- ChatGPT 设计方案；
-- 备选方案（若有）；
-- 已知风险；
-- 明确希望审查的问题。
+Owner 同时上传上一任对话 PDF。
 
-不要无差别上传整个项目知识库。
+接班采用 Tail First → Expand Backward as Needed。
 
-## 8. Gemini Code Review Pack
+## 10. Return / Completion Rule
 
-**Codex 是 Review Pack 的唯一默认生成责任方。**
-
-当 ChatGPT 判定需要 Gemini Code Review 时，应先把“生成 Review Pack”作为当前 Codex Task 的 Stop Point / Handoff 要求，或单独生成一个 Review Pack Generation Task。Codex 负责：
-
-- 运行 `tools/review-pack/` 工具；
-- 生成 `diff.patch`；
-- 收集允许进入 Pack 的测试 / build / CI / runtime Evidence；
-- 执行既定脱敏与 Secret Scan；
-- 输出最终 ZIP 或结构化 Markdown fallback。
-
-用户只负责把最终产物交给 Gemini；不得要求零代码用户自己制作 patch、提取 exit code、整理 raw logs 或拼装 Review Pack。
-
-如果 Codex 所在环境无法生成 Pack，应明确报告阻塞点并采用 `HANDOFF.md` 定义的 fallback，而不是把技术整理工作转嫁给用户。
-
-Review Pack 至少包含：
+正式 Prompt 最后应明确：
 
 ```text
-REVIEW.md
-MANIFEST.md
-diff.patch
-context/
-evidence/
+==================================================
+RETURN / COMPLETION RULE
+==================================================
+完成后：
+- 返回给：<角色 / 对话>
+- 返回内容：<需要带回什么>
+- 不自行进入：<下一阶段 / 超出 Scope 的工作>
+- 真实阻塞：说明缺什么、为什么不能自行解决。
+- 不受阻的已授权工作继续推进。
+
+==================================================
+提示词结束｜END OF PROMPT
+==================================================
+【提示词到此结束，请按以上内容执行。】
 ```
 
-`REVIEW.md`：Task、Acceptance、Risk、Review focus。
-
-`MANIFEST.md`：base/review commit、changed files、included/excluded context、脱敏说明。
-
-`diff.patch`：本任务审查差异。
-
-`context/`：必要 Architecture / ADR / relevant source。
-
-`evidence/`：tests、build、CI、runtime 等真实验证材料。
-
-High Risk Code Review 优先使用明确的 **base commit → review commit** 锚点。任务改动不应只停留在未提交工作树中，否则 Review Pack 可能静默遗漏真正需要审查的变化。
-
-一般开发允许 dirty working tree，但生成 commit-anchored Review Pack 时：
-
-- 默认应先把本 Task 的修改形成可审查 commit；
-- 如果仍存在已知且与本 Task 无关的 dirty state，可以由 Codex确认后显式允许；
-- `MANIFEST.md` 必须记录打包时的 working tree state；
-- 不得把“工作树是 dirty”与“Review Pack 已包含这些修改”混为一谈。
-
-## 9. Context Selection
-
-目标是 Minimum Sufficient Context。
-
-Small Task：可使用一个 Markdown review dossier。
-
-Medium Task：优先一个自动生成的 ZIP Review Pack。
-
-Large Task：优先顺序：
-
-1. 能安全拆分时拆为多个 Medium Review；
-2. 平台支持可靠 PR Review 时使用 PR + Review Context；
-3. 无法拆分时生成 Multi-Part Review Pack；
-4. 单文件微观审查只能用于某个 Finding 的补充验证，不可替代整个 Large Change Review。
-
-Relevant files 的选择应由 Codex / ChatGPT 依据 diff 与调用链完成，用户不负责手工理解依赖。
-
-如果 changed path 因安全策略、大小或格式限制被排除，必须出现在 `MANIFEST.md` 中。Gemini 应把这种排除视为潜在缺失上下文，而不是默认认为未提供部分不存在问题。
-
-## 10. Security / Redaction
-
-Review Pack 使用：
-
-```text
-Allowlist + Mandatory Denylist + Secret Scan + Log Redaction
-```
-
-默认永不发送：
-
-- `.env` / `.env.*`（允许明确作为 schema 的 `.env.example` / `.env.sample` / `.env.template`）；
-- `*.pem` / `*.key` / `*.p12` / `*.pfx`；
-- SSH private keys；
-- database dumps；
-- `.git/`；
-- `node_modules/`；
-- 明确的生产凭据文件；
-- 无必要的大型 generated / vendor 文件。
-
-`.gitignore` 不是 Secret Boundary。
-
-需要说明环境变量时使用 `.env.example` 或生成脱敏 schema；不要修改真实 `.env` 后发送。
-
-Secret Scan 失败或发现疑似凭据时，Pack 生成应 fail closed，并要求处理后重新生成。
-
-当前 v1 helper 只提供基础 secret-pattern 检查，不应被视为专业 Secret / PII Scanner。敏感日志应在进入 Pack 前完成脱敏；Tier 3 项目优先使用独立 secret-scanning 能力。
-
-## 11. Missing Context Declaration
-
-Gemini 材料不足时必须允许输出：
-
-```text
-INSUFFICIENT_CONTEXT
-```
-
-或 Finding：
-
-```text
-Status: NEEDS_CONTEXT
-Missing: <file / behavior / evidence>
-Reason: <why it blocks reliable conclusion>
-```
-
-禁止基于未提供实现假装确定结论。
-
-## 12. Finding Schema
-
-推荐：
-
-```text
-Finding ID
-Severity
-Category
-Claim
-Evidence
-Affected Files
-Why It Matters
-Recommendation
-Confidence
-Blocking: Yes/No
-Missing Context: Yes/No
-```
-
-ChatGPT 裁决后保留 Finding ID：
-
-```text
-G-001 ACCEPTED
-G-002 REJECTED
-G-003 NEEDS_EVIDENCE
-```
-
-Codex Fix Task 必须携带对应 Finding ID，确保发现 → 裁决 → 修复 → 验证可追踪。
-
-## 13. Multi-Repo Handoff
-
-跨 Repo Task 至少记录：
-
-- repo name
-- branch
-- commit anchor
-- 本 Repo 的修改范围
-- cross-repo contract
-
-Review Pack 应在 MANIFEST 中明确多 Repo 边界。
+# END

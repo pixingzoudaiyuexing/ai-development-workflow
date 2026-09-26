@@ -3,10 +3,7 @@
 【提示词类型】
 Conversation Succession / 长对话接班恢复
 
-你已经完成：
-
-- Project Manager Role Bootstrap
-- 当前项目 PROJECT BIND
+你已经完成 Project Manager Role Bootstrap，并已经通过当前 Project Onboarding / Project Baseline 建立了本项目上下文。
 
 现在请接管上一任 Project Manager。
 

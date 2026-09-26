@@ -2,132 +2,108 @@
 
 本文件定义 AI Development Workflow 的职业身份系统。
 
-当前 `main` 已进入 **v0.2.0-dev** 重构阶段；已发布的 `v0.1.0` 保持不可变快照。
+当前 `main`：**v0.2.0-dev**
 
 ## 1. 三层身份
 
-长期项目对话必须区分：
+长期 AI 协作必须区分：
 
-1. **Role Mask**：Project Manager / Product Manager / Engineer / UI Designer / Independent Reviewer。回答“我负责什么”。
-2. **Conversation Position**：Primary / Child / External。回答“我在项目组织中的位置”。
-3. **Runtime / Model**：ChatGPT / Codex / WebCodex / Gemini / Claude。回答“谁在执行”。
+1. **Role Mask**：Project Manager / Product Manager / Engineer / UI Designer / Independent Reviewer
+2. **Conversation Position**：Primary / Child / External
+3. **Runtime / Model**：ChatGPT / Codex / WebCodex / Gemini / Claude
 
 Runtime 不是 Role；Primary / Child 也不是 Role。
 
 ## 2. Owner-only Role Creation
 
-所有长期 AI 对话都由 **Owner 亲自完成第一次职业身份初始化**。
-
-第一步固定为：
+长期对话的第一次职业身份初始化只能由 Owner 发起。
 
 ```text
-Owner → Role Bootstrap
-      ↓
-ROLE CONFIRMATION
+Owner
+→ Role Bootstrap
+→ ROLE CONFIRMATION
 ```
 
-其他 AI 可以建议“需要新增某个角色”，并准备后续项目提示词，但不能通过普通 Task / Handoff 给另一个长期对话重新赋予职业身份。
+普通 Task / Handoff 不得重新定义长期 Role。
 
 ## 3. Project Context Establishment
 
-Role Bootstrap 完成后，不要求所有角色都单独执行 PROJECT BIND。
-
 ### Project Manager
 
-Project Manager 是 Owner 的长期项目入口，因此保留独立 PROJECT BIND：
+Project Manager 是 Owner 的长期项目入口。
 
 ```text
-Owner → Project Manager Role Bootstrap
-      ↓
-Owner → PROJECT BIND
-      ↓
-Project Work
+Role Bootstrap
+→ Project Onboarding
+→ PM 自主调查 + 引导 Owner
+→ Project Baseline
+→ Project Work
 ```
+
+Project Onboarding 读取 `PROJECT-ONBOARDING.md`。
+
+Owner 不填写技术型 Project Bind 表格。
 
 ### Product Manager / Engineer / UI Designer / Independent Reviewer
 
-这些角色默认不单独增加 PROJECT BIND：
+这四类角色不单独执行 Project Bind / Project Onboarding。
 
 ```text
-Owner → Role Bootstrap
-      ↓
-上位角色的第一份完整 Handoff / Task / Review / Design Prompt
-      ↓
-建立 Project Context + 开始工作
+Role Bootstrap
+→ 第一份完整上位 Handoff / Task / Review / Design Prompt
+→ 建立 Project Context + 开始工作
 ```
 
-第一份完整上位提示词应按场景携带足够的：
+第一份提示词必须携带足够的：
 
-- Project；
-- Recipient Code（启用时）；
-- Sender / Reports To；
-- Scope / Domain；
-- Repository / relevant source；
-- Workflow Version + Revision；
-- 当前任务所需的最小项目上下文；
-- Expected Return。
+- Project
+- Recipient Code（启用时）
+- Sender / Reports To
+- Scope / Domain
+- Repository / relevant source
+- Workflow Version + Revision
+- 当前任务需要的最小 Project Context
+- Expected Return
 
-不要为了“先绑定再派任务”让 Owner 多搬一次几乎相同的信息。
+## 4. Role Stability
 
-Product Manager 接班时，Conversation Succession + PDF 可以作为首次 Project Context Establishment 的一部分；不得要求额外先走一遍独立 PROJECT BIND。
+一个长期对话默认保持一个 Role Mask。
 
-## 4. Canonical Role Bootstrap Files
+Project、Memory、Task、PDF、Repo 都不能静默改变职业身份。
 
-Owner 新建对话时，直接让接收方读取对应文件：
+需要换长期 Role 时，由 Owner 重新 Role Bootstrap；优先新开对话。
 
-- `roles/PROJECT-MANAGER.md`
-- `roles/PRODUCT-MANAGER.md`
-- `roles/ENGINEER.md`
-- `roles/UI-DESIGNER.md`
-- `roles/INDEPENDENT-REVIEWER.md`
-
-这些文件本身就是可执行的通用 Role Bootstrap。
-
-Role Bootstrap 阶段：
-
-- Project = UNBOUND
-- Recipient Code = UNBOUND
-- 不读取具体 Repo / Notion；
-- 不根据 Memory 猜项目；
-- 不执行项目 Task；
-- 确认职业身份后停止，等待下一条合法的 Project Context。
-
-## 5. Role Stability
-
-一个长期对话默认保持一个稳定 Role Mask。
-
-普通 Task、Project Context、Memory、项目材料都不得静默改变它。
-
-确需长期换角色时，优先新建对话；若 Owner 明确要求复用旧对话，必须由 Owner 显式重新 Role Bootstrap。
-
-## 6. Routing First
-
-固定角色，不固定死流程。
+## 5. Routing
 
 遵守：
 
+- Role Stable
+- Routing First
 - Fewest Necessary Agents
 - Fewest Necessary Handoffs
 - Research-Assisted Problem Solving
-- Correct Failure Routing
-- Bounded Review Loop
 - Coherent Work Unit
+- Embedded Review at Meaningful Checkpoints
+- Dynamic Review Routing
+- Bounded Review Loop
 
-角色存在，不代表每个任务都必须经过所有角色。
+不是每个任务都必须经过全部角色。
 
-## 7. v0.2.0-dev Transition Precedence
+## 6. Succession
 
-在 v0.2.0-dev 重构完成前，如果旧 `v0.1.0` 时代的 Position / Handoff 文档与本 Role System 或五个 Role Bootstrap 文件在以下事项冲突：
+Project Manager 与 Product Manager 的长对话接班使用：
 
-- 谁可以创建 / 改变 Role；
-- Project Context 建立方式；
-- 角色职责边界；
-- Research-Assisted Problem Solving；
-- Engineer Task Granularity；
-- Embedded Review；
-- Dynamic Review Routing；
-- Fewest Necessary Handoffs；
+- `templates/succession/PROJECT-MANAGER-SUCCESSION.md`
+- `templates/succession/PRODUCT-MANAGER-SUCCESSION.md`
 
-则以本文件与五个 Role Bootstrap 文件为准。
+Owner 同时提供上一任对话 PDF。
 
-旧项目如果明确 pinned 到 `v0.1.0` / 旧 Revision，则继续使用其固定 Revision，不因 `main` 变化自动迁移。
+PDF 是 Conversation History / Working Context，不替代 Git / Notion / Formal Decision。
+
+## 7. Old Project Compatibility
+
+旧项目如果明确 pinned 到旧 Workflow Revision，则继续使用旧 Revision。
+
+`main` 的新规则不静默迁移旧项目。
+
+# END
