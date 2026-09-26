@@ -28,7 +28,64 @@ Owner 只负责搬运完整 Prompt，不负责重新整理技术内容。
 - 是否增加明显复杂度 / 安全 / DB / 基础设施；
 - 做完返回哪里。
 
-## 4. First Project Context
+## 4. Canonical Recipient Identity Contract
+
+跨角色 Prompt 必须严格区分：
+
+1. **Role Mask**
+2. **Conversation Position**
+3. **Runtime / Model**
+4. **Task / Prompt Type**
+
+以下是唯一允许写入 `【发给谁】`、`【发送方】`、`【返回给】` 的 Canonical Role Mask：
+
+- Project Manager
+- Product Manager
+- Engineer
+- UI Designer
+- Independent Reviewer
+- Project + Product Manager
+
+禁止把以下内容拼进 Role 名称：
+
+- Primary / Child / External；
+- ChatGPT / Codex / WebCodex / Gemini / Claude；
+- Executor / Validator / Coordinator / Checker / Tester 等临时职责；
+- FINAL TEST / SECURITY REVIEW / DEPLOYMENT CHECK 等任务类型；
+- 项目名、Repo 名、Feature 名。
+
+正确 Header 形态：
+
+```text
+【发给谁】<Canonical Role Mask>
+【Conversation Position】Primary / Child / External（需要时）
+【Runtime】ChatGPT / Codex / WebCodex / Gemini / Claude（需要时）
+【发送方】<Canonical Role Mask>
+【Sender Conversation Position】Primary / Child / External（需要时）
+【提示词类型】<Task / Handoff / Review / Acceptance 类型>
+...
+【返回给】<Canonical Role Mask>
+【Return Conversation Position】Primary / Child / External（需要时）
+```
+
+例如：
+
+```text
+【发给谁】Project Manager
+【Conversation Position】Primary
+【发送方】Product Manager
+【提示词类型】FINAL TEST INTEGRATION ACCEPTANCE
+```
+
+不得写：
+
+```text
+【发给谁】CC Primary / TEST Acceptance Executor
+```
+
+如果实际目标对话的 Role Mask 不明确，先根据已绑定 Role / Project Context 确认；不得自行创造新身份名称。
+
+## 5. First Project Context
 
 ### Project Manager
 
@@ -65,7 +122,7 @@ Product Manager / Engineer / UI Designer / Independent Reviewer 的第一份完�
 
 后续 Prompt 只携带当前真正需要的上下文，并校验 Project / Recipient Code 一致性。
 
-## 5. Recipient Code
+## 6. Recipient Code
 
 Recipient Code 是轻量误投提醒，不是权限凭据。
 
@@ -75,7 +132,7 @@ Recipient Code 是轻量误投提醒，不是权限凭据。
 - 已绑定对话收到不一致 Code 时，只暂停该任务并提示可能误投；
 - 普通任务中的新 Code 不能静默改绑。
 
-## 6. Role-to-Role Routing
+## 7. Role-to-Role Routing
 
 Finding / Return 按问题性质回到真正负责的角色：
 
@@ -91,7 +148,7 @@ Engineer → Fix → Reviewer Verify
 
 不机械绕路。
 
-## 7. Engineer Task
+## 8. Engineer Task
 
 发给 Engineer 时，除完整 Task 外，还要给 Owner 可见的：
 
@@ -103,7 +160,7 @@ Task 以 Coherent Work Unit 为单位。
 
 内部 inspect / research / implement / debug / review / test / commit 不构成 Owner Relay Gate。
 
-## 8. Independent Review Handoff
+## 9. Independent Review Handoff
 
 Formal Review 必须提供足够 Evidence / Review Object。
 
@@ -116,7 +173,7 @@ Formal Review 必须提供足够 Evidence / Review Object。
 
 Reviewer 缺上下文时输出 NEEDS_CONTEXT，而不是猜。
 
-## 9. Succession
+## 10. Succession
 
 Project Manager：
 
@@ -130,7 +187,7 @@ Owner 同时上传上一任对话 PDF。
 
 接班采用 Tail First → Expand Backward as Needed。
 
-## 10. Return / Completion Rule
+## 11. Return / Completion Rule
 
 正式 Prompt 最后应明确：
 
@@ -139,7 +196,7 @@ Owner 同时上传上一任对话 PDF。
 RETURN / COMPLETION RULE
 ==================================================
 完成后：
-- 返回给：<角色 / 对话>
+- 返回给：<Canonical Role Mask>\n- Return Conversation Position：<Primary / Child / External，如需要>
 - 返回内容：<需要带回什么>
 - 不自行进入：<下一阶段 / 超出 Scope 的工作>
 - 真实阻塞：说明缺什么、为什么不能自行解决。
