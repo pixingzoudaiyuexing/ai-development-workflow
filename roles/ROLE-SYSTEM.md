@@ -33,16 +33,17 @@ Owner
 Project Manager 是 Owner 的长期项目入口。
 
 ```text
-Role Bootstrap
-→ Project Onboarding
+roles/PROJECT-MANAGER.md
+→ Role Bootstrap
+→ Embedded Project Onboarding
 → PM 自主调查 + 引导 Owner
 → Project Baseline
 → Project Work
 ```
 
-Project Onboarding 读取 `PROJECT-ONBOARDING.md`。
+Project Onboarding 已内置在 Project Manager Role 文件中。
 
-Owner 不填写技术型 Project Bind 表格。
+Owner 不填写技术型 Project Bind 表格，也不需要发送第二份 Onboarding Prompt。
 
 ### Product Manager / Engineer / UI Designer / Independent Reviewer
 
@@ -99,7 +100,7 @@ Canonical 新对话提示词：
 
 - `roles/PROJECT-PRODUCT-MANAGER.md`
 
-这个身份直接包含 Role Bootstrap + Project Onboarding，不再额外发送 Project Manager Role Bootstrap、Product Manager Role Bootstrap 或 `PROJECT-ONBOARDING.md`。
+这个身份直接包含 Role Bootstrap + Project Onboarding，不再额外发送 Project Manager Role Bootstrap、Product Manager Role Bootstrap 或单独的 Onboarding 文件。
 
 职位分配由 Owner 决定。其他 AI 可以提出角色调整建议，但不能自行改变长期 Role Topology。
 
