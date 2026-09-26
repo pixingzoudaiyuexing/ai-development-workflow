@@ -31,30 +31,38 @@ Role 确认后停止，再由 Owner 发送 PROJECT BIND；完成项目绑定后�
 
 ## 核心原则
 
+v0.2.0-dev 不再把所有任务固定成同一条流水线。默认采用：
+
 ```text
-用户描述需求
-   ↓
-Primary Conversation：产品 / 架构 / 路由 / 任务拆分
-   ↓
-必要时 Child Conversation：在明确 Repo / Scope 内推进
-   ↓
-Codex 做
-   ↓
-Gemini 查（按风险 Gate）
-   ↓
-ChatGPT 裁
-   ↓
-Codex 修
+Owner / Project Direction
+        ↓
+Project Manager / Product Manager
+        ↓
+Research-assisted analysis（需要时）
+        ↓
+Engineer：一个 Coherent Work Unit
+        ↓
+Research → Implement → Embedded Review → Validate → Evidence
+        ↓
+上游验收
+        ↓
+Formal Independent Review（仅在有价值 / 高风险时）
+        ↓
+Finding 按性质返回正确角色
 ```
 
 同时遵循：
 
-- GitHub Workflow 负责“AI 应该怎么工作”；Notion（启用时）负责“项目现在怎么定”；Git / Runtime / Tests 负责“技术上现在实际是什么”；
+- **Role Stable**：长期职业身份不被普通 Task 静默改变；
+- **Routing First**：先判断谁最适合做，不机械经过全部角色；
+- **Fewest Necessary Agents / Handoffs**：在不降低正确性和必要控制的前提下减少 Owner 搬运；
+- **Research-Assisted Problem Solving**：复杂 / 未知 / 第三方相关问题先借助官方资料、GitHub、同类项目建立可靠假设，避免长时间 Blind Trial-and-Error；
+- **Coherent Work Unit**：Engineer Task 以完整可交付结果为单位，内部步骤由 Engineer 自行完成；
+- **Embedded Review**：Engineer 可在有意义节点自动调用第二模型审查，不要求 Owner 逐次转发；
+- **Dynamic Review Routing**：正式 Reviewer 可介入产品、架构、代码、安全、数据、UI；Finding 返回真正负责的角色；
+- **Git / Runtime / Tests / Evidence** 保存技术事实；Notion（启用时）面向 Owner 保存项目进度与产品记忆；
 - Project Memory 是辅助，不是正式事实同步机制；
-- 高风险任务必须提供更强的可验证证据；
-- 跨 AI / 跨 Conversation 不存在“魔法箭头”，必须有明确上下文与 Handoff；
-- 用户负责产品目标和最终上线决定，不负责底层技术争论、Conversation / Repo 路由与验证实验设计；
-- Codex 的模型选择需要考虑额度与实现复杂度，因此正式 Codex Task 必须给出模型与推理强度建议。
+- 旧项目固定到自己的 Workflow Version + Revision，不因 `main` 变化静默迁移。
 
 ## 文档导航
 
@@ -73,6 +81,19 @@ Codex 修
 
 ## 版本策略
 
-Workflow 使用粗粒度版本：`v1`、`v2`、`v3`。
+Workflow 使用 SemVer 风格的 0.x 版本进行演进：
 
-旧项目不会因为 Workflow 升级自动迁移。只有真实项目运行暴露出问题，或平台能力变化导致流程无法执行时，才进入下一版设计。
+- `v0.1.0`：第一份稳定快照；
+- `v0.2.0-dev`：当前 `main` 的 Role-First / Owner-visible 工作流重构阶段；
+- 完成并验证后再发布正式 `v0.2.0`。
+
+每个项目应同时记录：
+
+```text
+Workflow Version: <release / dev version>
+Workflow Revision: <exact commit SHA>
+```
+
+Version 方便 Owner 识别工作流代际；Revision 用于 AI 精确读取规则。
+
+旧项目不会因为 Workflow 升级自动迁移。

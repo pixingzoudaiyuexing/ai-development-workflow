@@ -93,37 +93,63 @@ Gemini 默认不直接修改项目代码。
 
 ## 2. 标准开发循环
 
+v0.2.0-dev 不使用强制固定流水线。默认依据 Role、Task Risk 与真实依赖动态路由。
+
+常见路径：
+
 ```text
-需求
+Owner / Project Direction
 ↓
-ChatGPT：分析 / 设计 / Task Risk
+Project Manager / Product Manager
 ↓
-必要时：Gemini Design Review
+必要时：GitHub / 官方文档 / Web / Similar Project Research
 ↓
-ChatGPT：最终方案
+Engineer：Coherent Work Unit
 ↓
-Codex Task
+Research → Implement → Embedded Review → Test / Validate → Evidence → Report
 ↓
-Codex：Preflight → 实现 → 验证 → Evidence → Report
+上游：Intent / Acceptance Check
 ↓
-ChatGPT：核对验收与 Risk Gate
+必要时：Formal Independent Review
 ↓
-High Risk：Gemini Code Review
+Finding 按性质返回 Product / Project / Engineer / UI / Owner
 ↓
-ChatGPT：Accepted / Rejected / Needs Evidence
+Fix / Verify（只对真正需要的 Finding）
 ↓
-必要时 Codex Fix
-↓
-最终验证
-↓
-验收 / 发布
-↓
-仅在 DOCUMENTATION.md 触发条件成立时更新长期文档
+完成 / 发布 / 必要的长期知识同步
 ```
 
-Primary 编排已授权任务时，应遵守 `PRIMARY-CONVERSATION.md` 的 **Anti-Stagnation & Execution Boundaries**：非必要前置依赖不得阻断交付；开发测试不默认承接生产级要求，STOP 后优先恢复未受阻工作。
+### 2.1 Research-Assisted Problem Solving
 
-遇到非显而易见的开发故障时，按 `PRIMARY-CONVERSATION.md` 的 **Difficult Debugging — Early External Research & Retry Stop-Loss** 尽早借助官方资料、GitHub 上游与同类项目；调试有新证据也可并行检索，重复盲试则及时返回 ChatGPT 止损，不将检索变成普通小问题的机械门禁。
+复杂、未知、第三方相关问题，应尽早利用官方资料、GitHub 上游、Issues / Discussions、同类开源项目和 Web Research 建立有证据的 Hypothesis，再做针对性实验。
+
+研究不是机械门禁。明显本地小错误不需要先搜索全网；外部实现也不能替代当前项目事实。
+
+### 2.2 Coherent Work Unit
+
+Engineer Task 默认以一个完整、连续、可独立实现和验证的 Outcome 为单位。
+
+Task 内部可以包含多个步骤，但普通内部步骤不应变成多个 Owner Relay Gate。只有真实产品 Gate、关键 PoC、跨 Repo Contract、不可逆操作、上下文失控、真正并行或明显不同风险边界时才拆。
+
+### 2.3 Embedded Review
+
+Engineer Runtime 如果具备第二模型 / Antigravity Bridge，可在有意义的开发节点自行 Review，无需 Owner 逐次转发。
+
+Embedded Review 是内部质量控制，不自动取代所有 Formal Independent Review；普通低风险任务也不因形式要求机械增加 Formal Review。
+
+### 2.4 Dynamic Review Routing
+
+Independent Reviewer 可以按需要审核 Product / Architecture / Code / Security / Data / UI / Cross-repo。
+
+Finding 返回真正负责的角色：
+
+- Product → Product Manager
+- Architecture / Project Boundary → Project Manager
+- Engineering Defect → Engineer
+- UI / UX → UI Designer / Product Manager
+- Owner Business Decision → Owner
+
+Fix 后 Re-review 优先检查 Accepted Findings 与受影响区域，避免无限扩大 Review。
 
 ## 3. ChatGPT Project 与 Conversation Orchestration
 

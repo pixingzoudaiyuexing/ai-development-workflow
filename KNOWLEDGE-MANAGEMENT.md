@@ -84,36 +84,46 @@ Notion Project Root: <project root>
 - Archived Project 默认不读取；
 - 跨项目知识只有在 Primary 明确声明 Cross-Project Context 时才允许引入，并必须保留来源。
 
-## 4. 写权限
+## 4. 语义 Ownership 与写入责任
 
-项目级 Notion 的正式写入权属于 Primary Conversation。
+v0.2.0-dev 将 Notion 定位为：
+
+**Owner-facing Project / Product Memory Layer**
+
+而不是第二个 Git，也不是由 Conversation Position 自动垄断的数据库。
+
+语义 Ownership 按 Role 区分：
 
 ```text
-Primary
-= Read + Approve + Write
+Project Manager
+= Owner Dashboard / Project Progress / Roadmap / Milestones /
+  Project Current State / Role Topology / Workflow Revision /
+  项目级 Decision 状态
 
-Child
-= Read + Propose
+Product Manager
+= Feature Memory / Product Discussion / Confirmed Direction /
+  Must Have / Must Not / Delegated Space / Implemented Behavior /
+  AI-added Improvements / Feature Change History
 
-Codex
-= Propose through Report / Evidence
+Engineer
+= 提供真实 Implemented Behavior / Evidence / Commit / Deviation 候选
 
-Gemini
-= Propose through Findings / Review
+Independent Reviewer
+= 提供 Findings / Evidence / Drift / Risk 候选
+
+UI Designer
+= 提供关键 UX Decision / Design Intent / 实现偏差候选
 ```
 
-Child、Codex、Gemini 不得自行把建议宣布成项目级新事实。
+**Primary / Child 是 Conversation Position，不自动覆盖上述 Role Ownership。**
 
-它们通过 `Knowledge Update Candidate` 把可能需要长期保存的变化交给 Primary。Primary 负责接受、拒绝或要求进一步验证。
+实际执行 Notion 写入时：
 
-Primary 能直接写 Notion 时，完成校准后直接写入；如果当前环境不能直接写，不得只说“请更新 Notion”，而应生成：
+- 有连接工具且具备对应语义职责的角色，可以直接完成其授权范围内更新；
+- 没有直接写入能力时，生成完整可复制 / 可替换内容，让 Owner 只做最小搬运；
+- 其他角色提交 Candidate，不把建议静默写成正式项目事实。
 
-- 要更新的具体页面；
-- 完整可复制 / 可替换文本；
-- 必须保留的旧内容或 pointer；
-- 更新完成后应看到的目标状态。
-
-用户只负责执行最小复制粘贴，不负责重新总结或决定写什么。
+Git / Runtime / Tests / Evidence 仍保存技术事实。Notion 只保存 Owner 需要理解和长期恢复的项目 / 产品记忆。
 
 ## 5. Re-Anchor：用 Notion 给长对话重新校准
 
