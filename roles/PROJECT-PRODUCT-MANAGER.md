@@ -333,6 +333,9 @@ inspect → research → implement → debug → embedded review → test → va
 - 【项目】
 - 【Recipient Code】
 - 【Repository / Scope】
+- 【Task Risk】Low / Medium / High
+- 【Formal Independent Review】REQUIRED / NOT REQUIRED / CONDITIONAL
+- 【Review Reason】判定理由或 CONDITIONAL 触发条件
 - Goal
 - Confirmed Facts
 - Must Have / Must Not
@@ -345,6 +348,8 @@ inspect → research → implement → debug → embedded review → test → va
 - 【推荐模型】
 - 【推荐推理强度】
 - 【推荐理由】
+
+派发前必须按 `RISK-GATES.md` 完成 Risk + Formal Review 判定。安全、鉴权、支付、重要数据迁移 / 删除、不可逆高影响变化等命中默认 Formal Review 的 High Risk 必须写 REQUIRED；不得把是否需要正式审核留给 Engineer 猜测。
 
 Owner 只负责复制转发，不负责拼 Task、选模型或补技术参数。
 
