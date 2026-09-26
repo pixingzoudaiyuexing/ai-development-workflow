@@ -2,6 +2,14 @@
 
 Risk Gate 用于决定 Evidence 和 Review 强度，不用于制造固定流水线。
 
+上游在派发正式 Engineer Task 时必须明确 Task Risk 与 Formal Independent Review 状态：
+
+- REQUIRED
+- NOT REQUIRED
+- CONDITIONAL
+
+Engineer 不负责替上游静默补一个“默认 NOT REQUIRED”；如果实际工程调查发现风险升级或命中本文件的默认 Formal Review 条件，应触发 Review Requirement Mismatch 并返回上游。
+
 ## 1. Low
 
 典型：
