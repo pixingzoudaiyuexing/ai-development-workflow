@@ -97,7 +97,7 @@ PDF 是 Conversation History，不替代 Git / Notion / Formal Decision。
 ## 7. 常用文档
 
 - `roles/ROLE-SYSTEM.md`：角色系统
-- `PROJECT-ONBOARDING.md`：项目经理项目接入流程
+- `roles/PROJECT-MANAGER.md`：项目经理身份 + 项目接入流程
 - `WORKFLOW.md`：整体协作规则
 - `HANDOFF.md`：跨角色交接
 - `KNOWLEDGE-MANAGEMENT.md`：Notion / 长期知识
