@@ -1,99 +1,39 @@
 # WORKFLOW
 
-## 0. Role Identity Contract
+## 1. Identity Model
 
-Workflow 把以下三件事严格分开：
+长期协作严格区分：
 
-- **Role Mask（职业面具）**：Project Manager / Product Manager / Engineer / UI Designer / Independent Reviewer，回答“我负责什么”。
-- **Conversation Position（对话位置）**：Primary / Child / External，回答“我在项目组织中的位置”。
-- **Runtime / Model（运行者）**：ChatGPT / Codex / WebCodex / Gemini / Claude，回答“由谁执行这个角色”。
+- **Role Mask**：Project Manager / Product Manager / Engineer / UI Designer / Independent Reviewer
+- **Conversation Position**：Primary / Child / External
+- **Runtime / Model**：ChatGPT / Codex / WebCodex / Gemini / Claude
 
-同一个 Runtime 可以承担不同 Role Mask，但长期对话默认只保持一个 Role Mask。新对话先按 `roles/ROLE-SYSTEM.md` 建立面具，再绑定项目，最后接收任务。不得因为读到了项目文档或一份新 Task 就自行改变 Role Mask。
+Runtime 不是 Role；Primary / Child 也不是 Role。
 
-大型项目常见拓扑：
+## 2. Project Entry
 
-```text
-Owner
-↕
-Project Manager — ChatGPT (Primary)
-↓
-Product Manager — ChatGPT (Child)
-├─ UI Designer — Gemini (Child / External)
-↓
-Engineer — Codex / WebCodex
-↓
-Independent Reviewer — Gemini
-└─ Claude（需要额外独立意见时）
-```
-
-小型项目通常不机械增加 Project Manager：
+Project Manager：
 
 ```text
-Owner
-↕
-Product Manager — ChatGPT (Primary)
-↓
-Engineer — Codex / WebCodex
-↓
-Independent Reviewer — Gemini
+Role Bootstrap
+→ Project Onboarding
+→ Project Baseline
+→ Project Work
 ```
 
-角色的详细职责以 `roles/` 下对应文件为准；本文件只定义整体协作关系。
+其他角色：
 
-## 1. Runtime 默认职责（不是 Role Mask）
+```text
+Role Bootstrap
+→ 第一份完整上位任务 / Handoff
+→ Project Context + Work
+```
 
-### ChatGPT
+不为了形式增加重复 Project Bind。
 
-ChatGPT 是 Runtime，不等同于某个固定职业角色。它通常承载 Project Manager 或 Product Manager，也可以在明确启动时承担其他适合的非编码角色。
+## 3. Normal Work Routing
 
-负责：
-
-- 项目发现与需求澄清；
-- 产品与架构设计；
-- 任务拆解；
-- Task Risk 判断；
-- Codex Task 生成；
-- 综合 Codex 证据与 Gemini 审查意见；
-- 技术裁决；
-- 必要时设计 Evidence Gate 的最小可证伪实验；
-- 在长期项目中承担 Conversation Orchestration，决定是否需要子对话以及如何交接。
-
-默认不作为主代码修改者。
-
-### Codex
-
-Codex 是 Runtime，默认承载 **Engineer** Role Mask。
-
-负责：
-
-- 读取真实仓库与项目规则；
-- 实施代码；
-- 调试；
-- 测试、构建、lint、typecheck 等项目适用验证；
-- Git 状态、diff、commit；
-- Implementation Report；
-- Claims 与 Verifiable Evidence；
-- 生成跨 AI Review Pack（需要时）。
-
-除非明确要求，Codex 是默认唯一代码实施者。
-
-### Gemini
-
-Gemini 是 Runtime，可在不同独立对话中承载 **UI Designer** 或 **Independent Reviewer**；两个身份不得在同一长期对话中静默切换。
-
-负责：
-
-- Design Review；
-- Code Review；
-- Security / Failure Mode Review；
-- 独立第二意见；
-- 明确指出缺失上下文，而不是基于未知实现强行推理。
-
-Gemini 默认不直接修改项目代码。
-
-## 2. 标准开发循环
-
-v0.2.0-dev 不使用强制固定流水线。默认依据 Role、Task Risk 与真实依赖动态路由。
+不固定单一路线。
 
 常见路径：
 
@@ -102,436 +42,207 @@ Owner / Project Direction
 ↓
 Project Manager / Product Manager
 ↓
-必要时：GitHub / 官方文档 / Web / Similar Project Research
+Research（需要时）
 ↓
 Engineer：Coherent Work Unit
 ↓
-Research → Implement → Embedded Review → Test / Validate → Evidence → Report
+Implement → Embedded Review → Validate → Evidence
 ↓
-上游：Intent / Acceptance Check
+上游验收
 ↓
-必要时：Formal Independent Review
+Formal Independent Review（有实际价值 / 高风险时）
 ↓
-Finding 按性质返回 Product / Project / Engineer / UI / Owner
-↓
-Fix / Verify（只对真正需要的 Finding）
-↓
-完成 / 发布 / 必要的长期知识同步
+Finding 返回真正负责的角色
 ```
 
-### 2.1 Research-Assisted Problem Solving
+Routing 遵守：
 
-复杂、未知、第三方相关问题，应尽早利用官方资料、GitHub 上游、Issues / Discussions、同类开源项目和 Web Research 建立有证据的 Hypothesis，再做针对性实验。
+- Fewest Necessary Agents
+- Fewest Necessary Handoffs
+- Correct Failure Routing
 
-研究不是机械门禁。明显本地小错误不需要先搜索全网；外部实现也不能替代当前项目事实。
+## 4. Research-Assisted Problem Solving
 
-### 2.2 Coherent Work Unit
+复杂、未知、第三方相关问题，优先使用：
 
-Engineer Task 默认以一个完整、连续、可独立实现和验证的 Outcome 为单位。
+- 官方文档；
+- GitHub upstream；
+- Issues / Discussions；
+- 类似开源实现；
+- Web Research；
+- 最小针对性实验。
 
-Task 内部可以包含多个步骤，但普通内部步骤不应变成多个 Owner Relay Gate。只有真实产品 Gate、关键 PoC、跨 Repo Contract、不可逆操作、上下文失控、真正并行或明显不同风险边界时才拆。
+先建立有依据的 Hypothesis，再验证。
 
-### 2.3 Embedded Review
+外部实现是 Reference，不是项目 SSOT。
 
-Engineer Runtime 如果具备第二模型 / Antigravity Bridge，可在有意义的开发节点自行 Review，无需 Owner 逐次转发。
+## 5. Coherent Work Unit
 
-Embedded Review 是内部质量控制，不自动取代所有 Formal Independent Review；普通低风险任务也不因形式要求机械增加 Formal Review。
+Engineer Task 默认按一个完整 Outcome 派发。
 
-### 2.4 Dynamic Review Routing
+一个 Task 可以内部包含：
 
-Independent Reviewer 可以按需要审核 Product / Architecture / Code / Security / Data / UI / Cross-repo。
+- inspect
+- plan
+- research
+- implement
+- debug
+- embedded review
+- test
+- validate
+- commit
+- report
 
-Finding 返回真正负责的角色：
+这些是 Engineer 内部步骤，不是 Owner Relay Gate。
+
+只有真实 Gate 才拆：关键 PoC、跨 Repo Contract、不可逆动作、前序结果决定后续方向、真正并行、上下文失控或风险明显不同。
+
+## 6. Embedded Review
+
+Engineer 可以在有意义节点调用第二模型 Review，无需 Owner 逐次转发。
+
+默认原则：
+
+- Review at meaningful checkpoints, not every step.
+- Embedded Review 是内部质量控制。
+- 不自动替代所有 Formal Independent Review。
+- Reviewer 意见是 Evidence / Input，不自动成为正确答案。
+
+## 7. Dynamic Review Routing
+
+Independent Reviewer 可审核：
+
+- Product
+- Architecture
+- Code
+- Security
+- Data
+- UI / UX
+- Cross-repo Integration
+
+Finding 回到真正负责的角色：
 
 - Product → Product Manager
 - Architecture / Project Boundary → Project Manager
 - Engineering Defect → Engineer
 - UI / UX → UI Designer / Product Manager
-- Owner Business Decision → Owner
+- Business Decision → Owner
 
-Fix 后 Re-review 优先检查 Accepted Findings 与受影响区域，避免无限扩大 Review。
+工程缺陷可以直接 Engineer → Fix → Reviewer Verify，不机械绕路。
 
-## 3. ChatGPT Project 与 Conversation Orchestration
+## 8. Owner Boundary
 
-### 3.1 一个产品，一个 ChatGPT Project
+Owner 负责：
 
-一个长期产品原则上使用一个 ChatGPT Project。一个产品可以包含多个 Git Repo，也可以包含多个职责明确的 ChatGPT 对话。
+- 产品方向；
+- 商业规则；
+- 核心用户结果；
+- 重大优先级；
+- 上线 / 停止；
+- 只有 Owner 才知道的业务事实。
 
-Project Memory 可以帮助同一 Project 内的对话引用相关历史，但不得把它当作完整、确定、永久同步的事实数据库。
+AI 负责：
 
-长期复杂、多 Repo 或多 Conversation 项目可以启用 Notion 作为 **Project Knowledge Layer**，专门保存项目 Core Rules、Current State 和正式 Decisions。它不替代 Git，也不保存完整聊天。
+- 技术调查；
+- 架构与实现方案；
+- Repo / Conversation 路由；
+- 测试与验证；
+- 普通产品细节；
+- 代码 / Git；
+- Review / Evidence。
 
-Repo 内技术事实仍以项目 Git 文档、真实代码、Runtime 与 Evidence 为锚点，例如：
+不要把技术选择转嫁给 Owner。
 
-- `AGENTS.md`
-- `docs/PROJECT.md`
-- `docs/ARCHITECTURE.md`
-- `docs/DECISIONS.md` / `docs/adr/`
-- `docs/ROADMAP.md`
-- `docs/STATUS.md`（checkpoint only）
-
-原则：
-
-```text
-GitHub Workflow = AI 应该怎么工作
-Notion           = 项目现在怎么定（启用时）
-Git / Runtime    = 技术上现在实际是什么
-Chat / Memory    = 讨论与临时上下文
-```
-
-发生冲突时不凭优先级猜测，进入 Ground Truth Verification。
-
-### 3.2 Primary Conversation
-
-新项目的初始 Project Discovery 对话默认成为 **Primary Conversation（主对话）**。详细角色边界见 `PRIMARY-CONVERSATION.md`.
-
-主对话负责：
-
-- 接收用户新增需求与方向变化；
-- 产品、架构、跨 Repo 边界设计；
-- 判断需求属于局部任务还是跨领域任务；
-- 决定是否需要创建、复用或结束 Child Conversation；
-- 生成子对话可直接复制的启动消息；
-- 指定子对话需要读取的 Workflow 文档、项目文档、Repo 与当前任务；
-- 接收子对话返回结果并决定下一步；
-- 项目启用 Notion 时，负责项目级 Knowledge Re-Anchor、正式批准与写入。
-
-用户不负责判断“应该开几个对话、属于前端还是后端、是否跨 Repo”。这些属于主对话的编排职责。
-
-凡是 ChatGPT 需要用户把消息转发给另一个 Conversation、Codex 或 Gemini，必须按 `HANDOFF.md` 的 **User Relay Rule** 输出一个单一、完整、自包含的一键复制 Transfer Block。用户只负责搬运，不负责从解释正文中挑选、拼接或修改技术内容。
-
-已启用 Recipient Code 的项目，还须按 `HANDOFF.md` 的 **Recipient Code — 轻量误投提醒** 在正式 Transfer Block 中自动填写接收方暗号；不要求用户手工管理或逐次确认。
-
-### 3.3 Child Conversation
-
-Child Conversation（子对话）是有明确工作边界的长期或阶段性工作区。详细角色边界与 Re-Anchor 规则见 `CHILD-CONVERSATION.md`。例如：
-
-- Backend / API
-- Frontend / Web
-- Client
-- Deployment / Operations
-- 某个长期独立模块
-
-子对话不重新拥有整个产品的架构裁决权。它应优先处理自己的 Repo / Scope；如果发现当前需求影响产品规则、核心架构、其他 Repo 或既有 Contract，应暂停扩大范围并返回 Primary Conversation。
-
-子对话可以长期存在，也可以只是某个阶段的专项对话。是否创建新子对话由 Primary Conversation 根据复杂度、持续时间、Repo 边界和上下文隔离收益决定，不由用户提前猜测。
-
-项目启用 Notion 时，Child 可以读取 Primary 指定的项目知识用于校准，但不得直接修改项目级正式知识；需要变化时提交 Knowledge Update Candidate 并返回 Primary。
-
-### 3.4 Conversation Topology 与 Context Budget
-
-Project Discovery 后，如果项目存在多个长期工作流或多个 Repo，Primary Conversation 应主动给出建议的 Conversation Topology，例如：
+## 9. Truth Layers
 
 ```text
-Project: CloudGap
-│
-├── Primary：产品 / 需求 / 架构 / 调度
-├── Child：CloudGap API
-└── Child：CloudGap Web
+Git / Runtime / Tests / Evidence
+= 技术事实
+
+Notion
+= Owner-facing Project / Product Memory
+
+Conversation / PDF
+= Working Context / Discussion History
 ```
 
-每个建议的 Child Conversation 必须同时给出：
+讨论过 ≠ 决定了。
 
-- 建议名称；
-- 为什么需要；
-- 负责的 Repo / Domain；
-- 需要读取的 Workflow 文档；
-- 需要读取的项目 Git 文档；
-- 当前第一个任务；
-- Scope / Non-goals；
-- 什么时候必须返回主对话；
-- 完成后需要带回什么结果；
-- 一段用户可直接复制到新对话的启动消息。
+发生冲突时执行 Ground Truth Verification，不自动相信任何一层。
 
-上下文遵循 **Minimum Sufficient Context**：
+## 10. Handoff
 
-- 只预加载当前职责和任务需要的 Workflow / 项目文档；
-- 不因为“可能以后有用”就把整个项目文档集塞进 Child Conversation；
-- Primary 应明确当前不需要预加载的明显无关领域 / 文档；
-- Child 如果后续被真实问题阻塞，再请求补充具体上下文，而不是一开始全量加载。
+跨 Conversation / Runtime 不存在 Magic Arrow。
 
-使用 `templates/CONVERSATION-HANDOFF.template.md`。
+发送方负责生成完整、自包含、可直接复制的 Prompt。
 
-### 3.5 新需求如何路由
+Owner 是 Relay Transport，不是 Relay Editor。
 
-用户可以始终先把新需求告诉 Primary Conversation。
+正式 Prompt 必须明确：
 
-Primary Conversation 负责选择：
+- 发给谁
+- 发送方
+- 项目
+- Recipient Code（启用时）
+- Goal / Scope / Non-goals
+- Required Context
+- Expected Return
+- Escalation Boundary
+
+发给 Engineer 时还必须包含推荐 Model / Reasoning。
+
+## 11. Evidence
+
+Agent 的“已完成 / 已修复 / 没问题”属于 Claim。
+
+Evidence 包括：
+
+- tests / build / lint / typecheck；
+- runtime / HTTP / integration；
+- CI；
+- screenshot / preview；
+- diff / commit；
+- migration dry-run；
+- other reproducible verification。
+
+任务风险越高，对独立、可重复 Evidence 的要求越高。
+
+## 12. Ground Truth Verification
+
+事实冲突时：
 
 ```text
-留在主对话分析
-或
-交给现有子对话
-或
-创建新的子对话
-或
-拆成多个有顺序的 Repo Task
+STOP affected mutation
+→ 明确冲突
+→ 收集证据
+→ 判断哪一方过时 / 错误
+→ 修正真正错误的一方
 ```
 
-如果用户已经处于某个子对话，并且需求明显属于该子对话的既有 Scope，可以直接处理；一旦发现跨产品 / 架构 / Repo 边界，再升级回 Primary Conversation。
+如果冲突会改变产品 / 商业结果，再交 Owner 决定。
 
-不要要求零代码用户充当人工路由器，也不要要求用户充当 Handoff 编辑器。任何需要用户转发的 ChatGPT 消息都必须由发送方 ChatGPT 整理成最终可发送版本。
+纯技术事实由 AI 基于 Evidence 处理。
 
-### 3.6 Primary Re-Sync Gate
+## 13. Git / PR
 
-Child Conversation 返回结果后，Primary Conversation 不得只依赖历史 Project Memory 或文字摘要继续编排。
+Known State > Clean State。
 
-如果下一步任务依赖该 Child 的真实代码状态、架构变化、Contract 变化或长期文档变化，Primary 必须先刷新相关 Git 事实：
+不得覆盖未知修改，不执行无依据 destructive Git 操作。
 
-1. 读取返回包中的 Repo / branch / commit anchor；
-2. 读取本次明确受影响或已更新的核心 Git 文档；
-3. 必要时核对相关 diff / Implementation Report / Evidence；
-4. 然后才生成依赖这些变化的下一项 Task。
+PR 不是默认步骤。只有仓库规则、Owner 明确要求、正式 Review 需要或具体风险确实值得时使用。
 
-`STATUS.md` 只在它本来就属于当前 checkpoint、被更新或恢复流程需要时读取；不要为了 Re-Sync 强迫每个 Task 更新 STATUS。
+## 14. Completion
 
-如果 Primary 无法直接访问对应 Repo / 文档，应让 Child / Codex 提供精确的文件内容、diff 或结构化 Handoff；不得把“去 Git 里自己找这些文件”变成零代码用户的任务。
+完成不等于“代码写完”。
 
-### 3.7 Project Knowledge Re-Anchor
+至少按任务适用范围确认：
 
-项目启用 Notion 时，长期对话不得只靠历史聊天或 Memory 维持项目规则。
+- Outcome 达成；
+- Validation 完成；
+- Evidence 可追踪；
+- Git anchor 清楚；
+- 未验证项明确；
+- 必要 Review 已完成；
+- 长期 Project / Product Memory 是否需要更新。
 
-Re-Anchor 的 canonical Trigger：
-
-- Primary → `PRIMARY-CONVERSATION.md`
-- Child → `CHILD-CONVERSATION.md`
-
-Project Root 隔离、Notion 写权限、Knowledge Update Candidate 与 Minimum Sufficient Knowledge 的 canonical 规则统一见 `KNOWLEDGE-MANAGEMENT.md`。
-
-本文件只定义它属于标准开发流程，不复制角色 Trigger，避免同一规则在多个文件独立演化。
-
-### 3.8 Affected Active Children 传播
-
-Notion / Git 被正确更新，并不代表已经存在的长期 Child Conversation 会自动知道变化。
-
-当 Primary 批准的变化影响以下任一内容时：
-
-- shared / cross-repo Contract；
-- Project Core Rule；
-- project-level Decision；
-- 另一个 Child 的 Repo / Domain Scope 或关键假设；
-
-Primary 必须明确列出：
-
-```text
-Affected Active Children:
-- <Child name>
-
-Before continuing related work:
-- Re-Anchor: <Core Rules / Decision IDs / Current State>
-- Re-Sync: <Git docs / contract / commit anchors, if needed>
-```
-
-受影响 Child 在继续**依赖该变化的相关工作**前，必须先收到最小 Update Handoff 并完成 Re-Anchor / 必要的 Git Re-Sync。
-
-不受影响的 Child 不需要机械同步。不要建立实时广播系统；遵守 `HANDOFF.md` 的 No Magic Arrows。
-
-## 4. Recovery Safety Gate / Duplicate Execution Guard
-
-Primary succession、Emergency recovery 或任何“执行状态可能不完整”的场景，在开始新的 mutation 前必须先回答：
-
-- 是否存在仍在运行或状态未知的 Codex / Child / Gemini / CI / deploy / migration / production operation；
-- Remote Git、local / Codex workspace、Runtime / Production 是否可能不同步；
-- working tree 是否 dirty / unknown；
-- 是否存在 `ACCEPTED + Knowledge Sync: PENDING`；
-- 是否存在 `UNRECONCILED HOTFIX` 或其他不可逆操作状态。
-
-核心规则：
-
-> **STOP mutation, continue verification.**
-
-以下任一情况存在时，不得开始可能冲突或重复的 mutation：
-
-- 旧 Codex Task 可能仍在运行，而重复执行可能有 side effect；
-- working tree dirty state 无法确认，且下一 Task 会修改同一 Repo / 区域；
-- 无法区分现有未提交修改与新 Task 修改；
-- migration / deploy / destructive operation 执行状态不明确；
-- production 与 Git 状态不一致且尚未解释；
-- `UNRECONCILED HOTFIX` 尚未 reconcile；
-- security / auth / payment / data-loss 类高风险变化的真实执行状态未知。
-
-允许继续的操作包括：读取 docs、查询 task/status、`git status`、查看 branch / HEAD / diff、读取 CI/runtime evidence、执行其他明确只读核验。
-
-**Duplicate Execution Guard：** 不知道旧任务是否完成时，不能把“没有看到 Git 变化”解释成“任务没有运行”。如果原 execution state 无法确认，先标记 `UNKNOWN` 并调查；不得自动取消、重跑或重新派发同一个可能有副作用的 Task。
-
-只有确认 Safe Resume Point 后，才恢复正常开发。
-
-## 5. Codex Preflight
-
-开始非简单任务前至少确认：
-
-```text
-git status
-git branch --show-current
-git rev-parse HEAD
-```
-
-原则是 **Known state > Clean state**。
-
-工作树不要求永远 clean，但：
-
-- 不覆盖未知已有修改；
-- 不擅自 reset；
-- 不删除不属于当前任务的文件；
-- 如果已有修改与当前任务冲突或难以区分，暂停并明确报告。
-
-Remote Sync Check（例如 `git fetch`）是条件式操作：仅在存在远端依赖、网络与权限可用且当前任务需要确认远端状态时执行。
-
-### Pull Request 使用原则
-
-**PR 不是默认步骤。** 在仓库规则允许、Owner 未明确要求 PR、且当前 Task 不依赖 PR Review 的情况下，Codex 可以在完成必要验证后直接提交到目标分支；不得为了“流程看起来完整”机械创建 branch → PR → 等待 CI → merge 的额外链路。
-
-仅在以下情况使用 PR：
-
-- 仓库 branch protection / 项目规则明确要求；
-- Owner 明确要求；
-- 当前 Task 的独立 Code Review 明确需要 PR + Review Context；
-- 大型或高风险变更中，Primary 基于具体审查需要决定 PR 明显有价值。
-
-不用 PR 不等于降低验证要求：仍须按 Task Risk 完成适用测试、diff 检查、Evidence、明确 commit anchor 与 Implementation Report。能直接安全完成的普通修改优先采用更短路径。
-
-## 6. Codex Model Routing
-
-正式 Codex Task 必须包含：
-
-- Recommended Codex Model
-- Recommended Reasoning Level
-- Selection Reason
-
-选择依据是：
-
-- 实现复杂度；
-- 上下文规模；
-- 调试难度；
-- Task Risk；
-- 额度与效率。
-
-默认指导：
-
-- **Luna**：简单、边界明确、低复杂度的小改动；
-- **Terra**：日常主力，普通功能、普通 Bug、跨若干文件的常规开发；
-- **Sol**：高复杂度根因分析、核心架构实现、复杂跨模块逻辑或技术难度显著更高的任务。
-
-Reasoning 默认只在 `Light / Medium / High` 中选择，并在用户可见提示中同时标注中文：`轻量 / 中 / 高`。
-
-采用 **Smallest Sufficient Runtime**：在能够可靠完成任务的前提下，选择足够但不过量的 Model + Reasoning，以兼顾正确性与额度。不要把“更强”当成默认，也不要为了省额度使用明显不足的档位。
-
-Risk 与模型不是一一对应：高风险但机械的实现未必必须 Sol；低业务风险但极难调试的问题可能需要 Sol。
-
-每次实际派发 Codex Task 时，ChatGPT 必须在一键复制 Task Block 之前明确显示本次推荐：
-- Codex Model；
-- Reasoning（Light/Medium/High + 轻量/中/高）；
-- 一句话 Selection Reason。
-
-用户不需要自己从 Task 内容推断应该选哪一档。
-
-## 7. Claims vs Evidence
-
-AI 的“我已经修复”“测试通过”“没有兼容问题”属于 Claim。
-
-Evidence 可以包括：
-
-- 实际命令与 exit code；
-- 原始测试 / build 输出；
-- 自动化测试；
-- 独立 CI；
-- staging / runtime 行为；
-- HTTP response；
-- 数据迁移 dry-run；
-- UI 截图 / 预览；
-- commit / diff。
-
-统一原则：**任务风险越高，越必须依赖独立、可重复的验证，而不是 Agent 自述。**
-
-## 8. Acceptance Evidence
-
-每个正式 Task 的 Acceptance Criteria 应尽量对应可验证 Evidence。
-
-示例：
-
-```text
-要求：/health 返回正常
-证据：实际请求 → HTTP 200 → 预期响应体
-
-要求：修复回归 Bug
-证据：修复前测试失败 → 修复后测试通过 → 相关回归测试通过
-```
-
-没有实际运行的验证，不得写成“已通过”。
-
-## 9. Ground Truth Verification
-
-代码、文档、测试、运行行为、已确认产品要求和安全边界都只是事实来源的一部分。
-
-发生冲突时：
-
-```text
-STOP
-↓
-明确冲突
-↓
-收集证据
-↓
-判断：代码错误 / 测试错误 / 文档过期 / 需求变化 / 环境异常
-↓
-修正真正错误的一方
-```
-
-禁止简单采用“代码永远正确”或“文档永远正确”。
-
-裁决边界：
-
-- 如果冲突是纯技术事实问题（代码 bug、测试与实现不一致、文档落后、环境异常等），由 Primary 基于 Evidence 做技术裁决；
-- 如果冲突会改变用户已经明确确认的产品目标、业务规则、非目标或核心边界，Primary 必须先用非技术语言向用户说明冲突与可选方向，让用户确认“产品要 A 还是 B”；具体技术实现仍由 Primary 决定。
-
-用户不负责判断代码、架构或验证方法，只负责确认真正的产品意图变化。
-
-## 10. Evidence Gate
-
-当 ChatGPT 与 Gemini 出现会影响实施方向的重大、无法靠已有材料解决的分歧时：
-
-1. 停止观点争论；
-2. ChatGPT 把争议转换成可证伪假设；
-3. ChatGPT 生成 Verification Task；
-4. Codex 执行安全、最小的验证；
-5. 返回 tests / logs / benchmark / runtime behavior 等证据；
-6. 再进行裁决。
-
-零代码用户不负责设计验证实验。
-
-如果实验需要生产环境、可能破坏数据或无法安全执行，必须先停下并改用安全的 staging、dry-run、只读验证或其他替代证据。
-
-## 11. Multi-Repo 最小支持
-
-一个产品可以对应多个 Git Repo，一个 ChatGPT Project 也可以讨论这个产品的多个 Repo。
-
-但：
-
-- 一个 Codex Task 默认只修改一个 Repo；
-- 必须跨 Repo 时，Task 明确列出每个 Repo 的 branch / commit 锚点；
-- 明确 cross-repo contract 与验收标准；
-- v1 不做复杂的多仓库自动编排。
-
-## 12. 完成定义
-
-代码写完不等于任务完成。
-
-中型及以上 Task 至少需要：
-
-- 目标实现；
-- 项目适用验证；
-- diff 检查；
-- 未验证内容说明；
-- Implementation Report；
-- Risk Assessment；
-- 必要的 Review / Evidence Gate 完成；
-- **Documentation Impact Check**：`NONE` 或命中 `DOCUMENTATION.md` 的具体更新项；
-- **Knowledge Impact Check**：`NONE` 或 `Knowledge Update Candidate: PROPOSED`；
-- 如果 Knowledge Candidate = `PROPOSED`，由 Primary 完成 `ACCEPTED / REJECTED / NEEDS_EVIDENCE`；
-- 如果 Candidate = `ACCEPTED`，再明确 `Knowledge Sync: SYNCED | PENDING`。
-
-正常任务命中 Git 长期文档 Trigger 时，应在关闭前同步相应 Git 文档；Hotfix 按 `EMERGENCY.md` 允许延后回填。
-
-Notion 暂时不可用不阻塞安全的技术完成；允许 `Knowledge Sync: PENDING`。但任何后续设计、路由或 Task **如果依赖该 Pending 事实**，在继续前必须先完成同步，或由 Primary 显式重新验证该事实并把它完整带入 Handoff。无关工作可以继续。
-
-如果 Primary 无法直接写 Notion，应生成“页面 + 完整可复制更新文本 + 更新后应看到的结果”，把用户操作降为粘贴 / 替换，而不是要求用户自己整理知识。
+不因普通小改机械更新 Notion / 长期文档。

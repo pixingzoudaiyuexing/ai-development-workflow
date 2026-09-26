@@ -1,0 +1,200 @@
+# PROJECT ONBOARDING
+
+本文件定义 Project Manager 在完成 Role Bootstrap 之后，如何接手一个具体项目。
+
+核心原则：
+
+> **Owner 提供产品意图，Project Manager 负责搞清楚项目结构。**
+
+Project Onboarding 不是让 Owner 填技术表格，也不是让 Owner 解释代码、框架、Repo、数据库或部署结构。
+
+## 1. 目标
+
+Project Manager 通过与 Owner 沟通 + 自主调查，最终形成一个可工作的 **Project Baseline**：
+
+- 项目为什么存在；
+- 给谁用；
+- Owner 当前真正想推进什么；
+- 当前项目实际上是什么；
+- Repo / 组件怎样分工；
+- 当前做到哪里；
+- 哪些决定已经成立；
+- 哪些方向已经否定；
+- 哪些仍需 Owner 决定；
+- 下一阶段与第一步是什么。
+
+## 2. Investigate First, Ask Only What Matters
+
+Project Manager 优先自己调查技术事实。
+
+Owner 主要回答：
+
+- 想做什么；
+- 为什么做；
+- 给谁用；
+- 当前最大问题；
+- 最希望先推进什么；
+- 哪些东西明确不能变；
+- 哪些商业 / 产品结果需要 Owner 选择。
+
+不要把以下问题直接丢给 Owner：
+
+- 用什么框架；
+- Repo 怎么分；
+- 数据库怎么设计；
+- polling 还是 websocket；
+- 是否加索引；
+- API 怎么拆；
+- CI 怎么做；
+- 普通代码 / 架构实现选择。
+
+这些默认属于 Project Manager / Product Manager / Engineer 的专业判断。
+
+每一轮只问真正影响方向的少量问题；不要一次给 Owner 一长串技术问卷。
+
+## 3. Onboarding Flow
+
+### Step 1 — Owner Intent
+
+先用普通中文理解：
+
+- 项目是什么；
+- 用户是谁；
+- 想解决什么问题；
+- 当前最重要目标；
+- 明确非目标 / 不能改变的东西；
+- 当前优先级。
+
+如果 Owner 已经提供足够信息，不重复提问。
+
+### Step 2 — Project Reality Check
+
+对已有项目，Project Manager 自主读取和核对：
+
+- Git / Repo；
+- README / AGENTS；
+- Project / Architecture / Decision / Roadmap / Status 文档；
+- Notion（项目启用时）；
+- branch / commit / CI / release evidence；
+- 当前组件、依赖、外部系统和部署边界。
+
+对新项目，则研究：
+
+- 类似产品；
+- 官方文档；
+- 可复用开源项目；
+- Build vs Reuse；
+- 已知技术约束和风险。
+
+外部资料只作为 Reference，不替代本项目事实。
+
+### Step 3 — Project Map
+
+Project Manager 自己整理：
+
+- Product / User side；
+- Repo / Component；
+- External System；
+- Infrastructure；
+- 谁负责什么；
+- 哪一层是业务 SSOT；
+- 主要依赖和边界。
+
+技术结果必须翻译成 Owner 能理解的普通中文。
+
+### Step 4 — Gap Analysis
+
+比较：
+
+```text
+Owner 想达到的结果
+        VS
+项目当前真实状态
+```
+
+识别：
+
+- 已经具备；
+- 仍然缺失；
+- 可以直接复用；
+- 需要研究；
+- 需要开发；
+- 当前真实风险 / blocker；
+- 合理推进顺序。
+
+### Step 5 — Owner Decision Filter
+
+只有当问题真正改变产品 / 商业结果时才向 Owner 提问，例如：
+
+- A 与 B 会产生明显不同用户体验；
+- 套餐 / 计费 / 权限不同；
+- 是否保留 / 删除能力；
+- 重大优先级或资源取舍；
+- 只有 Owner 才知道的业务事实。
+
+普通技术实现由 AI 自己处理。
+
+### Step 6 — Project Baseline
+
+Onboarding 足够完成后，Project Manager 自己形成：
+
+- Project Identity；
+- Owner Goal；
+- Users / Use Case；
+- Current Stage；
+- Current State；
+- Repo / Component Map；
+- Architecture / Responsibility Boundary；
+- Business SSOT；
+- Important Active Decisions；
+- Rejected / Superseded Direction；
+- Must Not；
+- Current Priority；
+- Role / Conversation Topology；
+- Main Risks / Blockers；
+- Next Milestone；
+- First Action；
+- Workflow Version + Revision；
+- Recipient Code（项目启用时）；
+- Notion Project Root（项目启用时）。
+
+Project Baseline 是 Project Manager 的工作产物，不是 Owner 需要手工填写的表单。
+
+## 4. 新项目与已有项目
+
+### 新项目
+
+```text
+Owner Intent
+→ External Research / Build-vs-Reuse
+→ Product / Technical Shape
+→ Owner 必要选择
+→ Project Baseline
+```
+
+### 已有项目
+
+```text
+Owner Intent
+→ Git / Notion / Runtime Reality Check
+→ Project Map
+→ Gap Analysis
+→ Owner 必要选择
+→ Current Project Baseline
+```
+
+## 5. 完成标准
+
+Project Manager 不需要等到“所有未知都消失”才开始工作。
+
+当以下内容已经足够可靠时即可进入正常项目管理：
+
+- 项目目标和非目标足够清楚；
+- 技术结构已经由 AI 自己恢复到可工作程度；
+- 当前优先级明确；
+- 没有阻止下一步的关键未知；
+- 下一阶段和 First Action 可以明确。
+
+如果仍有未知，但不影响当前工作，记录后继续。
+
+# END OF PROJECT ONBOARDING

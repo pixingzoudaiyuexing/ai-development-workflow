@@ -1,99 +1,69 @@
 # CHILD CONVERSATION
 
-> **Child 是 Conversation Position，不是职业面具。** Child 可以是 Product Manager、UI Designer 或其他明确的局部角色；其实际职责必须由 Role Bootstrap 明确，不得仅因为“我是 Child”自行推断。具体职业职责先读取 `roles/ROLE-SYSTEM.md` 与对应角色文件。
+> Child 是 Conversation Position，不是职业角色。
 
-本文件定义 Child Conversation 的 Repo / Domain 局部职责。
+Child 可以承载 Product Manager、UI Designer 或其他长期局部角色。其职责始终以 Role Mask 为准。
 
-Child 是由 Primary Conversation 创建或调度的工作区。它负责在明确 Scope 内推进工作，但不拥有整个产品的最终架构裁决权。
-
-## 1. Child 可以做什么
-
-- 在指定 Repo / Domain 内分析需求；
-- 做 Repo-local 设计；
-- 判断局部 Task Risk；
-- 生成并验收 Codex Task；
-- 派发 Codex Task 时，明确告诉用户本次使用 Luna / Terra / Sol，以及 Light（轻量） / Medium（中） / High（高）；默认选择能可靠完成任务的最小充分档位以节省额度；
-- 当需要用户把消息转发给 Codex、Gemini 或 Primary 时，按 `HANDOFF.md` 的 **User Relay Rule** 生成单一、完整、一键复制的最终消息；
-- 收集 Evidence；
-- 处理 Primary 已经确定边界内的正常开发；
-- 向 Primary 提交 Return Package 和 Knowledge Update Candidate。
-
-## 2. Child 不可以自行做什么
-
-命中以下情况时，停止扩大范围并 Return to Primary：
-
-- 改变产品目标、非目标或核心业务规则；
-- 改变当前 Repo / 组件的核心职责；
-- 修改另一个 Repo；
-- 改变跨 Repo / API Contract；
-- 改变核心架构或安全边界；
-- 重新启用已 REJECTED / SUPERSEDED 的方案；
-- 出现会影响其他 Child 的长期决定。
-
-Child 无权直接修改项目级 Notion 正式事实。
-
-## 3. Child 初始化
+## 1. Initialization
 
 新 Child：
 
-1. 从 `START-HERE.md` 进入并确认 Role = Child；
-2. 确认 Primary Handoff 中的 Workflow Version + Workflow Revision，并按该 Revision 建立规则上下文；
-3. 读取本文件、Primary Handoff 和必要 Workflow；
-4. 确认 Current Project / Notion Project Root；
-5. 读取 Primary 指定的 Minimum Sufficient Knowledge；
-6. 读取 Repo `AGENTS.md` 与当前任务需要的 Git 文档；
-7. 做 Git Reality Check；
-8. 再开始正式工作。
+```text
+Owner → Role Bootstrap
+→ 上位角色第一份完整 Handoff / Task
+→ 建立 Project Context
+→ Work
+```
 
-不要假设自己自动拥有 Primary 或其他 Child 的全部聊天上下文。
+不单独执行 PROJECT BIND。
 
-## 4. Child Re-Anchor
+第一份 Handoff 必须提供完成当前工作所需的最小：
 
-Child 不靠“感觉对话太长了”决定何时重读 Notion，而按事件触发。
+- Project
+- Sender / Reports To
+- Recipient Code（启用时）
+- Scope / Domain
+- Repo / relevant source
+- Workflow Revision
+- Goal
+- Expected Return
 
-以下节点必须 Re-Anchor：
+## 2. Scope
 
-- 新 Child 第一次启动；
-- 开始新的 Feature / 新阶段；
-- 准备开始一个可能改变 Repo Scope、Contract、Core Rules 或正式 Decision 的 Task；
-- 当前 Task 的关键设计假设依赖某个长期 Decision 时，先确认该 Decision 仍为 ACTIVE；
-- 收到 Primary 的 Affected Active Children / Update Handoff 时；
-- 发现需求可能改变 Repo Scope、Contract、核心架构或项目规则；
-- 发现当前方案可能与 Core Rules / Decision 冲突；
-- 准备 Return to Primary；
-- 长时间中断后恢复；
-- 出现明显漂移信号：重复讨论旧问题、重新提出已否定方案、持续扩展到本 Repo 之外。
+Child 在自己的 Role + Scope 内自主工作。
 
-每次只读取：
+如果需要改变：
 
-- Project Core Rules；
-- Current State；
-- 与本 Child / 当前 Feature 相关的 ACTIVE Decisions；
-- 与当前问题相关的 REJECTED / SUPERSEDED Decisions。
+- 项目方向；
+- 核心产品规则；
+- 另一个 Repo / Domain 的职责；
+- 跨 Repo Contract；
+- 已确认 Must Not；
+- 未授权系统 / 资源；
 
-不要无差别读取整个 Notion。
+则返回正确的上位角色，不自行扩大。
 
-如果已经出现多套互相矛盾的长期讨论、经历多次重大方向变化，或 Re-Anchor 后仍持续按旧规则判断，Child 应停止继续堆叠上下文，Return to Primary 并建议由 Primary 生成新的 Child Handoff。
+## 3. Context
 
-## 5. Project Isolation
+遵守 Minimum Sufficient Context。
 
-Child 只能使用 Primary 指定的当前 Project Root。完整隔离规则以 `KNOWLEDGE-MANAGEMENT.md` 的 **Project Knowledge Isolation** 为准。
+不因为“可能以后有用”一次加载整个 Notion / Repo / Workflow。
 
-需要其他项目知识时，Return to Primary，由 Primary 明确引入 Cross-Project Context。
+真实需要更多上下文时，再读取对应来源。
 
-## 6. Return to Primary
+## 4. Return
 
-返回前先完成一次 Child Re-Anchor，然后输出至少：
+返回上位角色时，按当前 Role 给出足够的：
 
-- Result Summary；
-- Repo / branch / commit；
-- Evidence / Unverified Gaps；
-- Updated / Affected Git Docs；
-- Decisions Needed；
-- Cross-Repo Impact；
-- Blockers / Next Step；
-- Knowledge Update Candidate。
+- Result
+- Actual Behavior / Findings
+- Evidence
+- Commit / Repo anchor（适用时）
+- Deviations
+- Blockers
+- Cross-role impact
+- Durable Knowledge Candidate（如有）
 
-Knowledge Update Candidate 是“建议 Primary 检查”，不是项目事实。
+Owner 只负责搬运完整返回，不负责重新整理技术内容。
 
-如果 Child 要求用户把 Return Package 或升级消息带回 Primary，必须同时给出一个完整 Copy-Paste Block；不得要求用户从本回复的解释、分析或中间内容中自行筛选要转发的部分。
+# END
