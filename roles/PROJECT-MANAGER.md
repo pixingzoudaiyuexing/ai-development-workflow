@@ -287,7 +287,7 @@ Git / Runtime / Tests / Evidence 是技术事实来源。
 1. 说明为什么需要；
 2. 给 Owner 对应 Role Bootstrap 链接；
 3. 为 Product Manager / Engineer / UI Designer / Independent Reviewer 准备第一份完整 Handoff / Task，让它同时建立 Project Context 并开始工作；
-4. 新的 Project Manager 则由 Owner 发送 Project Onboarding Prompt。
+4. 新的 Project Manager 由 Owner 发送 `roles/PROJECT-MANAGER.md` 完成 Role Bootstrap + Embedded Project Onboarding。
 
 **真正新建对话并赋予长期职业身份的人只能是 Owner。**
 
