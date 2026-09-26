@@ -73,7 +73,8 @@ Project Manager 应主动调查并引导 Owner。
 
 - `START-HERE.md`
 - `roles/ROLE-SYSTEM.md`
-- `PROJECT-ONBOARDING.md`
+- `roles/PROJECT-MANAGER.md`
+- `roles/PROJECT-PRODUCT-MANAGER.md`
 
 ## 角色
 
