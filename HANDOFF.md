@@ -152,17 +152,18 @@ Engineer → Fix → Reviewer Verify
 
 **只有 Engineer Task 需要在跨 AI Prompt 中携带模型推荐。**
 
-Engineer 推荐模型固定二选一：
+Engineer 的推荐运行档位固定为 12 种 Model × Reasoning 组合：
 
-- GPT-6 Luna（`gpt-6-luna`）
-- GPT-6 Sol（`gpt-6-sol`）
+- GPT-6 Luna（`gpt-6-luna`）× `none` / `low` / `medium` / `high` / `xhigh` / `max`
+- GPT-6 Sol（`gpt-6-sol`）× `none` / `low` / `medium` / `high` / `xhigh` / `max`
 
-同时给出：
+正式 Engineer Task 同时给出：
 
+- Recommended Model
 - Recommended Reasoning
 - Selection Reason
 
-选择最小充分档位：普通清晰任务优先 Luna；大上下文、跨模块、复杂 Debug、架构敏感或高复杂度任务优先 Sol。
+选择最小充分组合：普通清晰任务优先 Luna；大上下文、跨模块、复杂 Debug、架构敏感或高复杂度任务优先 Sol。Reasoning 从 `none` 到 `max` 按实际复杂度递增，不把高档位当默认。
 
 发送给 Project Manager / Product Manager / Project + Product Manager / UI Designer / Independent Reviewer 等 ChatGPT 网页端角色时，不在 Handoff 中携带推荐模型 / 推理档位 / 推荐理由；Owner 默认使用最高可用 ChatGPT 档位，不需要 Workflow 再做模型预算。
 
