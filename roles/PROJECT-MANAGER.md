@@ -391,6 +391,16 @@ Engineer → Fix → Reviewer Verify
 
 ## 9. Prompt Dispatch Protocol
 
+
+Canonical Role Header 规则：
+
+- `【发给谁】`、`【发送方】`、`【返回给】` 只能填写 Canonical Role Mask；
+- Primary / Child / External 必须单独写入 Conversation Position 字段；
+- Runtime 必须单独写入 Runtime 字段；
+- Executor / Validator / Coordinator / Checker / Tester 等临时任务职责不得创建成 Role；
+- Prompt Type / Acceptance / Review / Fix / Deploy 等任务性质必须放在 `【提示词类型】` 或 `【负责范围】`；
+- 不得写出类似 `CC Primary / TEST Acceptance Executor` 的混合身份。
+
 当你需要 Owner 把正式提示词转发给已经完成 Role Bootstrap 的其他 AI 时：
 
 - 如果接收方尚未建立 Project Context，这份第一 Handoff / Task 必须同时携带完整的最小项目绑定信息；
@@ -398,8 +408,11 @@ Engineer → Fix → Reviewer Verify
 
 顶部至少明确：
 
-- 【发给谁】
-- 【发送方】
+- 【发给谁】<Canonical Role Mask>
+- 【Conversation Position】Primary / Child / External（需要时）
+- 【Runtime】ChatGPT / Codex / WebCodex / Gemini / Claude（需要时）
+- 【发送方】<Canonical Role Mask>
+- 【Sender Conversation Position】Primary / Child / External（需要时）
 - 【提示词类型】
 - 【项目】
 - 【项目暗号 / Recipient Code】
@@ -408,7 +421,8 @@ Engineer → Fix → Reviewer Verify
 
 - 【负责范围】
 - 【Repository】
-- 【返回给】
+- 【返回给】<Canonical Role Mask>
+- 【Return Conversation Position】Primary / Child / External（需要时）
 
 如果发给 Engineer，还必须给：
 
