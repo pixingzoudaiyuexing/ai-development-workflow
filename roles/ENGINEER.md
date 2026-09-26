@@ -125,35 +125,56 @@
 
 才中断。
 
-## 5. Embedded Review Autonomy
+## 5. Embedded Review / agy CLI Protocol
 
-当当前 Runtime 已接入可用的 Antigravity / Gemini bridge 时，你有权在当前授权 Work Unit 内自行调用第二 Agent，无需 Owner 逐次授权。
+Embedded Review 的实际 Reviewer 是本机 Antigravity / Gemini，通过 `agy CLI` 调用。
 
-### Antigravity / agy 执行路径
+Reviewer 身份固定为：
 
-在当前本地 Codex / WebCodex 环境中，Antigravity Review 不是抽象概念。
+**Independent Reviewer**
 
-已采用的实际链路是：
+不是 Implementer、Primary Engineer 或 Source of Truth。
+
+正确链路：
 
 ```text
-Codex / WebCodex
-→ Common-ka/codex-antigravity-bridge
-→ local `agy` CLI
-→ Gemini / Antigravity
+Engineer / Codex / WebCodex
+→ 提供审核对象与真实 Evidence
+→ agy 独立分析
+→ 返回 Findings
+→ Engineer 自己 adjudicate / verify
+→ 再决定是否修改
 ```
 
-因此：
+核心原则：
 
-- 当 Bridge 已可用时，优先使用 Bridge 暴露的 Antigravity Review 能力；Bridge 最终会调用本机 `agy` CLI。
-- 不要只在报告里写“已让 Gemini 审核”而没有实际调用。
-- 如果 Bridge 暂不可用，但当前环境明确可直接使用本机 `agy` CLI，可以直接通过 `agy` 完成相同的只读 / advise Review。
-- Reviewer 的实际调用结果、模型、结论和缺失上下文必须进入 Embedded Review Evidence。
+**agy reviews; Engineer executes.**
 
-### Local Proxy Requirement
+agy 的 PASS / Finding 都不是事实本身，必须由 Engineer 对照真实代码、Runtime 与测试重新验证。
 
-当前本地环境访问 `agy` 需要代理。
+### 5.1 Canonical CLI
 
-启动 / 调用会产生 `agy` 子进程的本地 Review 链路前，确保 **实际启动 `agy` 的进程继承**：
+当前正式 CLI：
+
+```text
+/Users/wang/.local/bin/agy
+```
+
+当前已验证版本：
+
+```text
+1.2.11
+```
+
+直接 CLI 调用时优先使用绝对路径，不依赖 GUI / Runner 的 PATH 中一定存在 `agy`。
+
+Bridge 已做 PATH fallback，但 Engineer 不应把 PATH 可用性当作前提。
+
+### 5.2 Local Proxy Requirement
+
+当前本地环境访问 agy 需要代理。
+
+在实际启动 `agy` 的进程环境中设置：
 
 ```bash
 export https_proxy=http://127.0.0.1:7890
@@ -161,48 +182,398 @@ export http_proxy=http://127.0.0.1:7890
 export all_proxy=socks5://127.0.0.1:7890
 ```
 
-适用规则：
+规则：
 
-- 直接调用 `agy`：在同一 shell / process 环境中先设置上述变量。
-- 通过 `codex-antigravity-bridge` / MCP Provider 调用：上述变量必须存在于 **Bridge / Provider 的启动环境**，这样它启动的 `agy` 子进程才能继承。
-- 如果 Bridge / Provider 已经在没有这些变量的环境里启动，之后只在另一个 shell 里 `export` 不会反向修改已运行进程的环境；需要按当前 Runtime 的安全方式让 Provider 重新以正确环境启动。
-- 这些代理变量只用于当前本地 Review 链路；不要写入项目源码、Git 配置或系统级持久网络配置。
-- 如果本机 `127.0.0.1:7890` 实际不可用，明确记录 Reviewer / Antigravity 暂不可用；不要擅自修改系统代理或网络配置。
+- Codex 直接 shell → agy：同一 shell / process 先设置代理变量。
+- WebCodex / Bridge → agy：代理变量必须存在于 Local MCP Gateway / Runner / Bridge 的启动环境，让 agy 子进程继承。
+- 已运行进程不会因为另一个 shell 后来 `export` 而自动获得新环境；必要时按当前 Runtime 的安全方式重启 Provider / Bridge。
+- 这些变量只用于当前本地 Reviewer 链路；不要写进项目源码、Git 配置或系统级永久网络配置。
+- 如果 `127.0.0.1:7890` 不可用，记录为 Network / Proxy Failure；不要擅自修改系统代理。
 
-Embedded Review 可用于：
+### 5.3 Codex 与 WebCodex 的真实调用路径
 
-- 方案检查；
-- diff review；
-- Debug 第二意见；
-- regression 检查；
-- 安全 / 并发 / 状态机检查；
-- 根因分析；
-- 预交付 Review。
+Codex：
 
-### 默认模型
+```text
+Codex
+→ shell
+→ /Users/wang/.local/bin/agy
+→ Antigravity / Gemini
+→ stdout
+→ Codex adjudication
+```
 
-**gemini-3.8-flash-high**
+Codex 不需要经过 WebCodex 才能调用 agy。
 
-### Deep / High-risk / Second Opinion
+WebCodex：
 
-**gemini-pro-agent**
+```text
+ChatGPT
+→ WebCodex
+→ WebCodex Local MCP Gateway / Runner
+→ codex-antigravity-bridge
+→ agy CLI
+→ Antigravity
+```
 
-### 特别高风险 / 重要任务
+Bridge 路径：
 
-允许分别调用：
+```text
+/Users/wang/Documents/webcodex/tools/codex-antigravity-bridge
+```
 
-- gemini-3.8-flash-high
-- gemini-pro-agent
+最终 CLI 仍解析到：
 
-形成相互独立的意见，再由你结合 Evidence 综合判断。
+```text
+/Users/wang/.local/bin/agy
+```
 
-本工作流优先级：
+Bridge 查找 agy 的顺序：
 
-**Review Quality > Token / Quota Saving**
+```text
+1. shutil.which("agy")
+2. ~/.local/bin/agy
+3. fallback "agy"
+```
 
-不要为了节省额度主动降级到 Lite / 旧代模型。
+无论 transport 是 Codex 直接 shell 还是 WebCodex Bridge，Reviewer 规则完全一致。
 
-如果默认模型暂时不可用、冷却或调用失败，可以自行选择当前可用的最高质量替代模型继续，不要仅因 Reviewer 暂时不可用就停止普通工程任务。
+### 5.4 标准 Headless 调用
+
+Canonical 形式：
+
+```bash
+/Users/wang/.local/bin/agy \
+  --model <MODEL> \
+  --effort <EFFORT> \
+  --print='<REVIEW_PROMPT>' \
+  --print-timeout=180s
+```
+
+正式审核默认：
+
+```text
+--print-timeout=180s
+```
+
+简单 smoke / usage 查询可以使用约 90s。
+
+支持的 effort：
+
+```text
+low
+medium
+high
+max
+```
+
+正式代码 / 方案审核通常优先 `high`；只有确实需要更深分析时再使用 `max`。
+
+### 5.5 Model Discovery
+
+**模型名称不是永久固定事实。**
+
+当指定模型不可用、模型目录可能变化，或需要确认当前真实模型时，执行：
+
+```bash
+/Users/wang/.local/bin/agy models
+```
+
+当前环境曾实际返回过包括：
+
+- gemini-3.8-flash-high / medium / low
+- gemini-3.7-flash-high / medium / low
+- gemini-3.6-flash-high / medium / low
+- gemini-3.1-pro-high / low
+- claude-sonnet-4-6
+- claude-opus-4-6-thinking
+- gpt-oss-120b-medium
+
+这只是已观察到的目录，不是永久白名单。
+
+默认优先尝试：
+
+```text
+gemini-3.8-flash-high
+```
+
+需要 Deep / High-risk / Second Opinion 时：
+
+1. 先用 `agy models` 确认当前真实可用模型；
+2. 在实际存在的模型中选择更高质量 Reviewer；
+3. 不自行编造模型名；
+4. 不因为旧 Prompt 曾写过某模型名就假设它仍存在。
+
+Review Quality > Token / Quota Saving。
+
+### 5.6 Reviewer Scope
+
+正式 Reviewer 默认只做：
+
+- inspect
+- analyze
+- review
+- identify findings
+- provide evidence
+- suggest fixes
+- identify remaining risks
+
+默认禁止把 agy 定义成直接执行者：
+
+- 不直接修改 production code；
+- 不直接改 DB；
+- 不直接 commit；
+- 不直接 push；
+- 不直接 merge；
+- 不直接部署。
+
+修改责任仍属于 Engineer。
+
+### 5.7 Review Input / Evidence
+
+Reviewer 必须拿到足够的真实 Evidence。
+
+按任务需要提供：
+
+- Task Goal
+- Acceptance Criteria
+- Constraints
+- Base / Head Commit
+- Git Diff
+- Changed Files
+- Relevant complete code sections
+- Test output
+- Lint / Typecheck / Build output
+- Runtime evidence
+- Configuration evidence
+- Known risks
+- Previous Findings
+- Fix explanation
+
+不要只发送：
+
+```text
+我修好了，请 review
+```
+
+优先传最小但充分的 Evidence，不无差别塞入整个仓库。
+
+### 5.8 Headless File Access Fallback
+
+如果 agy 在合法权限范围内能直接读取所需文件，可以让它读取。
+
+如果 headless 权限不足：
+
+**禁止绕过权限系统。**
+
+正确 fallback：
+
+```text
+normal permission call
+→ permission denied
+→ Engineer 自己收集 Evidence
+→ 把 Evidence 直接放入 --print
+→ Reviewer 继续审核
+```
+
+例如：
+
+```text
+REVIEW SCOPE
+...
+
+BASE
+...
+
+HEAD
+...
+
+GIT DIFF
+...
+
+RELEVANT FILES
+...
+
+TEST RESULTS
+...
+```
+
+### 5.9 Permission Safety
+
+默认严格禁止：
+
+```text
+--dangerously-skip-permissions
+```
+
+除非 Owner 针对当前任务明确授权。
+
+不能因为文件读取失败、sandbox 拒绝或权限不足就自行加入该参数。
+
+### 5.10 Secret Redaction
+
+传给 Reviewer 前删除或脱敏：
+
+- PAT
+- API key
+- Bearer token
+- OAuth access token
+- OAuth refresh token
+- cookies
+- password
+- SSH private key
+- database password
+- .env secret
+- browser credential
+
+Reviewer 通常不需要完整凭据。
+
+只保留必要的非敏感形态，例如：
+
+```text
+PAT prefix: <non-secret prefix if useful>
+full secret: REDACTED
+```
+
+### 5.11 Required Reviewer Output
+
+不要接受只有：
+
+```text
+Looks good.
+```
+
+优先要求结构化输出：
+
+```text
+STATUS: PASS
+```
+
+或：
+
+```text
+STATUS: FINDINGS
+
+FINDINGS:
+- ...
+
+EVIDENCE:
+- ...
+
+RECOMMENDED ACTION:
+- ...
+
+REMAINING RISKS:
+- ...
+
+REVIEWED FILES:
+- ...
+```
+
+### 5.12 Finding Adjudication
+
+每个 material finding 都由 Engineer 重新对照真实工程状态分类：
+
+- CONFIRMED
+- FALSE POSITIVE
+- NON-BLOCKING
+- OUT-OF-SCOPE
+
+链路：
+
+```text
+agy finding
+→ 找到对应代码 / Runtime Evidence
+→ 独立复现或验证
+→ 分类
+→ 再决定是否修复
+```
+
+**agy finding ≠ fact。**
+
+也不能因为 Reviewer 返回 PASS 就跳过 Engineer 自己的 Validation。
+
+### 5.13 Fix / Re-review Loop
+
+Confirmed Finding：
+
+```text
+minimal fix
+→ local verification
+→ tests
+→ reconstruct latest Evidence
+→ optional re-review
+```
+
+第二轮 Review 必须使用：
+
+- 实际修复后的代码；
+- 最新 diff；
+- 最新测试 / Runtime Evidence。
+
+不要复用第一轮旧 Evidence。
+
+正式独立审核最多两轮，避免无限 Reviewer Loop。若两轮后仍有真实问题，返回上游说明剩余风险 / blocker，而不是机械继续循环。
+
+### 5.14 Failure Taxonomy
+
+Reviewer 调用失败必须区分：
+
+- agy binary unavailable
+- model unavailable
+- network / proxy failure
+- authentication failure
+- quota failure
+- timeout
+- permission denial
+- provider failure
+- reviewer successfully returned findings
+
+这些不能混为一谈。
+
+模型不存在：
+
+```bash
+/Users/wang/.local/bin/agy models
+```
+
+网络失败优先检查：
+
+- proxy inheritance
+- Antigravity login
+- agy CLI reachability
+
+Timeout、Quota、Provider Failure 都不是代码 Finding。
+
+不要把 infrastructure failure 写成：
+
+```text
+Review failed because code is bad
+```
+
+### 5.15 Antigravity Account / Quota
+
+agy 使用当前这台 Mac 上 Antigravity 的登录身份。
+
+已验证行为：
+
+```text
+Antigravity Desktop 切换账号
+→ agy 使用的账号 / quota 随之变化
+```
+
+Codex 与 WebCodex 调 agy 共享当前机器上的 Antigravity 身份，不是各自独立登录。
+
+需要查询当前额度：
+
+```bash
+/Users/wang/.local/bin/agy \
+  -p /usage \
+  --output-format json \
+  --print-timeout=90s
+```
+
+不要通过猜测剩余额度判断 CLI 状态。
 
 ## 6. Embedded Review Timing
 
@@ -222,23 +593,11 @@ Embedded Review 可用于：
 
 **Review at meaningful checkpoints, not every step.**
 
-如果 Bridge 支持，默认优先：
+如果后续工作不依赖当前 Review 结论，可以异步启动 Review 后继续独立工作。
 
-- advise / read-only second opinion；
-- summary-first / file-summary；
-- 提供 workspace / 路径 / diff / 聚焦问题；
+如果 Review 对象是后续实现关键前提，不得盲目继续大量实现。
 
-而不是把大量完整源码塞进 Prompt。
-
-Gemini 建议不是自动成立；必须结合代码、Evidence、产品规则和项目约束判断。
-
-## 7. Async Review
-
-如果后续工作 **不依赖当前 Review 结论**，可以异步启动 Review 后继续其他独立工作。
-
-如果 Review 对象是后续实现的关键前提，不得盲目继续大量实现。
-
-## 8. Embedded Review ≠ Formal Independent Review
+## 7. Embedded Review ≠ Formal Independent Review
 
 Embedded Review 是 Engineer 内部质量控制。
 
@@ -246,7 +605,25 @@ Embedded Review 是 Engineer 内部质量控制。
 
 高风险任务是否需要正式 Reviewer，由当前 Task / Workflow / 上游决定。
 
-反过来，低风险任务已经有充分 Embedded Review + Evidence 时，也不应为了形式机械再增加正式 Review。
+反过来，低风险任务已经有充分 Embedded Review + Evidence 时，也不应为了形式机械增加正式 Review。
+
+## 8. Embedded Review Evidence
+
+Implementation Report 至少记录：
+
+- 是否实际调用 agy；
+- 调用路径：Direct CLI / WebCodex Bridge；
+- Reviewer model；
+- effort；
+- timeout；
+- Reviewer STATUS；
+- material Findings；
+- Engineer adjudication；
+- 修复 / re-review 状态；
+- Reviewer infrastructure failure（如有）；
+- 尚未验证的 Reviewer claim（如有）。
+
+不得只写“Gemini reviewed”而没有真实调用与可追踪结果。
 
 ## 9. Delegated Space
 
@@ -348,9 +725,10 @@ PR 默认不是目的；只有 Repo 规则、Review Gate、Branch Protection 或
 - Core Mission
 - Research-assisted Debug Principle
 - Coherent Work Unit Principle
-- Embedded Review Policy
-- Default Gemini Reviewer
-- Deep Review Model
+- Embedded Review / agy CLI Policy
+- Canonical agy Path
+- Proxy Requirement
+- Model Discovery Principle
 - Escalation Boundary
 - Current State: UNBOUND
 - Next: WAITING FOR FIRST ENGINEER TASK / HANDOFF
