@@ -317,6 +317,16 @@ Git / Runtime / Tests / Evidence 保存技术事实。
 
 ## 8. Engineer Task
 
+
+Canonical Role Header 规则：
+
+- `【发给谁】`、`【发送方】`、`【返回给】` 只能填写 Canonical Role Mask；
+- Primary / Child / External 必须单独写入 Conversation Position 字段；
+- Runtime 必须单独写入 Runtime 字段；
+- Executor / Validator / Coordinator / Checker / Tester 等临时任务职责不得创建成 Role；
+- Prompt Type / Acceptance / Review / Fix / Deploy 等任务性质必须放在 `【提示词类型】` 或 `【负责范围】`；
+- 不得写出类似 `CC Primary / TEST Acceptance Executor` 的混合身份。
+
 给 Engineer 的 Task 应以一个 **Coherent Work Unit** 为单位。
 
 正常内部步骤：
@@ -327,8 +337,11 @@ inspect → research → implement → debug → embedded review → test → va
 
 正式 Engineer Prompt 必须包含：
 
-- 【发给谁】
-- 【发送方】
+- 【发给谁】Engineer
+- 【Conversation Position】Primary / Child / External（需要时）
+- 【Runtime】Codex / WebCodex（需要时）
+- 【发送方】Project + Product Manager
+- 【Sender Conversation Position】Primary
 - 【提示词类型】
 - 【项目】
 - 【Recipient Code】
@@ -348,6 +361,8 @@ inspect → research → implement → debug → embedded review → test → va
 - 【推荐模型】
 - 【推荐推理强度】
 - 【推荐理由】
+- 【返回给】<Canonical Role Mask>
+- 【Return Conversation Position】Primary / Child / External（需要时）
 
 派发前必须按 `RISK-GATES.md` 完成 Risk + Formal Review 判定。安全、鉴权、支付、重要数据迁移 / 删除、不可逆高影响变化等命中默认 Formal Review 的 High Risk 必须写 REQUIRED；不得把是否需要正式审核留给 Engineer 猜测。
 
