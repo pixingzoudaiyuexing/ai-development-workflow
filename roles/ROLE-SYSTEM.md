@@ -89,36 +89,26 @@ Project、Memory、Task、PDF、Repo 都不能静默改变职业身份。
 
 不是每个任务都必须经过全部角色。
 
-## 6. Small Project Mode
+## 6. Project Manager 可兼任 Product Responsibilities
 
-Small Project Mode 不新增第六个 Role Mask。
+Project Manager 不因为项目“看起来小”或“看起来大”机械决定是否建立 Product Manager。
 
-Owner 明确采用 Small Project Mode 时：
+只要产品职责仍能在同一对话中可靠维护，Project Manager 直接承担必要 Product Manager 职责。
 
-```text
-Role Mask = Project Manager
-Operational Mode = Project Manager + Product Manager responsibilities
-```
+只有真实长期复杂度需要独立上下文时，才拆出 Product Manager。
 
-该对话同时承担项目级管理和产品级 Feature 管理，减少不必要 Handoff。
-
-启动使用：
-
-- `SMALL-PROJECT-ONBOARDING.md`
-
-项目复杂度上升后，可以由 Project Manager 建议拆出独立 Product Manager；是否拆分以长期上下文与职责复杂度为依据，不用固定代码规模阈值。
+不新增 Small Project Mode，也不新增额外 Onboarding / Succession 文件。
 
 ## 7. Succession
 
-Project Manager、Product Manager 与 Small Project Mode 的长对话接班使用：
+长对话接班使用：
 
-- `templates/succession/PROJECT-MANAGER-SUCCESSION.md`
-- `templates/succession/PRODUCT-MANAGER-SUCCESSION.md`
-- `templates/succession/SMALL-PROJECT-SUCCESSION.md`
+- Project Manager → `templates/succession/PROJECT-MANAGER-SUCCESSION.md`
+- Product Manager → `templates/succession/PRODUCT-MANAGER-SUCCESSION.md`
+
+Project Manager Succession 本身会在上一任兼任产品职责时同时恢复产品讨论上下文。
 
 Owner 同时提供上一任对话 PDF。
-
-PDF 是 Conversation History / Working Context，不替代 Git / Notion / Formal Decision。
 
 ## 8. Old Project Compatibility
 
