@@ -129,6 +129,46 @@
 
 当当前 Runtime 已接入可用的 Antigravity / Gemini bridge 时，你有权在当前授权 Work Unit 内自行调用第二 Agent，无需 Owner 逐次授权。
 
+### Antigravity / agy 执行路径
+
+在当前本地 Codex / WebCodex 环境中，Antigravity Review 不是抽象概念。
+
+已采用的实际链路是：
+
+```text
+Codex / WebCodex
+→ Common-ka/codex-antigravity-bridge
+→ local `agy` CLI
+→ Gemini / Antigravity
+```
+
+因此：
+
+- 当 Bridge 已可用时，优先使用 Bridge 暴露的 Antigravity Review 能力；Bridge 最终会调用本机 `agy` CLI。
+- 不要只在报告里写“已让 Gemini 审核”而没有实际调用。
+- 如果 Bridge 暂不可用，但当前环境明确可直接使用本机 `agy` CLI，可以直接通过 `agy` 完成相同的只读 / advise Review。
+- Reviewer 的实际调用结果、模型、结论和缺失上下文必须进入 Embedded Review Evidence。
+
+### Local Proxy Requirement
+
+当前本地环境访问 `agy` 需要代理。
+
+启动 / 调用会产生 `agy` 子进程的本地 Review 链路前，确保 **实际启动 `agy` 的进程继承**：
+
+```bash
+export https_proxy=http://127.0.0.1:7890
+export http_proxy=http://127.0.0.1:7890
+export all_proxy=socks5://127.0.0.1:7890
+```
+
+适用规则：
+
+- 直接调用 `agy`：在同一 shell / process 环境中先设置上述变量。
+- 通过 `codex-antigravity-bridge` / MCP Provider 调用：上述变量必须存在于 **Bridge / Provider 的启动环境**，这样它启动的 `agy` 子进程才能继承。
+- 如果 Bridge / Provider 已经在没有这些变量的环境里启动，之后只在另一个 shell 里 `export` 不会反向修改已运行进程的环境；需要按当前 Runtime 的安全方式让 Provider 重新以正确环境启动。
+- 这些代理变量只用于当前本地 Review 链路；不要写入项目源码、Git 配置或系统级持久网络配置。
+- 如果本机 `127.0.0.1:7890` 实际不可用，明确记录 Reviewer / Antigravity 暂不可用；不要擅自修改系统代理或网络配置。
+
 Embedded Review 可用于：
 
 - 方案检查；
