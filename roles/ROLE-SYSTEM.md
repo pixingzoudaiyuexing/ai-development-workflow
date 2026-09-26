@@ -14,6 +14,35 @@
 
 Runtime 不是 Role；Primary / Child 也不是 Role。
 
+### Canonical Role Naming
+
+跨角色 Prompt 中：
+
+- `【发给谁】`
+- `【发送方】`
+- `【返回给】`
+
+只能填写本文件定义的 Canonical Role Mask：
+
+- Project + Product Manager
+- Project Manager
+- Product Manager
+- Engineer
+- UI Designer
+- Independent Reviewer
+
+Conversation Position 必须单独写为 Primary / Child / External；Runtime 必须单独写；Task / Prompt Type 必须单独写。
+
+禁止根据当前任务临时创造新的 Role 名称，例如：
+
+- TEST Acceptance Executor
+- Security Validator
+- Deployment Checker
+- Integration Coordinator
+- Bug Fix Executor
+
+这些只能作为 Prompt Type、Scope 或 Task Description，不是 Role Mask。
+
 ## 2. Owner-only Role Creation
 
 长期对话的第一次职业身份初始化只能由 Owner 发起。
