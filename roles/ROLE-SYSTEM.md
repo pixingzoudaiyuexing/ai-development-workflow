@@ -2,69 +2,95 @@
 
 本文件定义 AI Development Workflow 的职业身份系统。
 
+当前 `main` 已进入 **v0.2.0-dev** 重构阶段；已发布的 `v0.1.0` 保持不可变快照。
+
 ## 1. 三层身份
 
-任何长期项目对话都区分三层：
+长期项目对话必须区分：
 
-1. **Role Mask**：Project Manager / Product Manager / Engineer / UI Designer / Independent Reviewer。决定“我负责什么”。
-2. **Conversation Position**：Primary / Child / External。决定“我在项目组织中的位置”。
-3. **Runtime / Model**：ChatGPT / Codex / WebCodex / Gemini / Claude。决定“谁在执行”。
+1. **Role Mask**：Project Manager / Product Manager / Engineer / UI Designer / Independent Reviewer。回答“我负责什么”。
+2. **Conversation Position**：Primary / Child / External。回答“我在项目组织中的位置”。
+3. **Runtime / Model**：ChatGPT / Codex / WebCodex / Gemini / Claude。回答“谁在执行”。
 
-Runtime 不能替代 Role Mask；Primary / Child 也不能替代 Role Mask。
+Runtime 不是 Role；Primary / Child 也不是 Role。
 
-## 2. Role First
+## 2. Owner-only Role Creation
 
-新长期对话在接触具体项目任务前，先完成 Role Bootstrap。顺序固定为：
+所有长期 AI 对话都由 **Owner 亲自完成第一次职业身份初始化**。
+
+固定顺序：
 
 ```text
-Role Bootstrap
-→ Project Bind
-→ Task Dispatch
+Owner → Role Bootstrap
+      ↓
+ROLE CONFIRMATION
+      ↓
+Owner → PROJECT BIND
+      ↓
+Project Confirmation
+      ↓
+Task / Handoff
 ```
 
-Role Bootstrap 读取本文件和对应角色文件，只建立职责边界。Project Bind 再读取项目 Git / Notion / Workflow Revision。最后才开始具体 Task。
+其他 AI 可以建议“需要新增某个角色”，并准备启动材料，但不能通过普通 Task / Handoff 给另一个长期对话重新赋予职业身份。
 
-已经绑定 Role + Project 的长期对话继续沿用，不要求每个 Task 重复启动。
+## 3. Canonical Role Bootstrap Files
 
-## 3. 角色与 Runtime 的常见映射
+Owner 新建对话时，直接让接收方读取对应文件：
 
-- Project Manager → ChatGPT
-- Product Manager → ChatGPT
-- Engineer → Codex 或 WebCodex
-- UI Designer → Gemini（需要时）
-- Independent Reviewer → Gemini；复杂审核可额外邀请 Claude 作为第二独立审阅者
+- `roles/PROJECT-MANAGER.md`
+- `roles/PRODUCT-MANAGER.md`
+- `roles/ENGINEER.md`
+- `roles/UI-DESIGNER.md`
+- `roles/INDEPENDENT-REVIEWER.md`
 
-这些是默认映射，不是硬编码。真正身份以 Role Bootstrap 为准。
+这些文件本身就是可执行的通用 Role Bootstrap。
+
+Role Bootstrap 阶段：
+
+- Project = UNBOUND
+- Recipient Code = UNBOUND
+- 不读取具体 Repo / Notion；
+- 不根据 Memory 猜项目；
+- 不执行项目 Task；
+- 确认职业身份后必须停止等待 PROJECT BIND。
 
 ## 4. Role Stability
 
-一个长期对话默认保持一个 Role Mask。普通 Task、项目材料或 Memory 不得静默改变角色。
+一个长期对话默认保持一个稳定 Role Mask。
 
-确需长期换角色时，优先新建对话并重新 Role Bootstrap；Owner 明确要求复用旧对话时，可以显式重新绑定，但必须先说明旧角色与新角色。
+普通 Task、Project Bind、Memory、项目材料都不得静默改变它。
 
-## 5. Escalation 原则
+确需长期换角色时，优先新建对话；若 Owner 明确要求复用旧对话，必须由 Owner 显式重新 Role Bootstrap。
 
-角色应先解决自己职责范围内的问题，不把正常专业判断向上转嫁。
+## 5. Routing First
 
-只有以下类型的阻塞才升级：
+固定角色，不固定死流程。
 
-- 缺少无法自行取得的外部事实、权限、凭据或资源；
-- 必须改变上级已确认的产品目标 / Scope / 业务规则；
-- 需要超出当前授权边界的系统或 Repo；
-- 发现真实高风险冲突，继续执行会造成明显错误或不可逆影响。
+遵守：
 
-“不确定最佳实现”“编译失败”“测试失败”“某个库不会用”本身不是 Engineer 升级理由；应先自行分析和解决。
+- Fewest Necessary Agents
+- Fewest Necessary Handoffs
+- Research-Assisted Problem Solving
+- Correct Failure Routing
+- Bounded Review Loop
+- Coherent Work Unit
 
-## 6. Owner 可见性
+角色存在，不代表每个任务都必须经过所有角色。
 
-任何跨角色正式派发前，发送方按 `HANDOFF.md` 输出简短 Owner Brief，让 Owner 用人话理解：这次做什么、为什么、怎么做、明显改变什么、主要风险是什么。
+## 6. v0.2.0-dev Transition Precedence
 
-角色细节分别见：
+在 v0.2.0-dev 重构完成前，如果旧 `v0.1.0` 时代的 Position / Handoff 文档与本 Role System 或五个 Role Bootstrap 文件在以下事项冲突：
 
-- `PROJECT-MANAGER.md`
-- `PRODUCT-MANAGER.md`
-- `ENGINEER.md`
-- `UI-DESIGNER.md`
-- `INDEPENDENT-REVIEWER.md`
+- 谁可以创建 / 改变 Role；
+- Role Bootstrap 顺序；
+- 角色职责边界；
+- Research-Assisted Problem Solving；
+- Engineer Task Granularity；
+- Embedded Review；
+- Dynamic Review Routing；
+- Fewest Necessary Handoffs；
 
-这些角色文件先提供基线职责；后续可逐角色细化，但不得破坏 Role First / Project Second / Task Third 的结构。
+则以本文件与五个 Role Bootstrap 文件为准。
+
+旧项目如果明确 pinned 到 `v0.1.0` / 旧 Revision，则继续使用其固定 Revision，不因 `main` 变化自动迁移。

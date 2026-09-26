@@ -11,19 +11,23 @@
 - 让风险、证据、审查和跨 AI / 跨 Conversation 交接成为可重复流程；
 - 尽量减少零代码用户手工搬运上下文、判断技术路由和做技术裁决的负担。
 
-当前版本：**v1**。
+当前 `main`：**v0.2.0-dev**。已发布稳定快照：**v0.1.0**。
 
 ## 使用入口
 
-任何新的 ChatGPT 项目或对话，都从 [`START-HERE.md`](./START-HERE.md) 开始。
+v0.2.0-dev 采用 **Owner Role First**。
 
-推荐的新项目启动语：
+新增长期 AI 对话时，Owner 先让接收方读取对应的通用 Role Bootstrap：
 
-> 这是一个新的开发项目。请读取这个仓库的 `START-HERE.md`，按照我的 AI 开发流程执行。现在不要写代码，也不要生成 Codex Task，先进入 Project Discovery。我是零代码基础用户，请由你判断 Project Tier、Conversation Topology、Task Risk、Codex 模型与是否需要 Gemini Review。
+- [Project Manager](./roles/PROJECT-MANAGER.md)
+- [Product Manager](./roles/PRODUCT-MANAGER.md)
+- [Engineer](./roles/ENGINEER.md)
+- [UI Designer](./roles/UI-DESIGNER.md)
+- [Independent Reviewer](./roles/INDEPENDENT-REVIEWER.md)
 
-新项目的初始 Project Discovery 对话默认成为 **Primary Conversation**。如果项目需要多个长期工作流或多个 Repo，由 Primary Conversation 决定是否建立 Child Conversation，并直接生成用户可复制的新对话启动消息。用户不需要自己判断“这个需求属于 API、Web 还是架构”。
+Role 确认后停止，再由 Owner 发送 PROJECT BIND；完成项目绑定后才进入 Task / Handoff。
 
-长期复杂项目可以启用 Notion Project Knowledge。Primary 负责正式写入；Child 只读取和提交 Knowledge Update Candidate。Primary / Child 都按事件触发 Re-Anchor，防止长对话导致核心规则漂移。
+旧项目如果 pinned 到 v0.1.0 / 旧 Workflow Revision，不会因 `main` 更新自动迁移。
 
 ## 核心原则
 

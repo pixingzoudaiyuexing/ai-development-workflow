@@ -47,7 +47,7 @@ Project Memory 可以辅助上下文恢复，但不是正式 Handoff 的替代�
 
 ### Owner Brief — 给 Owner 的人话说明
 
-任何需要 Owner 把正式任务 / Handoff / Review Prompt 转发给另一个 AI 或 Conversation 的场景，发送方都必须在最终 Transfer Block **之前**提供一段简短中文说明，默认控制在 3–6 行：
+任何需要 Owner 把正式任务 / Handoff / Review Prompt 转发给另一个 AI 或 Conversation 的场景，发送方都必须在最终 Transfer Block **之后**提供一段简短中文说明，默认控制在 3–6 行：
 
 - 这次要做什么 / 遇到了什么问题；
 - 为什么现在要派发这个任务；
@@ -61,13 +61,14 @@ Owner Brief 是给 Owner 看的，不属于接收方提示词；接收方提示�
 
 新长期对话首次进入项目时，默认遵循：
 
-`Role Bootstrap → Project Bind → Task Dispatch`
+`Owner Role Bootstrap → Project Bind → Task Dispatch`
 
-- Role Bootstrap 只建立 Role Mask / Conversation Position / Runtime / 职责边界，使用 `templates/ROLE-BOOTSTRAP.template.md`。
-- Project Bind 再绑定 Project / Recipient Code / Parent / Repo / Domain / Workflow Revision / Project Knowledge，使用 `templates/PROJECT-BIND.template.md`。
-- 前两步完成后才发送正式任务。已绑定的长期对话不要求每个 Task 重复启动流程。
-- 一次性的外部 Reviewer 可以把身份、项目和 Review Task 合并为一个完整 Transfer Block 以减少搬运，但必须在顶部明确 `Role Mask: Independent Reviewer`，不能靠模型名称推断身份。
-- Runtime 不是 Role：Codex / WebCodex 默认是 Engineer；Gemini 可以是 UI Designer 或 Independent Reviewer；Claude 默认仅在明确邀请时作为额外 Independent Reviewer；ChatGPT 根据拓扑佩戴 Project Manager 或 Product Manager。
+- Role Bootstrap 由 Owner 发起，直接读取 `roles/` 下对应 canonical Role 文件；不再由其他 AI 临时拼装职业身份。
+- Role Bootstrap 只建立稳定职业身份；此时 Project / Recipient Code 均为 UNBOUND。
+- Project Bind 再绑定 Project / Recipient Code / Parent / Repo / Domain / Workflow Revision / Project Knowledge，使用 `templates/PROJECT-BIND.template.md` 或其后续 canonical 版本。
+- 前两步完成后才发送正式任务。已绑定长期对话不要求每个 Task 重复启动。
+- 普通 Task / Handoff 只能验证预期 Role，不能重新定义 Role。
+- Runtime 不是 Role：Codex / WebCodex 默认是 Engineer；Gemini 可以是 UI Designer 或 Independent Reviewer；Claude 仅在明确邀请时作为额外 Reviewer；ChatGPT 常承载 Project Manager 或 Product Manager。
 
 ### Recipient Code — 轻量误投提醒
 
@@ -75,7 +76,7 @@ Owner Brief 是给 Owner 看的，不属于接收方提示词；接收方提示�
 
 - 一个项目沿用一个简短、固定的 **Recipient Code（接收暗号）**；同项目的 Primary、Child、Codex 可以共用。Primary 在项目首次启用时确定一次，并在该项目现有 Notion Project Knowledge（如启用）或项目 Git 文档中记录；后续生成任务时自动沿用，不要求用户手工填写。暗号只是便于识别误投的标签，不是密码或权限凭据。
 - 每份正式 Transfer Block 在开头清楚写出 `Recipient Code: <接收方暗号>`。涉及跨仓或跨项目的任务也**填写目标接收对话的暗号**；本次允许操作哪些项目 / 仓库仍由任务的 Scope 决定。暗号相同即可按原有 Workflow 继续正常工作，不为跨项目任务增加额外门禁。
-- 完全未绑定的新对话以收到的第一份完整启动消息或正式任务中的暗号建立本对话暗号，正常继续。已经有暗号的对话收到新任务时，先与**此前已绑定的暗号**比较：一致则照常处理；不一致则只暂停这份任务并提醒“暗号不一致，可能发错对话”，不自动改绑，也不影响其他正常工作。
+- 新长期对话不能从普通 Task 自动建立 Recipient Code。它必须先完成 Owner 发起的 Role Bootstrap，再通过 PROJECT BIND 建立 Project / Recipient Code。已经绑定暗号的对话收到新任务时，先与**此前已绑定的暗号**比较：一致则照常处理；不一致则只暂停这份任务并提醒“暗号不一致，可能发错对话”，不自动改绑，也不影响其他正常工作。
 - 若 Owner 明确要求将旧对话改作另一用途，可以明确重新绑定暗号；普通任务里的新暗号本身不代表切换指令。长对话中可依据此前的启动消息 / 历次任务或现有项目记录延续暗号；无须每次查询 Notion，不得仅凭一份突然出现的新暗号覆盖此前已绑定的暗号。
 - 未启用本规则或仍固定旧 Workflow Revision 的项目不因本文件更新而自动采用此约定。原有 Git Preflight 和 Scope 检查照常，不另增身份数据库、工作区校验清单或全项目冻结规则。
 

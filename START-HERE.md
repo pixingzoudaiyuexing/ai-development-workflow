@@ -4,17 +4,27 @@
 
 新对话不再先靠项目材料猜测自己是谁。**先建立 Role Mask，再绑定 Project，最后接收 Task。** 角色系统的 canonical 规则见 `roles/ROLE-SYSTEM.md`。
 
-## 0. 新对话启动：Role First
+## 0. 新对话启动：Owner Role First
 
-对新的长期项目对话 / 执行对话，发送方按以下顺序生成并让 Owner 直接转发完整消息：
+所有长期 AI 对话都由 **Owner 亲自完成第一次职业身份初始化**。
 
-1. **Role Bootstrap**：使用 `templates/ROLE-BOOTSTRAP.template.md`，先确定 Role Mask、Conversation Position、Runtime、职责、非职责和 Escalation Target。接收方先读取 `roles/ROLE-SYSTEM.md` 与对应角色文件；此阶段不分析具体项目、不执行任务。
-2. **Project Bind**：使用 `templates/PROJECT-BIND.template.md`，再绑定 Project、Recipient Code、Parent、Domain / Repo、Workflow Revision 与必要 Project Knowledge。此阶段只恢复项目事实，不开始实现。
-3. **Task Dispatch**：身份和项目都明确后，再发送具体 Task / Review / Design Handoff。
+Owner 不需要复制长 Prompt；只需要让新对话读取对应 canonical Role Bootstrap：
 
-已经完成 Role + Project 绑定的长期对话，后续普通任务不重复走三步；继续沿用已绑定身份即可。一次性的外部审查可以把 Role / Project / Task 合并在一个完整 Transfer Block 中，但 Role Mask 必须明确写出，不能让接收方自行猜测。
+- `roles/PROJECT-MANAGER.md`
+- `roles/PRODUCT-MANAGER.md`
+- `roles/ENGINEER.md`
+- `roles/UI-DESIGNER.md`
+- `roles/INDEPENDENT-REVIEWER.md`
 
-先读取 `VERSION` 确认当前 Workflow 版本，并记录当前项目采用的 **Workflow Revision（具体 commit SHA）**。项目默认固定到已记录的 Revision；除非 Primary 明确执行 Workflow 升级，不得因为仓库 `main` 继续变化而静默切换规则。然后再判断当前场景，只读取需要的文档；不要一次性把所有规则加载进上下文。
+顺序固定为：
+
+1. **Role Bootstrap**：只建立稳定职业身份。此时 Project / Recipient Code 均为 UNBOUND，不分析具体项目。
+2. **Project Bind**：由 Owner 再发送项目绑定信息，绑定 Project / Recipient Code / Domain / Repo / Workflow Revision / Project Knowledge。
+3. **Task Dispatch**：Role + Project 都确认后才进入具体工作。
+
+其他 AI 可以建议建立新角色并准备启动材料，但不能通过普通 Task 给另一个长期对话重新赋予身份。
+
+已经完成 Role + Project Bind 的长期对话，后续普通任务不重复 Bootstrap。
 
 ## 1. 新项目 / Primary Conversation
 

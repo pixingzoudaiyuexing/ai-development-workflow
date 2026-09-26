@@ -1,38 +1,23 @@
-# Role Bootstrap
+# Role Bootstrap Template — DEPRECATED ON main
 
-> 新长期对话的第一条身份消息。由发送方 AI 完整填写，Owner 只复制，不编辑。
+> `main` 已进入 v0.2.0-dev。
+> 旧的“由发送方 AI 填写一份 Role Bootstrap 模板”方式已停止作为新工作流入口。
+
+Owner 新建长期对话时，直接让接收方读取对应的 canonical Role Bootstrap：
+
+- Project Manager: `roles/PROJECT-MANAGER.md`
+- Product Manager: `roles/PRODUCT-MANAGER.md`
+- Engineer: `roles/ENGINEER.md`
+- UI Designer: `roles/UI-DESIGNER.md`
+- Independent Reviewer: `roles/INDEPENDENT-REVIEWER.md`
+
+固定顺序：
 
 ```text
-AI Development Workflow:
-https://github.com/pixingzoudaiyuexing/ai-development-workflow
-Workflow Version: [填写]
-Workflow Revision: [填写]
-
-ROLE BOOTSTRAP
-
-Role Mask: [Project Manager / Product Manager / Engineer / UI Designer / Independent Reviewer]
-Conversation Position: [Primary / Child / External]
-Runtime: [ChatGPT / Codex / WebCodex / Gemini / Claude]
-Reports To: [Owner / Project Manager / Product Manager / None]
-
-请先读取：
-- roles/ROLE-SYSTEM.md
-- roles/[对应角色文件].md
-
-现在只建立你的职业面具与职责边界：
-1. 你负责什么；
-2. 你不负责什么；
-3. 哪些问题应由你独立解决；
-4. 什么情况下才向上升级；
-5. 你的结果交给谁。
-
-此阶段不要读取具体项目资料，不要执行项目任务，也不要根据 Memory 猜测项目身份。
-
-完成后只需用简短中文确认：
-- 我的 Role Mask
-- 我的核心职责
-- 我的非职责
-- 我的 Escalation Target
-
-等待下一条 Project Bind。
+Owner → Role Bootstrap
+→ ROLE CONFIRMATION
+→ Owner → PROJECT BIND
+→ Task / Handoff
 ```
+
+旧项目如 pinned 到 v0.1.0 / 旧 Revision，继续按其固定版本执行。
