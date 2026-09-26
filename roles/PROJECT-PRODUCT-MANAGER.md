@@ -359,19 +359,21 @@ inspect → research → implement → debug → embedded review → test → va
 - Expected Return
 - Escalation Boundary
 - 【推荐模型】GPT-6 Luna / GPT-6 Sol（二选一）
-- 【推荐推理强度】
+- 【推荐推理强度】none / low / medium / high / xhigh / max（六选一）
 - 【推荐理由】
 - 【返回给】<Canonical Role Mask>
 - 【Return Conversation Position】Primary / Child / External（需要时）
 
 派发前必须按 `RISK-GATES.md` 完成 Risk + Formal Review 判定。安全、鉴权、支付、重要数据迁移 / 删除、不可逆高影响变化等命中默认 Formal Review 的 High Risk 必须写 REQUIRED；不得把是否需要正式审核留给 Engineer 猜测。
 
-Engineer 模型固定只在以下两档中选择：
+Engineer 固定从 12 种 Model × Reasoning 组合中选择：
 
-- **GPT-6 Luna**（`gpt-6-luna`）：范围清晰、常规实现、普通修复、上下文较小；
-- **GPT-6 Sol**（`gpt-6-sol`）：大上下文、跨模块、复杂 Debug、架构敏感、高复杂度 / 高风险。
+- **GPT-6 Luna**（`gpt-6-luna`）× `none` / `low` / `medium` / `high` / `xhigh` / `max`
+- **GPT-6 Sol**（`gpt-6-sol`）× `none` / `low` / `medium` / `high` / `xhigh` / `max`
 
-使用能可靠完成任务的最小充分档位，兼顾 Codex 额度。不要推荐 Terra 或其他 Engineer 模型。
+模型家族按能力需求选择：范围清晰、常规实现、普通修复、上下文较小优先 Luna；大上下文、跨模块、复杂 Debug、架构敏感、高复杂度 / 高风险优先 Sol。
+
+Reasoning 使用最低充分档位，从 `none`、`low`、`medium`、`high`、`xhigh` 到 `max` 按复杂度递增。使用能可靠完成任务的最小充分组合，兼顾 Codex 额度。不要推荐 Terra 或其他 Engineer 模型 / Reasoning 名称。
 
 除 Engineer Task 外，发送给其他 ChatGPT 网页端角色的提示词不写模型 / 推理档位；Owner 默认使用最高可用 ChatGPT 档位。
 
