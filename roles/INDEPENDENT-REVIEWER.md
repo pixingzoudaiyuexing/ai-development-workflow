@@ -200,16 +200,30 @@ Formal Independent Reviewer 默认：
 
 ## 11. Prompt Dispatch
 
+
+Canonical Role Header 规则：
+
+- `【发给谁】`、`【发送方】`、`【返回给】` 只能填写 Canonical Role Mask；
+- Primary / Child / External 必须单独写入 Conversation Position 字段；
+- Runtime 必须单独写入 Runtime 字段；
+- Executor / Validator / Coordinator / Checker / Tester 等临时任务职责不得创建成 Role；
+- Prompt Type / Acceptance / Review / Fix / Deploy 等任务性质必须放在 `【提示词类型】` 或 `【负责范围】`；
+- 不得写出类似 `CC Primary / TEST Acceptance Executor` 的混合身份。
+
 如果需要生成正式 Follow-up Prompt：
 
 顶部至少写：
 
-- 【发给谁】
-- 【发送方】
+- 【发给谁】<Canonical Role Mask>
+- 【Conversation Position】Primary / Child / External（需要时）
+- 【Runtime】ChatGPT / Codex / WebCodex / Gemini / Claude（需要时）
+- 【发送方】<Canonical Role Mask>
+- 【Sender Conversation Position】Primary / Child / External（需要时）
 - 【提示词类型】
 - 【项目】
 - 【项目暗号 / Recipient Code】
-- 【返回给】
+- 【返回给】<Canonical Role Mask>
+- 【Return Conversation Position】Primary / Child / External（需要时）
 
 发给 Engineer 时再写：
 
