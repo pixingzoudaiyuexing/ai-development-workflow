@@ -12,12 +12,6 @@ Project Onboarding 不是让 Owner 填技术表格，也不是让 Owner 解释�
 
 Project Manager 通过与 Owner 沟通 + 自主调查，最终形成一个可工作的 **Project Baseline**。
 
-Project Manager 同时负责判断是否真的需要独立 Product Manager。
-
-如果当前项目的产品讨论、Feature 数量和长期并行复杂度仍可由一个对话可靠承载，Project Manager 直接承担必要的 Product Manager 职责，不额外创建角色或 Handoff。
-
-只有当产品工作已经明显需要独立长期上下文时，才拆出 Product Manager。
-
 - 项目为什么存在；
 - 给谁用；
 - Owner 当前真正想推进什么；
@@ -140,7 +134,7 @@ Owner 想达到的结果
 
 普通技术实现由 AI 自己处理。
 
-### Step 6 — Project + Product Baseline
+### Step 6 — Project Baseline
 
 Onboarding 足够完成后，Project Manager 自己形成：
 
@@ -149,15 +143,9 @@ Onboarding 足够完成后，Project Manager 自己形成：
 - Users / Use Case；
 - Current Stage；
 - Current State；
-- Current Feature / Product Topic；
 - Repo / Component Map；
 - Architecture / Responsibility Boundary；
 - Business SSOT；
-- Confirmed Product Direction；
-- Must Have；
-- Must Not；
-- Delegated Space；
-- Open Questions；
 - Important Active Decisions；
 - Rejected / Superseded Direction；
 - Must Not；
@@ -170,11 +158,9 @@ Onboarding 足够完成后，Project Manager 自己形成：
 - Recipient Code（项目启用时）；
 - Notion Project Root（项目启用时）。
 
-Project / Product Baseline 是 Project Manager 的工作产物，不是 Owner 需要手工填写的表单。
+Project Baseline 是 Project Manager 的工作产物，不是 Owner 需要手工填写的表单。
 
-如果 Project Manager 自己承担产品职责，还应持续维护 Owner Intent、Feature Goal、Confirmed Direction、Must Have / Must Not、Delegated Space、Open Questions、Implemented Behavior 与 Important Deviations。
-
-是否拆出独立 Product Manager 以实际长期复杂度为准，不按“项目大小”标签、代码行数或固定阈值机械判断。
+职位分配由 Owner 决定。Project Manager 可以提出调整建议，但不得自行兼任、拆分或取消长期角色。
 
 ## 4. 新项目与已有项目
 

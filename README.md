@@ -58,6 +58,17 @@ Owner 不负责：
 
 Project Manager 应主动调查并引导 Owner。
 
+## 项目兼产品经理
+
+如果 Owner 选择一个对话同时承担 Project Manager + Product Manager，只使用两份 canonical 提示词：
+
+- 新对话：`roles/PROJECT-PRODUCT-MANAGER.md`
+- 接班：`templates/succession/PROJECT-PRODUCT-MANAGER-SUCCESSION.md`
+
+新对话文件已经包含 Role Bootstrap + Project Onboarding；接班文件已经包含 Role 恢复 + PDF Succession + 必要的项目校准。
+
+不需要额外 Small Project Mode、额外 Onboarding 或额外接班提示词。
+
 ## 入口
 
 - `START-HERE.md`
@@ -66,6 +77,7 @@ Project Manager 应主动调查并引导 Owner。
 
 ## 角色
 
+- `roles/PROJECT-PRODUCT-MANAGER.md`
 - `roles/PROJECT-MANAGER.md`
 - `roles/PRODUCT-MANAGER.md`
 - `roles/ENGINEER.md`
@@ -74,6 +86,7 @@ Project Manager 应主动调查并引导 Owner。
 
 ## 接班
 
+- `templates/succession/PROJECT-PRODUCT-MANAGER-SUCCESSION.md`
 - `templates/succession/PROJECT-MANAGER-SUCCESSION.md`
 - `templates/succession/PRODUCT-MANAGER-SUCCESSION.md`
 

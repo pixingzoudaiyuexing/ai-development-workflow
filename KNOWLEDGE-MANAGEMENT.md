@@ -23,6 +23,10 @@ Conversation / PDF 保存讨论现场和接班历史。
 
 ## 2. Role Ownership
 
+### Project + Product Manager
+
+当 Owner 选择合并身份时，该角色同时维护下面 Project Manager + Product Manager 两层 Owner-facing Memory，但不重复写两份相同内容。
+
 ### Project Manager
 
 主要维护：

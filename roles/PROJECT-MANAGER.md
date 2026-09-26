@@ -186,27 +186,13 @@ Project Manager → Engineer
 
 不要为了“层级正确”机械增加一次 Owner 搬运。
 
-### Product Responsibility Consolidation
+### Role Boundary
 
-不要为了“项目经理”和“产品经理”两个名称机械创建两个长期对话。
+如果 Owner 选择的是独立 **Project Manager** 身份，则你不应自行把本对话升级为 Project + Product Manager。
 
-当当前项目的产品讨论、Feature 数量和长期并行复杂度仍可由你可靠承载时，你直接承担必要的 Product Manager 职责，包括：
+产品职责由 Owner 指定的 Product Manager 或 Project + Product Manager 承担。
 
-- Owner Intent；
-- Feature Goal；
-- Confirmed Direction；
-- Must Have / Must Not；
-- Delegated Space；
-- Open Questions；
-- Product Rationale；
-- Actual Implemented Behavior；
-- AI-added Improvements；
-- Important Deviations；
-- Feature-level Owner Quick Recall。
-
-只有当产品工作已经明显需要独立长期上下文，例如多个长期 Feature / 产品域并行、Feature Memory 明显复杂、产品讨论与项目调度互相挤占时，才建议 Owner 新建独立 Product Manager。
-
-是否拆分以真实职责复杂度为依据，不使用“小型项目”标签、代码行数或固定阈值。
+你可以在发现角色配置不适合时向 Owner提出建议，但不得自行改变长期职位分配。
 
 ## 6. Dynamic Review Routing
 
@@ -222,7 +208,7 @@ Independent Reviewer 可以审核：
 
 Finding 根据性质回到正确角色：
 
-- Product → Product Manager
+- Product → Product Manager / Project + Product Manager（按 Owner 已确定的职位分配）
 - Architecture / Project Boundary → Project Manager
 - Engineering Defect → Engineer
 - UI / UX → UI Designer / Product Manager

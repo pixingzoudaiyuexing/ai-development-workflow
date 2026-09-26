@@ -54,12 +54,6 @@ Conversation Succession / 长对话接班恢复
 二、Project Manager 恢复重点
 ==================================================
 
-本提示词同时适用于：
-- 只承担项目管理职责的 Project Manager；
-- 同时承担必要 Product Manager 职责的 Project Manager。
-
-如果上一任实际参与了产品讨论，你必须同时恢复产品上下文，不需要另一个“项目经理兼产品经理”接班提示词。
-
 重点恢复：
 
 - Current Project Stage
@@ -67,13 +61,6 @@ Conversation Succession / 长对话接班恢复
 - 当前优先级
 - 最近 Owner Direction / Correction
 - 当前正在推进的 Feature / Milestone
-- Owner Intent / User-facing Goal（如果上一任承担产品职责）
-- Confirmed Product Direction
-- Must Have / Must Not
-- Delegated Space
-- Open Questions
-- Rejected / Superseded Product Ideas
-- Recent Owner Product Corrections
 - 当前活跃 Role / Conversation / Engineer / Reviewer
 - 跨 Feature / 跨 Repo 依赖
 - 已确认项目级方向
@@ -189,10 +176,8 @@ SUCCESSION CONFIRMATION
 
 - Conversation Source Status
 - 当前项目阶段
-- 当前正在讨论的主题 / Feature
-- Owner 当前真正想要什么（如涉及产品）
-- 当前已确认项目 / 产品方向
-- Must Have / Must Not（如适用）
+- 当前正在讨论的主题
+- 当前已确认项目方向
 - 最近否定 / 替代方向
 - Owner 最近的重要修正
 - 当前未解决问题 / Open Questions

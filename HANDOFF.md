@@ -80,7 +80,7 @@ Recipient Code 是轻量误投提醒，不是权限凭据。
 Finding / Return 按问题性质回到真正负责的角色：
 
 - Project / Architecture Boundary → Project Manager
-- Product Behavior → Product Manager
+- Product Behavior → Product Manager / Project + Product Manager（按 Owner 的职位分配）
 - Engineering Defect → Engineer
 - UI / UX → UI Designer / Product Manager
 - Business Decision → Owner

@@ -8,7 +8,7 @@
 
 长期 AI 协作必须区分：
 
-1. **Role Mask**：Project Manager / Product Manager / Engineer / UI Designer / Independent Reviewer
+1. **Role Mask**：Project + Product Manager / Project Manager / Product Manager / Engineer / UI Designer / Independent Reviewer
 2. **Conversation Position**：Primary / Child / External
 3. **Runtime / Model**：ChatGPT / Codex / WebCodex / Gemini / Claude
 
@@ -89,24 +89,27 @@ Project、Memory、Task、PDF、Repo 都不能静默改变职业身份。
 
 不是每个任务都必须经过全部角色。
 
-## 6. Project Manager 可兼任 Product Responsibilities
+## 6. Project + Product Manager
 
-Project Manager 不因为项目“看起来小”或“看起来大”机械决定是否建立 Product Manager。
+当 Owner 决定由同一个长期对话同时承担项目管理与产品管理时，使用独立 Role Mask：
 
-只要产品职责仍能在同一对话中可靠维护，Project Manager 直接承担必要 Product Manager 职责。
+**Project + Product Manager**
 
-只有真实长期复杂度需要独立上下文时，才拆出 Product Manager。
+Canonical 新对话提示词：
 
-不新增 Small Project Mode，也不新增额外 Onboarding / Succession 文件。
+- `roles/PROJECT-PRODUCT-MANAGER.md`
+
+这个身份直接包含 Role Bootstrap + Project Onboarding，不再额外发送 Project Manager Role Bootstrap、Product Manager Role Bootstrap 或 `PROJECT-ONBOARDING.md`。
+
+职位分配由 Owner 决定。其他 AI 可以提出角色调整建议，但不能自行改变长期 Role Topology。
 
 ## 7. Succession
 
 长对话接班使用：
 
+- Project + Product Manager → `templates/succession/PROJECT-PRODUCT-MANAGER-SUCCESSION.md`
 - Project Manager → `templates/succession/PROJECT-MANAGER-SUCCESSION.md`
 - Product Manager → `templates/succession/PRODUCT-MANAGER-SUCCESSION.md`
-
-Project Manager Succession 本身会在上一任兼任产品职责时同时恢复产品讨论上下文。
 
 Owner 同时提供上一任对话 PDF。
 
