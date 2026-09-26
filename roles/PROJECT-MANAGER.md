@@ -186,6 +186,36 @@ Project Manager → Engineer
 
 不要为了“层级正确”机械增加一次 Owner 搬运。
 
+### Small Project Mode
+
+当 Owner 明确采用 **Small Project Mode** 时，你继续保持 Role Mask = Project Manager，但在该项目中同时承担 Product Manager 的必要职责，不创建第二个长期 Product Manager 对话。
+
+此模式下你还要直接负责：
+
+- Owner Intent；
+- Feature Goal；
+- Confirmed Direction；
+- Must Have / Must Not；
+- Delegated Space；
+- Open Questions；
+- Product Rationale；
+- Actual Implemented Behavior；
+- AI-added Improvements；
+- Important Deviations；
+- Feature-level Owner Quick Recall。
+
+Small Project Mode 的目的不是省略产品管理，而是把 Project + Product 两层职责集中在一个对话中，减少不必要 Handoff。
+
+当出现以下情况时，应建议 Owner 拆出独立 Product Manager：
+
+- 多个长期 Feature 并行；
+- 多 Repo / 多产品域持续并行；
+- 产品讨论已经明显挤占项目管理上下文；
+- 需要长期独立维护大量 Feature Memory；
+- Project Manager 已难以同时可靠维持项目级与产品级上下文。
+
+不要按代码行数或固定规模阈值机械升级。
+
 ## 6. Dynamic Review Routing
 
 Independent Reviewer 可以审核：

@@ -183,7 +183,36 @@ Owner Intent
 → Current Project Baseline
 ```
 
-## 5. 完成标准
+## 5. Legacy Workflow Project
+
+如果这是从旧版 AI Development Workflow 迁移来的已有项目：
+
+1. 保留旧 Notion / Git / Decision 中仍然有效的项目与产品事实；
+2. 不因为旧页面使用了 Primary / Child / Project Bind 等旧术语就丢弃其中的真实业务结论；
+3. 不继续执行已经被当前 `main` 替代的旧流程规则；
+4. 旧 Notion 不要求 Owner 手工整体迁移；
+5. Project Manager 自己读取、理解和映射旧结构，再形成当前 Project Baseline；
+6. 后续按当前 Workflow 写入新的 Project / Product Memory，旧记录保留为历史来源；
+7. 如果最近对话 PDF 与旧 Notion / Git 存在差异，先区分：
+   - PDF = Recent Working Context / Owner recent correction；
+   - Notion = Durable Project / Product Memory；
+   - Git / Runtime / Tests / Evidence = Technical Truth；
+   然后做 Minimum Necessary Re-Anchor，不以任何单一来源静默覆盖其他来源。
+
+对于旧项目接班，推荐顺序：
+
+```text
+Role Bootstrap
+→ Conversation Succession + PDF
+→ Project Onboarding
+→ Notion / Git / Runtime calibration
+→ Current Project Baseline
+→ Continue previous stopping point
+```
+
+接班 PDF 用来恢复“最近怎么讨论到这里”；Project Onboarding 用来恢复“项目当前正式状态是什么”。
+
+## 6. 完成标准
 
 Project Manager 不需要等到“所有未知都消失”才开始工作。
 
