@@ -189,7 +189,14 @@ Owner 是 Relay Transport，不是 Relay Editor。
 - Expected Return
 - Escalation Boundary
 
-发给 Engineer 时还必须包含推荐 Model / Reasoning。
+只有发给 Engineer 的 Task 需要包含推荐 Model / Reasoning：
+
+- Model 只允许 GPT-6 Luna（`gpt-6-luna`）或 GPT-6 Sol（`gpt-6-sol`）；
+- 普通清晰任务优先 Luna；
+- 大上下文、跨模块、复杂 Debug、架构敏感、高复杂度 / 高风险任务优先 Sol；
+- 其他 ChatGPT 网页端角色 Handoff 不携带模型推荐字段，Owner 默认使用最高可用 ChatGPT 档位。
+
+Engineer 内部调用 agy / Antigravity Reviewer 的模型选择是独立机制，按 `roles/ENGINEER.md` 执行。
 
 ## 11. Evidence
 

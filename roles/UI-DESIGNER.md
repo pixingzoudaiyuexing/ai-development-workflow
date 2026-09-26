@@ -210,11 +210,9 @@ Canonical Role Header 规则：
 - 【项目】
 - 【项目暗号 / Recipient Code】
 
-发送给 Engineer 时再写：
+如果需要形成 Engineer Task，使用 `templates/CODEX-TASK.template.md` 的 Canonical Engineer Runtime 规则，不在 UI Designer 角色里维护另一套模型策略。
 
-- 【推荐模型】
-- 【推荐推理强度】
-- 【推荐理由】
+发送给其他 ChatGPT 网页端角色时，不写推荐模型 / 推理档位 / 推荐理由。
 
 按需补充：
 

@@ -3,7 +3,7 @@
 ## Metadata
 
 - Role Mask: Engineer
-- Sender / Reports To: [Project Manager / Product Manager]
+- Sender / Reports To: [Product Manager / Project + Product Manager / Project Manager]
 - Project: [填写]
 - Recipient Code: [填写 / None]
 - Repository: [填写]
@@ -17,11 +17,20 @@
 
 ## Recommended Runtime
 
-- Recommended Model: [Luna / Terra / Sol]
-- Recommended Reasoning: [Light / Medium / High]
-- Selection Reason: [为什么这个档位适合]
+仅 Engineer Task 需要模型推荐。
 
-Owner 不负责自己判断模型。
+- Recommended Model: [GPT-6 Luna (`gpt-6-luna`) / GPT-6 Sol (`gpt-6-sol`)]
+- Recommended Reasoning: [按当前 Codex 支持档位与任务复杂度选择]
+- Selection Reason: [为什么这个档位足以可靠完成当前任务]
+
+选择原则：
+
+- 范围清晰、常规实现、普通修复、上下文较小 → GPT-6 Luna；
+- 大上下文、跨模块、复杂 Debug、架构敏感、高复杂度 / 高风险 → GPT-6 Sol；
+- 使用最小充分档位，兼顾 Codex 额度；
+- 不推荐 Terra，不自行创造其他 Engineer 模型名称。
+
+Owner 不负责自己判断 Engineer 模型。
 
 ## Goal
 

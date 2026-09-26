@@ -424,11 +424,9 @@ Canonical Role Header 规则：
 - 【返回给】<Canonical Role Mask>
 - 【Return Conversation Position】Primary / Child / External（需要时）
 
-如果发给 Engineer，还必须给：
+如果实际生成 Engineer Task，使用 `templates/CODEX-TASK.template.md` 的 Canonical Engineer Runtime 规则；不要在 Project Manager 角色里维护另一套模型策略。
 
-- 【推荐模型】
-- 【推荐推理强度】
-- 【推荐理由】
+除 Engineer Task 外，其他 ChatGPT 网页端角色 Handoff 不写推荐模型 / 推理档位 / 推荐理由。
 
 模型由 AI 选择，不让 Owner 自己判断。
 

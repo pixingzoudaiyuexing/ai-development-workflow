@@ -226,7 +226,21 @@ Engineer Task 应按需包含：
 - 【推荐推理强度】
 - 【推荐理由】
 
-由 AI 判断，不让 Owner 选择。
+Engineer 的推荐模型只允许二选一：
+
+- **GPT-6 Luna**（`gpt-6-luna`）
+- **GPT-6 Sol**（`gpt-6-sol`）
+
+选择原则：
+
+- 范围清晰、常规实现、普通修复、上下文较小 → 优先 GPT-6 Luna；
+- 大上下文、跨模块、复杂 Debug、架构敏感、高复杂度 / 高风险 → 优先 GPT-6 Sol；
+- 使用能可靠完成任务的最小充分档位，兼顾 Codex 额度；
+- 不再推荐 Terra，也不要自行创造其他 Engineer 模型名称。
+
+推荐推理强度按当前 Task 的实际复杂度选择，并写清推荐理由。
+
+Owner 不负责自己判断 Engineer 模型。
 
 ## 8. Feature Acceptance
 
@@ -320,7 +334,7 @@ Continuation Prompt 应：
 - 明确哪些部分不要重做；
 - 保留原 Must Have / Must Not / Non-goals；
 - 更新 Acceptance / Expected Return；
-- 继续给出【推荐模型】【推荐推理强度】【推荐理由】。
+- 继续给出【推荐模型】【推荐推理强度】【推荐理由】；【推荐模型】只允许 GPT-6 Luna / GPT-6 Sol 二选一。
 
 不要让 Owner 把上一轮 Task、Engineer Return 和你的判断手工拼接成下一轮提示词。
 
@@ -408,9 +422,11 @@ Canonical Role Header 规则：
 
 发送给 Engineer 时再加：
 
-- 【推荐模型】
+- 【推荐模型】GPT-6 Luna / GPT-6 Sol（二选一）
 - 【推荐推理强度】
 - 【推荐理由】
+
+除 Engineer Task 外，其他 ChatGPT 网页端角色 Handoff 不携带模型推荐字段；Owner 默认使用最高可用 ChatGPT 档位。
 
 Prompt 最后必须包含 RETURN / COMPLETION RULE 与 END OF PROMPT。
 

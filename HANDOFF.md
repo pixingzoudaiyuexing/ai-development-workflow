@@ -150,11 +150,23 @@ Engineer → Fix → Reviewer Verify
 
 ## 8. Engineer Task
 
-发给 Engineer 时，除完整 Task 外，还要给 Owner 可见的：
+**只有 Engineer Task 需要在跨 AI Prompt 中携带模型推荐。**
 
-- Recommended Model
+Engineer 推荐模型固定二选一：
+
+- GPT-6 Luna（`gpt-6-luna`）
+- GPT-6 Sol（`gpt-6-sol`）
+
+同时给出：
+
 - Recommended Reasoning
 - Selection Reason
+
+选择最小充分档位：普通清晰任务优先 Luna；大上下文、跨模块、复杂 Debug、架构敏感或高复杂度任务优先 Sol。
+
+发送给 Project Manager / Product Manager / Project + Product Manager / UI Designer / Independent Reviewer 等 ChatGPT 网页端角色时，不在 Handoff 中携带推荐模型 / 推理档位 / 推荐理由；Owner 默认使用最高可用 ChatGPT 档位，不需要 Workflow 再做模型预算。
+
+**Engineer → agy / Antigravity Reviewer 属于独立例外**，继续完全按 `roles/ENGINEER.md` 的 Embedded Review / agy CLI Protocol 选择 Reviewer 模型，不受本节 GPT-6 Luna / Sol 规则影响。
 
 Task 以 Coherent Work Unit 为单位。
 
