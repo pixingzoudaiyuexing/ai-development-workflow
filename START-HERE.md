@@ -2,7 +2,7 @@
 
 这是 AI Development Workflow 的唯一入口。
 
-新对话不再先靠项目材料猜测自己是谁。**先建立 Role Mask，再绑定 Project，最后接收 Task。** 角色系统的 canonical 规则见 `roles/ROLE-SYSTEM.md`。
+新对话不再先靠项目材料猜测自己是谁。**先建立 Role Mask，再建立 Project Context，然后开始工作。** 角色系统的 canonical 规则见 `roles/ROLE-SYSTEM.md`。
 
 ## 0. 新对话启动：Owner Role First
 
