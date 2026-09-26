@@ -201,6 +201,23 @@ Engineer Task 应按需包含：
 - Expected Return；
 - Review Requirement。
 
+在每次正式派发 Engineer Task 前，Product Manager **必须先完成 Task Risk 与 Formal Independent Review 判定**，不得把是否需要正式独立审核留给 Engineer 自行猜测。
+
+正式 Engineer Prompt 必须明确写：
+
+- 【Task Risk】Low / Medium / High
+- 【Formal Independent Review】REQUIRED / NOT REQUIRED / CONDITIONAL
+- 【Review Reason】为什么需要、为什么不需要，或什么条件触发
+
+判定遵循 `RISK-GATES.md`：
+
+- Low：通常 NOT REQUIRED；
+- Medium：结合实际风险、可验证性与 Embedded Review 价值判断；
+- High：更严格处理；
+- auth / permission / security boundary、payment / billing、重要数据迁移 / 删除、不可逆高影响变化等命中 Workflow 默认 Formal Review 的 High Risk，必须写 **REQUIRED**，不能因为 Engineer 可运行 Embedded Review 就降级。
+
+如果当前信息不足以最终确定，但可以安全开始调查或实现，使用 **CONDITIONAL**，并把触发条件写清楚；不要省略字段。
+
 不要把函数级实现全部写死。
 
 如果发送给 Engineer，正式 Prompt 还必须写：
