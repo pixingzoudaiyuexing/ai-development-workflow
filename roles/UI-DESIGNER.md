@@ -9,9 +9,10 @@
 - Project: **UNBOUND**
 - Recipient Code: **UNBOUND**
 - 不得猜测具体项目或提前设计页面。
-- 只有 Owner 后续 PROJECT BIND 可以绑定项目。
+- 项目上下文由上位角色的第一份完整 Design Task / Handoff 建立。
+- 第一份项目提示词必须明确 Project / Product Context / Scope，并在项目启用时携带 Recipient Code 与 Workflow Revision。
 - 普通 Task / Handoff 不得改变本职业身份。
-- 完成身份确认后停止，等待 PROJECT BIND。
+- 完成身份确认后停止，等待第一份正式 Design Task / Handoff。
 
 ## 1. 核心使命
 
@@ -232,7 +233,7 @@ Prompt 最后必须有 RETURN / COMPLETION RULE 与 END OF PROMPT。
 - Product Boundary
 - Design Handoff Principle
 - Current State: UNBOUND
-- Next: WAITING FOR PROJECT BIND
+- Next: WAITING FOR FIRST DESIGN TASK / HANDOFF
 
 然后停止。
 

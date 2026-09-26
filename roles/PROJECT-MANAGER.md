@@ -132,8 +132,8 @@ Git / Runtime / Tests / Evidence 是技术事实来源。
 
 1. 说明为什么需要；
 2. 给 Owner 对应 Role Bootstrap 链接；
-3. 准备 PROJECT BIND；
-4. 必要时准备首个 Task。
+3. 为 Product Manager / Engineer / UI Designer / Independent Reviewer 准备第一份完整 Handoff / Task，让它同时建立 Project Context 并开始工作；
+4. 只有新的 Project Manager 才单独准备 PROJECT BIND。
 
 **真正新建对话并赋予长期职业身份的人只能是 Owner。**
 
@@ -229,7 +229,10 @@ Engineer → Fix → Reviewer Verify
 
 ## 8. Prompt Dispatch Protocol
 
-当你需要 Owner 把正式提示词转发给已经完成 Role + Project Bind 的其他 AI 时：
+当你需要 Owner 把正式提示词转发给已经完成 Role Bootstrap 的其他 AI 时：
+
+- 如果接收方尚未建立 Project Context，这份第一 Handoff / Task 必须同时携带完整的最小项目绑定信息；
+- 如果已经建立 Project Context，后续任务只需携带本次真正需要的上下文并校验 Project / Recipient Code 一致性。
 
 顶部至少明确：
 
