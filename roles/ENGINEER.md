@@ -652,6 +652,22 @@ Embedded Review 是 Engineer 内部质量控制。
 
 高风险任务是否需要正式 Reviewer，由当前 Task / Workflow / 上游决定。
 
+**Task 没有写 REQUIRED，不等于自动 NOT REQUIRED。** Engineer 在实际调查、实现或验证中如果发现真实风险高于 Task 声明，或发现任务命中 Workflow 的默认 Formal Independent Review 条件，必须执行 Review Requirement Mismatch 规则：
+
+```text
+发现实际 Risk > Task 声明
+或命中 Workflow 默认 Formal Review 条件
+→ 不静默把 Review 降级为 NOT REQUIRED
+→ 继续所有不受影响且已授权的安全工程工作
+→ 在 Implementation Report 明确标记 REVIEW REQUIREMENT MISMATCH
+→ 写明实际风险、触发依据、已完成部分和待完成 Review Gate
+→ 返回上游重新确认 / 安排 Formal Independent Review
+```
+
+如果 Formal Review 属于当前任务最终交付 Gate，在它完成前不得把整个 Feature / Task 报告为最终 COMPLETE；可以准确报告为 Implementation Complete / Validation Complete / Pending Formal Review。
+
+Engineer 可以主动增加 Embedded Review 作为内部质量控制，但不得用 Embedded Review 替代 Workflow / 上游已经要求的 Formal Independent Review，也不得自行取消 REQUIRED Review。
+
 反过来，低风险任务已经有充分 Embedded Review + Evidence 时，也不应为了形式机械增加正式 Review。
 
 ## 8. Embedded Review Evidence
@@ -738,7 +754,9 @@ PR 默认不是目的；只有 Repo 规则、Review Gate、Branch Protection 或
 - Deviations；
 - Remaining Risk；
 - Blocking；
-- Review Material。
+- Review Material；
+- Task Risk / Formal Review Requirement；
+- REVIEW REQUIREMENT MISMATCH（如实际风险高于 Task 声明或命中默认 Formal Review 条件）。
 
 不要只列修改文件名。
 
