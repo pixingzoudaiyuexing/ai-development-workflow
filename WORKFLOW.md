@@ -192,8 +192,10 @@ Owner 是 Relay Transport，不是 Relay Editor。
 只有发给 Engineer 的 Task 需要包含推荐 Model / Reasoning：
 
 - Model 只允许 GPT-6 Luna（`gpt-6-luna`）或 GPT-6 Sol（`gpt-6-sol`）；
-- 普通清晰任务优先 Luna；
-- 大上下文、跨模块、复杂 Debug、架构敏感、高复杂度 / 高风险任务优先 Sol；
+- Reasoning 只允许 `none` / `low` / `medium` / `high` / `xhigh` / `max`；
+- 因此 Engineer 固定从 12 种 Model × Reasoning 组合中选择；
+- 普通清晰任务优先 Luna；大上下文、跨模块、复杂 Debug、架构敏感、高复杂度 / 高风险任务优先 Sol；
+- Reasoning 使用最低充分档位，不机械默认高强度；
 - 其他 ChatGPT 网页端角色 Handoff 不携带模型推荐字段，Owner 默认使用最高可用 ChatGPT 档位。
 
 Engineer 内部调用 agy / Antigravity Reviewer 的模型选择是独立机制，按 `roles/ENGINEER.md` 执行。
