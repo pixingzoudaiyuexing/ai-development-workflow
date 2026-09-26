@@ -269,40 +269,87 @@ max
 
 正式代码 / 方案审核通常优先 `high`；只有确实需要更深分析时再使用 `max`。
 
-### 5.5 Model Discovery
+### 5.5 Canonical Reviewer Models
 
-**模型名称不是永久固定事实。**
+以下模型目录由 Owner 明确提供，作为当前本地 agy 环境的 **Canonical Model Catalog**。正常审核不要把模型名称当作待猜测事项，也不要自行编造新的模型名。
 
-当指定模型不可用、模型目录可能变化，或需要确认当前真实模型时，执行：
+当前固定目录：
+
+```text
+gemini-3.8-flash-high
+gemini-3.8-flash-medium
+gemini-3.8-flash-low
+
+gemini-3.7-flash-high
+gemini-3.7-flash-medium
+gemini-3.7-flash-low
+
+gemini-3.6-flash-high
+gemini-3.6-flash-medium
+gemini-3.6-flash-low
+
+gemini-3.1-pro-high
+gemini-3.1-pro-low
+
+claude-sonnet-4-6
+claude-opus-4-6-thinking
+
+gpt-oss-120b-medium
+```
+
+Engineer 的默认 Reviewer 路由固定为：
+
+### Default Embedded Review
+
+```text
+model: gemini-3.8-flash-high
+effort: high
+```
+
+### Deep / High-risk Review
+
+```text
+model: gemini-3.1-pro-high
+effort: high
+```
+
+### Particularly Important / High-risk Second Opinion
+
+分别独立调用：
+
+```text
+1. gemini-3.8-flash-high
+2. gemini-3.1-pro-high
+```
+
+然后由 Engineer 基于真实 Evidence 统一 adjudicate。
+
+不要为了省额度自动降级到 medium / low。
+
+如果固定模型调用失败，应先按 Failure Taxonomy 判断是：
+
+- model unavailable
+- quota / cooling
+- authentication
+- provider
+- network / proxy
+- timeout
+
+必要时可以执行：
 
 ```bash
 /Users/wang/.local/bin/agy models
 ```
 
-当前环境曾实际返回过包括：
+该命令此时仅用于 **诊断当前 CLI / Provider 实际状态是否与本 Canonical Catalog 一致**，不是让 Engineer自由发现并改用任意新模型。
 
-- gemini-3.8-flash-high / medium / low
-- gemini-3.7-flash-high / medium / low
-- gemini-3.6-flash-high / medium / low
-- gemini-3.1-pro-high / low
-- claude-sonnet-4-6
-- claude-opus-4-6-thinking
-- gpt-oss-120b-medium
+如果实际返回目录与本文件不一致：
 
-这只是已观察到的目录，不是永久白名单。
-
-默认优先尝试：
-
-```text
-gemini-3.8-flash-high
-```
-
-需要 Deep / High-risk / Second Opinion 时：
-
-1. 先用 `agy models` 确认当前真实可用模型；
-2. 在实际存在的模型中选择更高质量 Reviewer；
-3. 不自行编造模型名；
-4. 不因为旧 Prompt 曾写过某模型名就假设它仍存在。
+- 明确记录 Model Catalog Drift；
+- 不自行把未知新模型加入工作流；
+- 不自行改写本文件；
+- 在已固定目录中仍有可用的合适模型时可继续；
+- 如果当前所需 Reviewer 已不可用且没有明确允许的替代路径，向上游报告 Reviewer Infrastructure Issue。
 
 Review Quality > Token / Quota Saving。
 
@@ -728,7 +775,7 @@ PR 默认不是目的；只有 Repo 规则、Review Gate、Branch Protection 或
 - Embedded Review / agy CLI Policy
 - Canonical agy Path
 - Proxy Requirement
-- Model Discovery Principle
+- Canonical Reviewer Models
 - Escalation Boundary
 - Current State: UNBOUND
 - Next: WAITING FOR FIRST ENGINEER TASK / HANDOFF
