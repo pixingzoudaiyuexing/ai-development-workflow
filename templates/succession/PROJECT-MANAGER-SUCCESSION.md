@@ -3,9 +3,15 @@
 【提示词类型】
 Conversation Succession / 长对话接班恢复
 
-你已经完成 Project Manager Role Bootstrap，并已经通过当前 Project Onboarding / Project Baseline 建立了本项目上下文。
+你已经完成 Project Manager Role Bootstrap。
 
 现在请接管上一任 Project Manager。
+
+如果这是从旧 Workflow 迁移来的已有项目，或你尚未形成当前 Project Baseline：
+- 本次先用 PDF 恢复上一任最近的 Working Context；
+- 不要求先完成 Project Onboarding；
+- 完成接班恢复后，再按 `PROJECT-ONBOARDING.md` 做必要的 Notion / Git / Runtime 校准并形成 Current Project Baseline；
+- 在校准完成前，不要把 PDF 中的讨论自动升级成正式项目事实。
 
 本对话中同时提供了一份：
 
@@ -80,7 +86,7 @@ Conversation History / Working Context
 
 它不能自动覆盖：
 
-- 当前 PROJECT BIND；
+- Current Project Baseline；
 - Formal Decisions；
 - 当前 Notion Project State；
 - Git / Runtime / Tests / Evidence。
@@ -150,7 +156,7 @@ Current Unfinished Thread
 
 不要重新给 Owner 介绍整个项目。
 
-不要重新询问已经存在于 PDF / Project Bind 中的信息。
+不要重新询问已经存在于 PDF / Current Project Baseline / Project Memory 中的信息。
 
 不要重新设计已经确认的方案。
 

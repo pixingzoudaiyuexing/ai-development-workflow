@@ -46,7 +46,17 @@ Owner Role Bootstrap
 
 第一份正式提示词必须携带当前任务所需的最小 Project Context。
 
-## 4. 长对话接班
+## 4. Small Project Mode
+
+小型项目可以由同一个 Project Manager 同时承担 Product Manager 的必要职责，不新增第六个 Role Mask。
+
+启动：
+
+- `SMALL-PROJECT-ONBOARDING.md`
+
+当项目长期出现多 Feature / 多 Repo / 产品讨论明显复杂化时，再拆出独立 Product Manager。
+
+## 5. 长对话接班
 
 Project Manager：
 
@@ -56,11 +66,15 @@ Product Manager：
 
 - `templates/succession/PRODUCT-MANAGER-SUCCESSION.md`
 
+Small Project Mode：
+
+- `templates/succession/SMALL-PROJECT-SUCCESSION.md`
+
 Owner 同时提供上一任对话 PDF。新对话采用 Tail First → Expand Backward as Needed 恢复最近工作现场。
 
 PDF 是 Conversation History，不替代 Git / Notion / Formal Decision。
 
-## 5. 核心协作原则
+## 6. 核心协作原则
 
 - Role Stable
 - Routing First
@@ -75,10 +89,11 @@ PDF 是 Conversation History，不替代 Git / Notion / Formal Decision。
 - Notion Owner-facing Project / Product Memory
 - Conversation PDF = Working Context / Succession Source
 
-## 6. 常用文档
+## 7. 常用文档
 
 - `roles/ROLE-SYSTEM.md`：角色系统
 - `PROJECT-ONBOARDING.md`：项目经理项目接入流程
+- `SMALL-PROJECT-ONBOARDING.md`：小型项目 Project Manager + Product Manager 模式
 - `WORKFLOW.md`：整体协作规则
 - `HANDOFF.md`：跨角色交接
 - `KNOWLEDGE-MANAGEMENT.md`：Notion / 长期知识

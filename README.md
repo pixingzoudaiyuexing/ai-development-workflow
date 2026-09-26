@@ -58,6 +58,23 @@ Owner 不负责：
 
 Project Manager 应主动调查并引导 Owner。
 
+## Small Project Mode
+
+小型项目不必为了层级完整额外创建 Product Manager。
+
+Owner 明确采用 Small Project Mode 时：
+
+```text
+Role Mask = Project Manager
+Operational Mode = Project Manager + Product Manager responsibilities
+```
+
+启动：
+
+- `SMALL-PROJECT-ONBOARDING.md`
+
+项目复杂度长期上升后再拆出独立 Product Manager。
+
 ## 入口
 
 - `START-HERE.md`
@@ -76,6 +93,7 @@ Project Manager 应主动调查并引导 Owner。
 
 - `templates/succession/PROJECT-MANAGER-SUCCESSION.md`
 - `templates/succession/PRODUCT-MANAGER-SUCCESSION.md`
+- `templates/succession/SMALL-PROJECT-SUCCESSION.md`
 
 ## 其他
 
