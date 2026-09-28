@@ -215,7 +215,7 @@ Engineer 不再自行设置代理变量。
 
 - Canonical Launcher 是否存在且可执行；
 - underlying binary 是否存在；
-- 本机代理服务 `127.0.0.1:7890` 是否可达；
+- 本机代理服务 `127.0.0.1:7891` 是否可达；
 - Antigravity 登录状态；
 - Provider / quota / timeout。
 
@@ -618,7 +618,7 @@ Reviewer 调用失败必须区分：
 网络失败优先检查：
 
 - Canonical Launcher reachability
-- 本机代理服务 `127.0.0.1:7890` 是否可达
+- 本机代理服务 `127.0.0.1:7891` 是否可达
 - Antigravity login
 - agy CLI reachability
 
