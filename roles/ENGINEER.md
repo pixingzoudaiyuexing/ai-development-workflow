@@ -154,7 +154,13 @@ agy 的 PASS / Finding 都不是事实本身，必须由 Engineer 对照真实�
 
 ### 5.1 Canonical CLI
 
-当前正式 CLI：
+当前正式 agy Launcher：
+
+```text
+/Users/wang/bin/agy
+```
+
+官方 underlying binary：
 
 ```text
 /Users/wang/.local/bin/agy
@@ -163,32 +169,57 @@ agy 的 PASS / Finding 都不是事实本身，必须由 Engineer 对照真实�
 当前已验证版本：
 
 ```text
-1.2.11
+1.2.12
 ```
 
-直接 CLI 调用时优先使用绝对路径，不依赖 GUI / Runner 的 PATH 中一定存在 `agy`。
+Engineer / Codex / WebCodex 统一把 `/Users/wang/bin/agy` 视为 Canonical agy Entry。
 
-Bridge 已做 PATH fallback，但 Engineer 不应把 PATH 可用性当作前提。
-
-### 5.2 Local Proxy Requirement
-
-当前本地环境访问 agy 需要代理。
-
-在实际启动 `agy` 的进程环境中设置：
+Owner 在正常交互式 Terminal 中可以直接输入：
 
 ```bash
-export https_proxy=http://127.0.0.1:7890
-export http_proxy=http://127.0.0.1:7890
-export all_proxy=socks5://127.0.0.1:7890
+agy
 ```
 
-规则：
+当前本机 PATH 已配置为优先解析到 `/Users/wang/bin/agy`。
 
-- Codex 直接 shell → agy：同一 shell / process 先设置代理变量。
-- WebCodex / Bridge → agy：代理变量必须存在于 Local MCP Gateway / Runner / Bridge 的启动环境，让 agy 子进程继承。
-- 已运行进程不会因为另一个 shell 后来 `export` 而自动获得新环境；必要时按当前 Runtime 的安全方式重启 Provider / Bridge。
-- 这些变量只用于当前本地 Reviewer 链路；不要写进项目源码、Git 配置或系统级永久网络配置。
-- 如果 `127.0.0.1:7890` 不可用，记录为 Network / Proxy Failure；不要擅自修改系统代理。
+自动化与 Engineer 调用仍优先使用 Canonical Launcher 的绝对路径，不依赖 Runtime / GUI / Runner 是否加载交互式 shell PATH。
+
+不要直接调用 underlying binary，除非正在诊断 Launcher 本身。
+
+### 5.2 Launcher-owned Proxy
+
+当前本地环境访问 agy 需要代理，但代理已经封装在 Canonical Launcher：
+
+```text
+/Users/wang/bin/agy
+```
+
+Launcher 在启动 underlying agy 时只对该 agy 进程及其必要子进程注入代理环境。
+
+Engineer 不再自行设置代理变量。
+
+严格禁止为了调用 agy：
+
+- 在 shell 中 `export http_proxy` / `https_proxy` / `all_proxy`；
+- 给整个 Codex Runtime 设置代理；
+- 给整个 WebCodex / Local MCP Gateway / Runner / Bridge 设置代理；
+- 修改 macOS 系统代理；
+- 修改 Git / npm / pnpm 全局代理；
+- 把 agy 代理写进项目源码或 Repo 配置。
+
+正确原则：
+
+**Proxy belongs to the agy launcher, not to the machine, shell, Codex, WebCodex, Bridge, repository, or project.**
+
+如果 Launcher 调用失败，Engineer 只诊断：
+
+- Canonical Launcher 是否存在且可执行；
+- underlying binary 是否存在；
+- 本机代理服务 `127.0.0.1:7890` 是否可达；
+- Antigravity 登录状态；
+- Provider / quota / timeout。
+
+不要通过扩大代理作用域来“修复” agy。
 
 ### 5.3 Codex 与 WebCodex 的真实调用路径
 
@@ -197,6 +228,8 @@ Codex：
 ```text
 Codex
 → shell
+→ /Users/wang/bin/agy
+→ launcher 注入 agy-only proxy
 → /Users/wang/.local/bin/agy
 → Antigravity / Gemini
 → stdout
@@ -212,7 +245,9 @@ ChatGPT
 → WebCodex
 → WebCodex Local MCP Gateway / Runner
 → codex-antigravity-bridge
-→ agy CLI
+→ /Users/wang/bin/agy
+→ launcher 注入 agy-only proxy
+→ /Users/wang/.local/bin/agy
 → Antigravity
 ```
 
@@ -222,19 +257,15 @@ Bridge 路径：
 /Users/wang/Documents/webcodex/tools/codex-antigravity-bridge
 ```
 
-最终 CLI 仍解析到：
+WebCodex / Bridge 的目标也必须是 Canonical Launcher：
 
 ```text
-/Users/wang/.local/bin/agy
+/Users/wang/bin/agy
 ```
 
-Bridge 查找 agy 的顺序：
+不得把 `~/.local/bin/agy` 作为正常 Review 调用路径，因为那会绕过 Launcher 中封装的 agy-only proxy。
 
-```text
-1. shutil.which("agy")
-2. ~/.local/bin/agy
-3. fallback "agy"
-```
+如果现有 Bridge / Runner 实际仍解析到 underlying binary，视为 Reviewer Infrastructure Configuration Drift：优先修正 Bridge / Runner 的 agy executable target 到 Canonical Launcher，而不是给整个 Bridge 注入代理。
 
 无论 transport 是 Codex 直接 shell 还是 WebCodex Bridge，Reviewer 规则完全一致。
 
@@ -243,7 +274,7 @@ Bridge 查找 agy 的顺序：
 Canonical 形式：
 
 ```bash
-/Users/wang/.local/bin/agy \
+/Users/wang/bin/agy \
   --model <MODEL> \
   --effort <EFFORT> \
   --print='<REVIEW_PROMPT>' \
@@ -338,7 +369,7 @@ effort: high
 必要时可以执行：
 
 ```bash
-/Users/wang/.local/bin/agy models
+/Users/wang/bin/agy models
 ```
 
 该命令此时仅用于 **诊断当前 CLI / Provider 实际状态是否与本 Canonical Catalog 一致**，不是让 Engineer自由发现并改用任意新模型。
@@ -581,14 +612,17 @@ Reviewer 调用失败必须区分：
 模型不存在：
 
 ```bash
-/Users/wang/.local/bin/agy models
+/Users/wang/bin/agy models
 ```
 
 网络失败优先检查：
 
-- proxy inheritance
+- Canonical Launcher reachability
+- 本机代理服务 `127.0.0.1:7890` 是否可达
 - Antigravity login
 - agy CLI reachability
+
+不要检查或依赖 shell / Bridge 的 proxy inheritance；正常路径不应由它们继承代理。
 
 Timeout、Quota、Provider Failure 都不是代码 Finding。
 
@@ -614,7 +648,7 @@ Codex 与 WebCodex 调 agy 共享当前机器上的 Antigravity 身份，不是�
 需要查询当前额度：
 
 ```bash
-/Users/wang/.local/bin/agy \
+/Users/wang/bin/agy \
   -p /usage \
   --output-format json \
   --print-timeout=90s
@@ -791,8 +825,9 @@ PR 默认不是目的；只有 Repo 规则、Review Gate、Branch Protection 或
 - Research-assisted Debug Principle
 - Coherent Work Unit Principle
 - Embedded Review / agy CLI Policy
-- Canonical agy Path
-- Proxy Requirement
+- Canonical agy Launcher
+- Underlying agy Binary
+- Launcher-owned Proxy Policy
 - Canonical Reviewer Models
 - Escalation Boundary
 - Current State: UNBOUND
