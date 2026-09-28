@@ -188,15 +188,37 @@ agy
 
 ### 5.2 Launcher-owned Proxy
 
-当前本地环境访问 agy 需要代理，但代理已经封装在 Canonical Launcher：
+当前本地环境访问 agy 需要代理，但代理选择与故障切换已经封装在 Canonical Launcher：
 
 ```text
 /Users/wang/bin/agy
 ```
 
-Launcher 在启动 underlying agy 时只对该 agy 进程及其必要子进程注入代理环境。
+当前 Proxy Profiles：
 
-Engineer 不再自行设置代理变量。
+```text
+Primary: 192.168.1.1:7893
+Backup:  127.0.0.1:7891
+```
+
+两者都是 mixed proxy ports。Launcher 在每次启动 agy 时自行做真实代理可达性检查：
+
+```text
+Primary 可用
+→ 使用 192.168.1.1:7893
+
+Primary 不可用
+→ 检查 Backup
+→ 使用 127.0.0.1:7891
+
+Primary + Backup 都不可用
+→ 明确报 Proxy Infrastructure Failure
+→ 不启动 agy
+```
+
+正常使用时 Engineer 不选择代理、不探测端口优先级，也不自行设置代理变量；只调用 Canonical Launcher。
+
+Launcher 只对最终 agy 进程及其必要子进程注入选中的 proxy env，不应改变父 shell。
 
 严格禁止为了调用 agy：
 
@@ -205,21 +227,22 @@ Engineer 不再自行设置代理变量。
 - 给整个 WebCodex / Local MCP Gateway / Runner / Bridge 设置代理；
 - 修改 macOS 系统代理；
 - 修改 Git / npm / pnpm 全局代理；
-- 把 agy 代理写进项目源码或 Repo 配置。
+- 把 agy 代理写进项目源码或 Repo 配置；
+- 绕过 Launcher 直接选择 Primary / Backup。
 
 正确原则：
 
-**Proxy belongs to the agy launcher, not to the machine, shell, Codex, WebCodex, Bridge, repository, or project.**
+**Proxy selection and failover belong to the agy launcher, not to the Engineer, machine, shell, Codex, WebCodex, Bridge, repository, or project.**
 
 如果 Launcher 调用失败，Engineer 只诊断：
 
 - Canonical Launcher 是否存在且可执行；
 - underlying binary 是否存在；
-- 本机代理服务 `127.0.0.1:7891` 是否可达；
+- Launcher 是否已明确报告 Primary / Backup 都不可用；
 - Antigravity 登录状态；
 - Provider / quota / timeout。
 
-不要通过扩大代理作用域来“修复” agy。
+如果两个 Proxy Profiles 都不可用，记录为 Reviewer Infrastructure Issue / Proxy Infrastructure Failure。不要通过扩大代理作用域来“修复” agy。
 
 ### 5.3 Codex 与 WebCodex 的真实调用路径
 
@@ -618,7 +641,7 @@ Reviewer 调用失败必须区分：
 网络失败优先检查：
 
 - Canonical Launcher reachability
-- 本机代理服务 `127.0.0.1:7891` 是否可达
+- Launcher 的 Primary / Backup Proxy Profiles 是否至少一个可达
 - Antigravity login
 - agy CLI reachability
 
