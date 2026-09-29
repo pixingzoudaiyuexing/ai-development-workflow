@@ -1,6 +1,6 @@
-# Codex Runtime Deployment
+# Shared Engineer Runtime Deployment
 
-This directory contains the canonical runtime rules for the Engineer when using Codex.
+This directory contains the canonical Engineer runtime rules shared by Codex and WebCodex.
 
 ## Canonical Source
 
@@ -8,13 +8,17 @@ This directory contains the canonical runtime rules for the Engineer when using 
 runtime/codex/AGENTS.md
 ```
 
-Deployment target on Owner's Mac:
+Verified deployment targets:
 
 ```text
+Ordinary Codex:
 ~/.codex/AGENTS.md
+
+WebCodex:
+<WebCodex registered project root>/.codex/AGENTS.md
 ```
 
-Codex loads global AGENTS instructions from its home directory and then adds repository / directory-specific AGENTS instructions.
+Ordinary Codex loads the global file from its home directory. WebCodex does not automatically load that home-level file; it loads the shared runtime copy from the registered project root.
 
 ## Three Layers
 
@@ -85,7 +89,7 @@ WebCodex:
 → not automatically loaded
 
 <WebCodex registered project root>/.codex/AGENTS.md
-→ project-local candidate for shared Engineer runtime rules
+→ verified shared Engineer runtime rules
 
 <WebCodex registered project root>/AGENTS.md
 → verified project-specific rules
