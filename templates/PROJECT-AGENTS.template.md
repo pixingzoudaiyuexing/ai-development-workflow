@@ -115,8 +115,8 @@ Do not place proxy configuration, global Engineer behavior, secrets, or machine-
 
 ## Directory Overrides
 
-For ordinary Codex, more specific directory-scoped `AGENTS.md` / `AGENTS.override.md` rules may be used when supported by the runtime.
+Keep required project-wide rules in the repository-root `AGENTS.md`.
 
-For WebCodex, do not rely on deeper scoped AGENTS injection or `AGENTS.override.md` until that behavior is separately verified. Keep required WebCodex project rules in the registered project root `AGENTS.md`.
+Use deeper directory-scoped instruction files only when the active runtime is verified to load them for that scope. Do not assume an override mechanism is portable across runtimes.
 
 Do not bloat the root file with rules that are irrelevant to the whole project.
