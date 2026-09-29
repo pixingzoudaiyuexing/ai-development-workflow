@@ -1,7 +1,9 @@
-# Global Engineer Runtime Rules — Codex
+# Shared Engineer Runtime Rules — Codex / WebCodex
 
-> Canonical source for the machine-wide Codex Engineer runtime.
-> Deployment target: `~/.codex/AGENTS.md`.
+> Canonical source for the shared Primary Engineer runtime used by Codex and WebCodex.
+> Verified deployment targets:
+> - Ordinary Codex: `~/.codex/AGENTS.md`
+> - WebCodex: `<registered-project-root>/.codex/AGENTS.md`
 > This file is the compact always-loaded Engineer execution contract.
 > Project-specific facts belong in each repository's `AGENTS.md`; task-specific facts belong in the current Engineer Task.
 
@@ -210,7 +212,7 @@ agy researches, challenges, analyzes, designs tests, and reviews.
 Engineer investigates, decides, executes, and verifies.
 ```
 
-Codex remains the only implementation owner unless the task explicitly establishes another safe execution boundary.
+The Primary Engineer remains the only implementation owner unless the task explicitly establishes another safe execution boundary.
 
 Do not let a second model silently become a second writer in the same worktree.
 
@@ -430,12 +432,12 @@ Do not report only “Gemini reviewed / helped”; expose the actual usage and r
 
 ## 16. Instruction Layering
 
-Use this global file for machine-wide Engineer behavior.
+Use this canonical file for shared Engineer behavior across supported runtimes.
 
 Then add, in order of specificity:
 
 ```text
-Global Codex AGENTS
+Shared Engineer Runtime Rules
 + current repository / directory AGENTS instructions
 + current authorized Engineer Task
 = actual execution context
