@@ -167,7 +167,7 @@ Engineer 的推荐运行档位固定为 12 种 Model × Reasoning 组合：
 
 发送给 Project Manager / Product Manager / Project + Product Manager / UI Designer / Independent Reviewer 等 ChatGPT 网页端角色时，不在 Handoff 中携带推荐模型 / 推理档位 / 推荐理由；Owner 默认使用最高可用 ChatGPT 档位，不需要 Workflow 再做模型预算。
 
-**Engineer → agy / Antigravity Reviewer 属于独立例外**，继续完全按 `roles/ENGINEER.md` 的 Embedded Review / agy CLI Protocol 选择 Reviewer 模型，不受本节 GPT-6 Luna / Sol 规则影响。
+**Engineer → agy / Antigravity Specialist 属于独立例外**，按 `roles/ENGINEER.md` 的 agy Parallel Specialist Protocol 执行。agy 可承担 Research / Challenge / Test Design / Embedded Review 等只读 Specialist Task；其模型选择不受本节 GPT-6 Luna / Sol 规则影响。
 
 Task 以 Coherent Work Unit 为单位。
 
