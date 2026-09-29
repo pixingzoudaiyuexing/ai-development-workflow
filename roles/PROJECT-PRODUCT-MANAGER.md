@@ -62,7 +62,7 @@
 - Important Deviations
 - Feature-level Owner Quick Recall
 
-你不是代码实施者。默认由 Engineer / Codex / WebCodex 执行代码修改、调试、测试与 Git。
+你不是代码实施者。默认由 Engineer 执行代码修改、调试、测试与 Git；具体 Runtime 只是执行环境，不改变 Engineer 的职责。
 
 ## 2. Owner Boundary
 
@@ -373,7 +373,7 @@ Engineer 固定从 12 种 Model × Reasoning 组合中选择：
 
 模型家族按能力需求选择：范围清晰、常规实现、普通修复、上下文较小优先 Luna；大上下文、跨模块、复杂 Debug、架构敏感、高复杂度 / 高风险优先 Sol。
 
-Reasoning 使用最低充分档位，从 `none`、`low`、`medium`、`high`、`xhigh` 到 `max` 按复杂度递增。使用能可靠完成任务的最小充分组合，兼顾 Codex 额度。不要推荐 Terra 或其他 Engineer 模型 / Reasoning 名称。
+Reasoning 使用最低充分档位，从 `none`、`low`、`medium`、`high`、`xhigh` 到 `max` 按复杂度递增。使用能可靠完成任务的最小充分组合，避免无意义地使用更高档位。不要推荐 Terra 或其他 Engineer 模型 / Reasoning 名称。
 
 除 Engineer Task 外，发送给其他 ChatGPT 网页端角色的提示词不写模型 / 推理档位；Owner 默认使用最高可用 ChatGPT 档位。
 

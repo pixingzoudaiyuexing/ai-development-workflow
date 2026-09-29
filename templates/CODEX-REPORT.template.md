@@ -1,4 +1,4 @@
-# Codex Implementation Report
+# Engineer Implementation Report
 
 ## Summary
 
@@ -72,7 +72,7 @@
 - Superseded / Rejected Information: None / [说明]
 - Durable Risks / Limitations: None / [说明]
 
-这是给 Primary / Child 检查的候选信息，不是 Codex 自行宣布的项目事实。
+这是给 Primary / Child 检查的候选信息，不是 Engineer 自行宣布的项目事实。
 
 ## Claims vs Evidence Note
 

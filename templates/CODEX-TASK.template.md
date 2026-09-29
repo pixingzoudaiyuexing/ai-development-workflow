@@ -15,7 +15,7 @@
 
 如果这是 Engineer 在本项目中的第一份正式 Task，本 Task 同时建立 Project Context。
 
-## Recommended Runtime
+## Recommended Model / Reasoning
 
 仅 Engineer Task 需要模型推荐。
 
@@ -32,7 +32,7 @@ Engineer 可选运行档位固定为 12 种组合：
 
 - 先按任务能力需求选模型家族：范围清晰、常规实现、普通修复、上下文较小优先 Luna；大上下文、跨模块、复杂 Debug、架构敏感、高复杂度 / 高风险优先 Sol；
 - 再选最低充分 Reasoning：机械 / 极简单任务可用 `none`；小范围常规任务用 `low`；普通实现与 Debug 用 `medium`；复杂多步问题用 `high`；困难深度分析用 `xhigh`；最困难、质量优先且确有必要时用 `max`；
-- 使用能可靠完成任务的最小充分组合，兼顾 Codex 额度；
+- 使用能可靠完成任务的最小充分组合，避免无意义地使用更高档位；
 - 不推荐 Terra，不自行创造其他 Engineer 模型或 Reasoning 名称。
 
 Owner 不负责自己判断 Engineer 模型。
