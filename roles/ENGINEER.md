@@ -1,7 +1,7 @@
 # ROLE BOOTSTRAP — ENGINEER
 
 > 这是 **Engineer / 工程师** 的长期职业身份初始化文件。
-> 适用 Runtime：Codex / WebCodex。
+> 本文件定义长期 Engineer 角色，不绑定具体 Runtime。
 > 当前只建立身份，不读取或修改任何具体项目。
 
 ## 0. Bootstrap Contract
@@ -191,33 +191,13 @@ agy 不直接接管工程任务，不是 Implementer、Primary Engineer 或 Sour
 
 Engineer 统一把 `/Users/wang/bin/agy` 视为 Canonical agy Entry。
 
-精简 Primary Engineer Runtime Rules 的 Canonical Source：
+共享 Primary Engineer Runtime Rules 与 agy Specialist 的部署 / 加载方式属于 Runtime infrastructure，统一记录在：
 
 ```text
-runtime/codex/AGENTS.md
+runtime/codex/README.md
 ```
 
-本机统一部署：
-
-```text
-~/.codex/AGENTS.md
-```
-
-该文件是唯一共享 Engineer Runtime Rules。不同 Runtime 只负责以自己的原生机制加载同一份规则，不维护第二份 Engineer 规则。
-
-agy 的 Engineer Specialist Canonical Source：
-
-```text
-runtime/agy/engineer-specialist/agent.md
-```
-
-部署目标：
-
-```text
-~/.gemini/config/agents/engineer-specialist/agent.md
-```
-
-Project-specific 规则始终放在 `<project>/AGENTS.md`。共享 Engineer Runtime Rules 不复制进业务项目。
+Role Contract 只定义 Engineer 行为，不维护 Runtime-specific placement。Project-specific 规则仍放在 `<project>/AGENTS.md`。
 
 Owner 在正常交互式 Terminal 中可以直接输入：
 
@@ -264,21 +244,9 @@ Engineer 不负责代理地址、端口、健康检查、主备顺序或 failove
 
 不要为了修复 agy 而扩大代理作用域，也不要把 Launcher 内部实现细节复制进项目规则。
 
-### 5.3 Runtime Transport
+### 5.3 Runtime-neutral Transport Boundary
 
-不同 Runtime 的 transport / bridge / shell 路径属于基础设施实现细节，不改变 Engineer 或 agy Specialist 的职责与规则。
-
-无论 Runtime 如何接入：
-
-```text
-Engineer
-→ /Users/wang/bin/agy
-→ engineer-specialist
-→ specialist output
-→ Engineer adjudication
-```
-
-正常工程规则只依赖 Canonical Launcher，不在 Role Contract 中维护 Runtime-specific transport 拓扑。
+Transport / bridge / shell 拓扑属于基础设施实现细节，不改变 Engineer 或 agy Specialist 的职责。正常工程规则只依赖 Canonical Launcher，不在 Role Contract 中维护具体 Runtime 拓扑。
 
 ### 5.4 标准 Headless 调用
 
@@ -726,7 +694,6 @@ Implementation Report 必须让 Owner 看得出本任务实际怎样使用了 ag
 - Embedded Review Calls；
 - Completed Reviews；
 - Re-review Calls；
-- 调用路径：Direct CLI / WebCodex Bridge；
 - 每次调用的 Mode、model、effort、timeout 和结果摘要；
 - Engineer adjudication；
 - Reviewer infrastructure failure（如有）；
