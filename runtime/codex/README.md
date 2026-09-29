@@ -1,0 +1,58 @@
+# Codex Runtime Deployment
+
+This directory contains the canonical runtime rules for the Engineer when using Codex.
+
+## Canonical Source
+
+```text
+runtime/codex/AGENTS.md
+```
+
+Deployment target on Owner's Mac:
+
+```text
+~/.codex/AGENTS.md
+```
+
+Codex loads global AGENTS instructions from its home directory and then adds repository / directory-specific AGENTS instructions.
+
+## Three Layers
+
+```text
+~/.codex/AGENTS.md
+= machine-wide Engineer runtime behavior
+
+<project>/AGENTS.md
+= project-specific engineering rules
+
+Current Engineer Task
+= current outcome, scope, acceptance, and risk
+```
+
+Do not copy the full long-form `roles/ENGINEER.md` into global AGENTS. The long-form role is the workflow source of truth; the runtime AGENTS file is the compact always-loaded execution contract.
+
+## agy Specialist
+
+Canonical custom-agent source:
+
+```text
+runtime/agy/engineer-specialist/agent.md
+```
+
+Deployment target:
+
+```text
+~/.gemini/config/agents/engineer-specialist/agent.md
+```
+
+Codex invokes it through the canonical launcher:
+
+```text
+/Users/wang/bin/agy --agent engineer-specialist ...
+```
+
+## WebCodex
+
+Engineer responsibilities are the same for Codex and WebCodex.
+
+WebCodex runtime placement / loading of AGENTS is intentionally deferred until its actual runtime behavior is investigated. Do not assume the Codex global path is automatically inherited by WebCodex.
