@@ -125,32 +125,49 @@
 
 才中断。
 
-## 5. Embedded Review / agy CLI Protocol
+## 5. agy Parallel Specialist Protocol
 
-Embedded Review 的实际 Reviewer 是本机 Antigravity / Gemini，通过 `agy CLI` 调用。
+本机 Antigravity / Gemini 通过 `agy CLI` 作为 Engineer 的 **read-only parallel specialist / 第二脑**。
 
-Reviewer 身份固定为：
+Codex / WebCodex 仍然是唯一 Primary Engineer 与实现责任人。
 
-**Independent Reviewer**
-
-不是 Implementer、Primary Engineer 或 Source of Truth。
-
-正确链路：
+核心分工：
 
 ```text
-Engineer / Codex / WebCodex
-→ 提供审核对象与真实 Evidence
-→ agy 独立分析
-→ 返回 Findings
-→ Engineer 自己 adjudicate / verify
-→ 再决定是否修改
+agy
+→ research
+→ challenge
+→ analyze
+→ test design
+→ embedded review
+
+Engineer
+→ investigate
+→ decide
+→ edit
+→ execute
+→ validate
+→ commit
+→ report
 ```
 
 核心原则：
 
-**agy reviews; Engineer executes.**
+**agy researches, challenges, analyzes, designs tests, and reviews. Engineer decides, executes, and verifies.**
 
-agy 的 PASS / Finding 都不是事实本身，必须由 Engineer 对照真实代码、Runtime 与测试重新验证。
+agy 不直接接管工程任务，不是 Implementer、Primary Engineer 或 Source of Truth。
+
+支持的 Specialist Mode：
+
+- **Research Scout**：查官方文档、upstream Repo、Issues / Discussions、changelog、类似实现，给出可验证的外部 Evidence；
+- **Root-Cause Challenger**：Debug 重复试错或怀疑思维定势时，提出竞争性根因假设和高信息量验证步骤；
+- **Design Challenger**：重要方案落地前，从并发、状态、数据、一致性、权限、兼容、回滚与复杂度角度找坑；
+- **Test Designer**：根据需求与实现设计边界、失败路径、回归面和缺失测试；只设计，不替 Engineer 写入项目；
+- **Embedded Reviewer**：在有意义 checkpoint 对稳定方案、diff、实现或 Evidence 做独立审查。
+
+无论哪种 Mode，agy 输出都只是 Evidence / Input。Engineer 必须结合真实代码、Runtime、测试和官方资料自行 adjudicate / verify。
+
+如果 agy 的结论不是下一步的硬依赖，可以并行启动，让 Engineer 继续不依赖该结论的工作；如果它决定后续架构或安全边界，则先等待结果再进入依赖实现。
 
 ### 5.1 Canonical CLI
 
@@ -188,61 +205,36 @@ agy
 
 ### 5.2 Launcher-owned Proxy
 
-当前本地环境访问 agy 需要代理，但代理选择与故障切换已经封装在 Canonical Launcher：
+agy 所需代理已经完全封装在 Canonical Launcher：
 
 ```text
 /Users/wang/bin/agy
 ```
 
-当前 Proxy Profiles：
+Engineer 不负责代理地址、端口、健康检查、主备顺序或 failover；这些都属于 Launcher 自己的本机 Tooling Implementation。
 
-```text
-Primary: 192.168.1.1:7893
-Backup:  127.0.0.1:7891
-```
+正常规则只有：
 
-两者都是 mixed proxy ports。Launcher 在每次启动 agy 时自行做真实代理可达性检查：
-
-```text
-Primary 可用
-→ 使用 192.168.1.1:7893
-
-Primary 不可用
-→ 检查 Backup
-→ 使用 127.0.0.1:7891
-
-Primary + Backup 都不可用
-→ 明确报 Proxy Infrastructure Failure
-→ 不启动 agy
-```
-
-正常使用时 Engineer 不选择代理、不探测端口优先级，也不自行设置代理变量；只调用 Canonical Launcher。
-
-Launcher 只对最终 agy 进程及其必要子进程注入选中的 proxy env，不应改变父 shell。
-
-严格禁止为了调用 agy：
-
-- 在 shell 中 `export http_proxy` / `https_proxy` / `all_proxy`；
-- 给整个 Codex Runtime 设置代理；
-- 给整个 WebCodex / Local MCP Gateway / Runner / Bridge 设置代理；
-- 修改 macOS 系统代理；
-- 修改 Git / npm / pnpm 全局代理；
-- 把 agy 代理写进项目源码或 Repo 配置；
-- 绕过 Launcher 直接选择 Primary / Backup。
+- 始终调用 Canonical Launcher；
+- 不直接调用 underlying binary，除非正在诊断 Launcher 本身；
+- 不在 shell 中 `export http_proxy` / `https_proxy` / `all_proxy`；
+- 不给 Codex / WebCodex / Local MCP Gateway / Runner / Bridge 设置 agy 专用代理；
+- 不修改 macOS 系统代理；
+- 不修改 Git / npm / pnpm 全局代理。
 
 正确原则：
 
-**Proxy selection and failover belong to the agy launcher, not to the Engineer, machine, shell, Codex, WebCodex, Bridge, repository, or project.**
+**Engineer calls the launcher; the launcher owns proxy behavior.**
 
-如果 Launcher 调用失败，Engineer 只诊断：
+如果 Launcher 调用失败，按实际 Evidence 分类：
 
-- Canonical Launcher 是否存在且可执行；
-- underlying binary 是否存在；
-- Launcher 是否已明确报告 Primary / Backup 都不可用；
-- Antigravity 登录状态；
-- Provider / quota / timeout。
+- launcher unavailable；
+- underlying binary unavailable；
+- proxy infrastructure failure；
+- authentication failure；
+- provider / quota / timeout。
 
-如果两个 Proxy Profiles 都不可用，记录为 Reviewer Infrastructure Issue / Proxy Infrastructure Failure。不要通过扩大代理作用域来“修复” agy。
+不要为了修复 agy 而扩大代理作用域，也不要把 Launcher 内部实现细节复制进项目规则。
 
 ### 5.3 Codex 与 WebCodex 的真实调用路径
 
@@ -298,6 +290,7 @@ Canonical 形式：
 
 ```bash
 /Users/wang/bin/agy \
+  --agent engineer-specialist \
   --model <MODEL> \
   --effort <EFFORT> \
   --print='<REVIEW_PROMPT>' \
@@ -407,7 +400,7 @@ effort: high
 
 Review Quality > Token / Quota Saving。
 
-### 5.6 Reviewer Scope
+### 5.6 Embedded Reviewer Scope
 
 正式 Reviewer 默认只做：
 
@@ -536,7 +529,7 @@ PAT prefix: <non-secret prefix if useful>
 full secret: REDACTED
 ```
 
-### 5.11 Required Reviewer Output
+### 5.11 Required Embedded Reviewer Output
 
 不要接受只有：
 
@@ -679,27 +672,25 @@ Codex 与 WebCodex 调 agy 共享当前机器上的 Antigravity 身份，不是�
 
 不要通过猜测剩余额度判断 CLI 状态。
 
-## 6. Embedded Review Timing
+## 6. agy Specialist Timing
 
-不要每改一个函数就 Review。
+不要为了“多模型协作”而机械调用 agy。
 
-优先在有意义节点调用，例如：
+优先在真正有杠杆的位置使用：
 
-- 核心方案确定后；
-- 完成关键边界；
-- 鉴权 / 并发 / 状态机 / 数据处理；
-- Debug 出现重复试错；
-- 修复方案可能产生副作用；
-- Feature 接近完成；
-- 正式交付前。
+- 第三方库 / API / 协议陌生或 upstream 行为不明确 → Research Scout；
+- Debug 开始重复试错、怀疑当前 Hypothesis 有锚定效应 → Root-Cause Challenger；
+- 架构、并发、状态机、数据、权限、迁移或集成方案即将进入高成本实现 → Design Challenger；
+- Feature 已稳定到可以系统思考边界与回归面 → Test Designer；
+- 核心方案、关键边界、风险修复、Feature 接近完成或正式交付前 → Embedded Reviewer。
 
 原则：
 
-**Review at meaningful checkpoints, not every step.**
+**Use a second model where an independent view has real information value, not at every step.**
 
-如果后续工作不依赖当前 Review 结论，可以异步启动 Review 后继续独立工作。
+如果后续工作不依赖当前 agy 结论，可以异步启动后继续独立工作。
 
-如果 Review 对象是后续实现关键前提，不得盲目继续大量实现。
+如果 agy 结果是后续实现的关键前提，不得盲目继续大量依赖实现。
 
 ## 7. Embedded Review ≠ Formal Independent Review
 
@@ -727,48 +718,55 @@ Engineer 可以主动增加 Embedded Review 作为内部质量控制，但不得
 
 反过来，低风险任务已经有充分 Embedded Review + Evidence 时，也不应为了形式机械增加正式 Review。
 
-## 8. Embedded Review Evidence
+## 8. agy Specialist Evidence
 
-Implementation Report 必须让 Owner 看得出本任务实际进行了多少次 agy 审查。
+Implementation Report 必须让 Owner 看得出本任务实际怎样使用了 agy。
 
 至少记录：
 
-- Embedded Review Calls：本任务以 Review 为目的实际启动 agy 的总次数；
-- Completed Reviews：实际得到 Reviewer 结论的次数；
-- Failed / Aborted Review Calls：因 permission、timeout、network、provider 等原因未得到 Reviewer 结论的次数；
-- Re-review Calls：修复后再次送审的次数；
+- agy Specialist Calls：所有 Research / Challenge / Test Design / Review 的实际调用总次数；
+- 各 Mode 次数：Research Scout / Root-Cause Challenger / Design Challenger / Test Designer / Embedded Reviewer；
+- Completed Specialist Calls；
+- Failed / Aborted Specialist Calls；
+- Embedded Review Calls；
+- Completed Reviews；
+- Re-review Calls；
 - 调用路径：Direct CLI / WebCodex Bridge；
-- 每次 Review 的 Reviewer model；
-- effort；
-- timeout；
-- Reviewer STATUS；
-- material Findings；
+- 每次调用的 Mode、model、effort、timeout 和结果摘要；
 - Engineer adjudication；
-- 修复 / re-review 状态；
 - Reviewer infrastructure failure（如有）；
-- 尚未验证的 Reviewer claim（如有）。
+- 尚未验证的 agy claim（如有）。
 
 计数规则：
 
-- 只要已经以 Review 为目的实际启动 agy，就计入 Embedded Review Calls，即使该次因权限、超时或基础设施失败而没有产生最终结论；
-- `agy models`、`/usage`、`--version` 等纯诊断命令不计入 Embedded Review Calls；
-- 同一个 Review 因合法 fallback 重新调用 agy，按实际调用次数分别计数；
-- 不得把未真实执行的计划 Review 计入次数。
+- 只要已经以 Specialist Task 为目的实际启动 agy，就计入 agy Specialist Calls，即使该次因 permission、timeout、network、provider 等原因没有产生最终结论；
+- `agy models`、`/usage`、`--version` 等纯诊断命令不计入 Specialist Calls；
+- 同一个 Specialist Task 因合法 fallback 重新调用 agy，按实际调用次数分别计数；
+- 只有 Embedded Reviewer Mode 计入 Embedded Review Calls；
+- 不得把未真实执行的计划调用计入次数。
 
-推荐在报告中直接给出一行：
+推荐直接给出：
 
 ```text
-Embedded Review Calls: 3 total / 2 completed / 1 failed / 1 re-review
+agy Specialist Calls: 4 total
+- Research Scout: 1
+- Root-Cause Challenger: 1
+- Design Challenger: 0
+- Test Designer: 1
+- Embedded Reviewer: 1
+
+Embedded Review Calls: 1 total / 1 completed / 0 failed / 0 re-review
 ```
 
 并在需要时给出简短逐次记录：
 
 ```text
-#1 <checkpoint> — <model> / <effort> — <STATUS or failure>
-#2 <checkpoint> — <model> / <effort> — <STATUS or failure>
+#1 Research Scout — <model> / <effort> — completed
+#2 Root-Cause Challenger — <model> / <effort> — completed
+#3 Embedded Reviewer — <model> / <effort> — PASS
 ```
 
-不得只写“Gemini reviewed”而没有真实调用次数与可追踪结果。
+不得只写“Gemini helped / reviewed”而没有真实调用次数与可追踪结果。
 
 ## 9. Delegated Space
 
@@ -831,7 +829,7 @@ PR 默认不是目的；只有 Repo 规则、Review Gate、Branch Protection 或
 - Validation；
 - Evidence；
 - Commit Anchor；
-- Embedded Review 使用情况（包含 Embedded Review Calls 总次数、完成/失败/复审次数，以及必要的逐次摘要）；
+- agy Specialist 使用情况（总调用次数、各 Mode 次数、Embedded Review Calls、完成/失败/复审次数，以及必要的逐次摘要）；
 - AI-added Improvements；
 - Deviations；
 - Remaining Risk；
