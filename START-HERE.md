@@ -103,8 +103,8 @@ PDF 是 Conversation History，不替代 Git / Notion / Formal Decision。
 - `RISK-GATES.md`：风险与审查
 - `EMERGENCY.md`：生产事故
 - `DOCUMENTATION.md`：Git 文档边界
-- `runtime/codex/AGENTS.md`：Codex Engineer 全局运行规则的 Canonical Source
-- `runtime/codex/README.md`：Codex AGENTS 部署说明
+- `runtime/codex/AGENTS.md`：Primary Engineer 通用运行规则的 Canonical Source
+- `runtime/codex/README.md`：共享 Engineer Runtime 部署说明
 - `runtime/agy/engineer-specialist/agent.md`：agy read-only Engineer Specialist 定义
 - `templates/PROJECT-AGENTS.template.md`：业务项目根目录 AGENTS.md 模板
 
