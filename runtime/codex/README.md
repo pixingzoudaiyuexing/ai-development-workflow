@@ -71,6 +71,48 @@ A new Codex session is required for newly installed global AGENTS instructions t
 
 ## WebCodex
 
-Engineer responsibilities are the same for Codex and WebCodex.
+Engineer responsibilities are the same for Codex and WebCodex, but the verified runtime loading locations differ.
 
-WebCodex runtime placement / loading of AGENTS is intentionally deferred until its actual runtime behavior is investigated. Do not assume the Codex global path is automatically inherited by WebCodex.
+Current verified behavior:
+
+```text
+Ordinary Codex:
+~/.codex/AGENTS.md
+→ loaded as machine-wide Engineer rules
+
+WebCodex:
+~/.codex/AGENTS.md
+→ not automatically loaded
+
+<WebCodex registered project root>/.codex/AGENTS.md
+→ project-local candidate for shared Engineer runtime rules
+
+<WebCodex registered project root>/AGENTS.md
+→ verified project-specific rules
+```
+
+The same canonical source remains:
+
+```text
+runtime/codex/AGENTS.md
+```
+
+Do not maintain a separate hand-edited WebCodex Engineer rules file.
+
+Sync the shared Engineer rules into an explicit registered WebCodex project:
+
+```bash
+bash scripts/sync-codex-runtime.sh \
+  --webcodex-project /Users/wang/Documents/webcodex/projects/CZ2128
+```
+
+Check without changing files:
+
+```bash
+bash scripts/sync-codex-runtime.sh --check \
+  --webcodex-project /Users/wang/Documents/webcodex/projects/CZ2128
+```
+
+For WebCodex, do not rely on parent-workspace AGENTS inheritance, deeper scoped AGENTS injection, or `AGENTS.override.md` until those behaviors are separately re-verified.
+
+The deployment target `<project>/.codex/AGENTS.md` is the shared Engineer runtime layer. It must not overwrite `<project>/AGENTS.md`, which remains project-specific.
