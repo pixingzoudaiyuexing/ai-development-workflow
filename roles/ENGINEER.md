@@ -729,11 +729,16 @@ Engineer 可以主动增加 Embedded Review 作为内部质量控制，但不得
 
 ## 8. Embedded Review Evidence
 
-Implementation Report 至少记录：
+Implementation Report 必须让 Owner 看得出本任务实际进行了多少次 agy 审查。
 
-- 是否实际调用 agy；
+至少记录：
+
+- Embedded Review Calls：本任务以 Review 为目的实际启动 agy 的总次数；
+- Completed Reviews：实际得到 Reviewer 结论的次数；
+- Failed / Aborted Review Calls：因 permission、timeout、network、provider 等原因未得到 Reviewer 结论的次数；
+- Re-review Calls：修复后再次送审的次数；
 - 调用路径：Direct CLI / WebCodex Bridge；
-- Reviewer model；
+- 每次 Review 的 Reviewer model；
 - effort；
 - timeout；
 - Reviewer STATUS；
@@ -743,7 +748,27 @@ Implementation Report 至少记录：
 - Reviewer infrastructure failure（如有）；
 - 尚未验证的 Reviewer claim（如有）。
 
-不得只写“Gemini reviewed”而没有真实调用与可追踪结果。
+计数规则：
+
+- 只要已经以 Review 为目的实际启动 agy，就计入 Embedded Review Calls，即使该次因权限、超时或基础设施失败而没有产生最终结论；
+- `agy models`、`/usage`、`--version` 等纯诊断命令不计入 Embedded Review Calls；
+- 同一个 Review 因合法 fallback 重新调用 agy，按实际调用次数分别计数；
+- 不得把未真实执行的计划 Review 计入次数。
+
+推荐在报告中直接给出一行：
+
+```text
+Embedded Review Calls: 3 total / 2 completed / 1 failed / 1 re-review
+```
+
+并在需要时给出简短逐次记录：
+
+```text
+#1 <checkpoint> — <model> / <effort> — <STATUS or failure>
+#2 <checkpoint> — <model> / <effort> — <STATUS or failure>
+```
+
+不得只写“Gemini reviewed”而没有真实调用次数与可追踪结果。
 
 ## 9. Delegated Space
 
@@ -806,7 +831,7 @@ PR 默认不是目的；只有 Repo 规则、Review Gate、Branch Protection 或
 - Validation；
 - Evidence；
 - Commit Anchor；
-- Embedded Review 使用情况；
+- Embedded Review 使用情况（包含 Embedded Review Calls 总次数、完成/失败/复审次数，以及必要的逐次摘要）；
 - AI-added Improvements；
 - Deviations；
 - Remaining Risk；
