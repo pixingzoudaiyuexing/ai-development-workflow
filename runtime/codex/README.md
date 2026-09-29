@@ -12,21 +12,15 @@ The path is retained for compatibility, but the file itself is runtime-neutral. 
 
 ## Local Deployment
 
-Deploy once on Owner's Mac:
+Deploy one shared local copy on Owner's Mac:
 
 ```text
 ~/.codex/AGENTS.md
 ```
 
-Ordinary Codex consumes that file directly.
+Engineer runtimes consume this same file through their native instruction-loading mechanism. Where a runtime requires explicit registration, point it at the same absolute file rather than creating another rule copy. For the current WebCodex setup, this file is configured once as a Runner-global instruction source.
 
-WebCodex should configure the same absolute file once as a Runner-global instruction source:
-
-```text
-/Users/wang/.codex/AGENTS.md
-```
-
-Do not copy the shared runtime rules into every WebCodex project.
+Do not copy the shared runtime rules into individual projects.
 
 Project-specific rules remain:
 
@@ -90,7 +84,7 @@ The script syncs:
 
 Existing different destination files are backed up before replacement.
 
-After changing Runner-global instruction path configuration in WebCodex, apply the Runner configuration as WebCodex requires. Changing the contents of an already configured instruction file is live for subsequent project bootstrap / instruction observation.
+After changing an instruction-source path in a runtime, apply that runtime's configuration as required. Changing the contents of the already configured shared file is then picked up by subsequent instruction observation according to that runtime's native behavior.
 
 ## Context Budget
 
