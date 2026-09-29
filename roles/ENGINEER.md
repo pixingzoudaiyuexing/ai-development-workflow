@@ -129,7 +129,7 @@
 
 本机 Antigravity / Gemini 通过 `agy CLI` 作为 Engineer 的 **read-only parallel specialist / 第二脑**。
 
-Codex / WebCodex 仍然是唯一 Primary Engineer 与实现责任人。
+Engineer 是唯一 Primary Engineer 与实现责任人。
 
 核心分工：
 
@@ -189,25 +189,21 @@ agy 不直接接管工程任务，不是 Implementer、Primary Engineer 或 Sour
 1.2.12
 ```
 
-Engineer / Codex / WebCodex 统一把 `/Users/wang/bin/agy` 视为 Canonical agy Entry。
+Engineer 统一把 `/Users/wang/bin/agy` 视为 Canonical agy Entry。
 
-Codex / WebCodex 共用的精简 Engineer Runtime Rules Canonical Source：
+精简 Primary Engineer Runtime Rules 的 Canonical Source：
 
 ```text
 runtime/codex/AGENTS.md
 ```
 
-已验证部署位置：
+本机统一部署：
 
 ```text
-Ordinary Codex:
 ~/.codex/AGENTS.md
-
-WebCodex:
-<WebCodex registered project root>/.codex/AGENTS.md
 ```
 
-两者职责相同，Runtime placement 不同；不得维护两份内容不同的 Engineer Runtime Rules。
+该文件是唯一共享 Engineer Runtime Rules。不同 Runtime 只负责以自己的原生机制加载同一份规则，不维护第二份 Engineer 规则。
 
 agy 的 Engineer Specialist Canonical Source：
 
@@ -221,7 +217,7 @@ runtime/agy/engineer-specialist/agent.md
 ~/.gemini/config/agents/engineer-specialist/agent.md
 ```
 
-WebCodex 与 Codex 的 Engineer 职责相同。当前已验证 WebCodex 会从 registered project root 加载 `.codex/AGENTS.md`；它不会自动继承 `~/.codex/AGENTS.md`。Project-specific 规则仍放在 `<project>/AGENTS.md`。
+Project-specific 规则始终放在 `<project>/AGENTS.md`。共享 Engineer Runtime Rules 不复制进业务项目。
 
 Owner 在正常交互式 Terminal 中可以直接输入：
 
@@ -250,7 +246,7 @@ Engineer 不负责代理地址、端口、健康检查、主备顺序或 failove
 - 始终调用 Canonical Launcher；
 - 不直接调用 underlying binary，除非正在诊断 Launcher 本身；
 - 不在 shell 中 `export http_proxy` / `https_proxy` / `all_proxy`；
-- 不给 Codex / WebCodex / Local MCP Gateway / Runner / Bridge 设置 agy 专用代理；
+- 不给任何 Engineer Runtime / Runner / Bridge 设置 agy 专用代理；
 - 不修改 macOS 系统代理；
 - 不修改 Git / npm / pnpm 全局代理。
 
@@ -268,53 +264,21 @@ Engineer 不负责代理地址、端口、健康检查、主备顺序或 failove
 
 不要为了修复 agy 而扩大代理作用域，也不要把 Launcher 内部实现细节复制进项目规则。
 
-### 5.3 Codex 与 WebCodex 的真实调用路径
+### 5.3 Runtime Transport
 
-Codex：
+不同 Runtime 的 transport / bridge / shell 路径属于基础设施实现细节，不改变 Engineer 或 agy Specialist 的职责与规则。
+
+无论 Runtime 如何接入：
 
 ```text
-Codex
-→ shell
+Engineer
 → /Users/wang/bin/agy
-→ launcher 注入 agy-only proxy
-→ /Users/wang/.local/bin/agy
-→ Antigravity / Gemini
-→ stdout
-→ Codex adjudication
+→ engineer-specialist
+→ specialist output
+→ Engineer adjudication
 ```
 
-Codex 不需要经过 WebCodex 才能调用 agy。
-
-WebCodex：
-
-```text
-ChatGPT
-→ WebCodex
-→ WebCodex Local MCP Gateway / Runner
-→ codex-antigravity-bridge
-→ /Users/wang/bin/agy
-→ launcher 注入 agy-only proxy
-→ /Users/wang/.local/bin/agy
-→ Antigravity
-```
-
-Bridge 路径：
-
-```text
-/Users/wang/Documents/webcodex/tools/codex-antigravity-bridge
-```
-
-WebCodex / Bridge 的目标也必须是 Canonical Launcher：
-
-```text
-/Users/wang/bin/agy
-```
-
-不得把 `~/.local/bin/agy` 作为正常 Review 调用路径，因为那会绕过 Launcher 中封装的 agy-only proxy。
-
-如果现有 Bridge / Runner 实际仍解析到 underlying binary，视为 Reviewer Infrastructure Configuration Drift：优先修正 Bridge / Runner 的 agy executable target 到 Canonical Launcher，而不是给整个 Bridge 注入代理。
-
-无论 transport 是 Codex 直接 shell 还是 WebCodex Bridge，Reviewer 规则完全一致。
+正常工程规则只依赖 Canonical Launcher，不在 Role Contract 中维护 Runtime-specific transport 拓扑。
 
 ### 5.4 标准 Headless 调用
 
@@ -666,11 +630,10 @@ Reviewer 调用失败必须区分：
 网络失败优先检查：
 
 - Canonical Launcher reachability
-- Launcher 的 Primary / Backup Proxy Profiles 是否至少一个可达
 - Antigravity login
 - agy CLI reachability
 
-不要检查或依赖 shell / Bridge 的 proxy inheritance；正常路径不应由它们继承代理。
+不要检查或依赖 Runtime / Bridge 的 proxy inheritance；正常路径不应由它们继承 agy 专用代理。
 
 Timeout、Quota、Provider Failure 都不是代码 Finding。
 
@@ -691,7 +654,7 @@ Antigravity Desktop 切换账号
 → agy 使用的账号 / quota 随之变化
 ```
 
-Codex 与 WebCodex 调 agy 共享当前机器上的 Antigravity 身份，不是各自独立登录。
+Engineer 调 agy 使用当前机器上的 Antigravity 身份。
 
 需要查询当前额度：
 
