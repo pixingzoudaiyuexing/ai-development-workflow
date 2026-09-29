@@ -115,4 +115,8 @@ Do not place proxy configuration, global Engineer behavior, secrets, or machine-
 
 ## Directory Overrides
 
-If a subdirectory needs different rules, add a more specific `AGENTS.md` or `AGENTS.override.md` inside that subtree instead of bloating this root file.
+For ordinary Codex, more specific directory-scoped `AGENTS.md` / `AGENTS.override.md` rules may be used when supported by the runtime.
+
+For WebCodex, do not rely on deeper scoped AGENTS injection or `AGENTS.override.md` until that behavior is separately verified. Keep required WebCodex project rules in the registered project root `AGENTS.md`.
+
+Do not bloat the root file with rules that are irrelevant to the whole project.
