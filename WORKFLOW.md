@@ -97,16 +97,28 @@ Engineer Task 默认按一个完整 Outcome 派发。
 
 只有真实 Gate 才拆：关键 PoC、跨 Repo Contract、不可逆动作、前序结果决定后续方向、真正并行、上下文失控或风险明显不同。
 
-## 6. Embedded Review
+## 6. Embedded Specialist / Review
 
-Engineer 可以在有意义节点调用第二模型 Review，无需 Owner 逐次转发。
+Engineer 可以在 Coherent Work Unit 内按需调用第二模型，无需 Owner 逐次转发。
+
+agy / Antigravity 的默认定位是 **read-only parallel specialist / 第二脑**，不是第二个 Implementer。
+
+适合的工作包括：
+
+- Research Scout：外部技术研究、官方文档、upstream Repo、Issues / Discussions、changelog；
+- Root-Cause Challenger：复杂 Debug 的竞争性根因假设；
+- Design Challenger：重要技术方案的反方审视；
+- Test Designer：边界、失败路径、回归面与缺失测试设计；
+- Embedded Reviewer：有意义 checkpoint 的独立 Review。
 
 默认原则：
 
-- Review at meaningful checkpoints, not every step.
-- Embedded Review 是内部质量控制。
-- 不自动替代所有 Formal Independent Review。
-- Reviewer 意见是 Evidence / Input，不自动成为正确答案。
+- agy researches / challenges / analyzes / designs tests / reviews；
+- Engineer decides / executes / verifies；
+- 不让两个 Agent 同时成为同一 worktree 的实现责任人；
+- 第二模型结论是 Evidence / Input，不自动成为正确答案；
+- 非硬依赖 Specialist Task 可以与 Engineer 主线并行；
+- Embedded Review 不自动替代所有 Formal Independent Review。
 
 ## 7. Dynamic Review Routing
 
