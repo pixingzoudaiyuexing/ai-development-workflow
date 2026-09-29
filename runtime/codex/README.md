@@ -51,6 +51,24 @@ Codex invokes it through the canonical launcher:
 /Users/wang/bin/agy --agent engineer-specialist ...
 ```
 
+## Sync
+
+From a local checkout of this workflow repository:
+
+```bash
+bash scripts/sync-codex-runtime.sh
+```
+
+Check without changing local files:
+
+```bash
+bash scripts/sync-codex-runtime.sh --check
+```
+
+The script installs both the Codex global AGENTS file and the agy Engineer Specialist definition. Existing different destination files are backed up before replacement.
+
+A new Codex session is required for newly installed global AGENTS instructions to be loaded.
+
 ## WebCodex
 
 Engineer responsibilities are the same for Codex and WebCodex.
