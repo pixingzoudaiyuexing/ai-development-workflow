@@ -191,6 +191,32 @@ agy 不直接接管工程任务，不是 Implementer、Primary Engineer 或 Sour
 
 Engineer / Codex / WebCodex 统一把 `/Users/wang/bin/agy` 视为 Canonical agy Entry。
 
+Codex 的精简 machine-wide runtime rules Canonical Source：
+
+```text
+runtime/codex/AGENTS.md
+```
+
+部署目标：
+
+```text
+~/.codex/AGENTS.md
+```
+
+agy 的 Engineer Specialist Canonical Source：
+
+```text
+runtime/agy/engineer-specialist/agent.md
+```
+
+部署目标：
+
+```text
+~/.gemini/config/agents/engineer-specialist/agent.md
+```
+
+WebCodex 与 Codex 的 Engineer 职责相同，但 WebCodex 的 AGENTS 实际加载位置暂不假设，等待单独验证。
+
 Owner 在正常交互式 Terminal 中可以直接输入：
 
 ```bash
