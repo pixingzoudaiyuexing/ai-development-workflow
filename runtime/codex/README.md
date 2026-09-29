@@ -1,6 +1,6 @@
-# Shared Engineer Runtime Deployment
+# Engineer Runtime Deployment
 
-This directory contains the canonical Engineer runtime rules shared by Codex and WebCodex.
+This directory contains the canonical always-loaded Primary Engineer runtime rules.
 
 ## Canonical Source
 
@@ -8,32 +8,46 @@ This directory contains the canonical Engineer runtime rules shared by Codex and
 runtime/codex/AGENTS.md
 ```
 
-Verified deployment targets:
+The path is retained for compatibility, but the file itself is runtime-neutral. Do not maintain separate Codex and WebCodex Engineer rule sets.
+
+## Local Deployment
+
+Deploy once on Owner's Mac:
 
 ```text
-Ordinary Codex:
 ~/.codex/AGENTS.md
-
-WebCodex:
-<WebCodex registered project root>/.codex/AGENTS.md
 ```
 
-Ordinary Codex loads the global file from its home directory. WebCodex does not automatically load that home-level file; it loads the shared runtime copy from the registered project root.
+Ordinary Codex consumes that file directly.
 
-## Three Layers
+WebCodex should configure the same absolute file once as a Runner-global instruction source:
+
+```text
+/Users/wang/.codex/AGENTS.md
+```
+
+Do not copy the shared runtime rules into every WebCodex project.
+
+Project-specific rules remain:
+
+```text
+<project>/AGENTS.md
+```
+
+Current task instructions remain in the current Engineer Task.
+
+The intended layering is:
 
 ```text
 ~/.codex/AGENTS.md
-= machine-wide Engineer runtime behavior
+= shared Primary Engineer runtime rules
 
 <project>/AGENTS.md
-= project-specific engineering rules
+= project-specific rules
 
 Current Engineer Task
-= current outcome, scope, acceptance, and risk
+= current goal, scope, acceptance, and risk
 ```
-
-Do not copy the full long-form `roles/ENGINEER.md` into global AGENTS. The long-form role is the workflow source of truth; the runtime AGENTS file is the compact always-loaded execution contract.
 
 ## agy Specialist
 
@@ -49,7 +63,7 @@ Deployment target:
 ~/.gemini/config/agents/engineer-specialist/agent.md
 ```
 
-Codex invokes it through the canonical launcher:
+Engineer invokes it through:
 
 ```text
 /Users/wang/bin/agy --agent engineer-specialist ...
@@ -63,60 +77,29 @@ From a local checkout of this workflow repository:
 bash scripts/sync-codex-runtime.sh
 ```
 
-Check without changing local files:
+Check without changing files:
 
 ```bash
 bash scripts/sync-codex-runtime.sh --check
 ```
 
-The script installs both the Codex global AGENTS file and the agy Engineer Specialist definition. Existing different destination files are backed up before replacement.
+The script syncs:
 
-A new Codex session is required for newly installed global AGENTS instructions to be loaded.
+- the shared Engineer runtime to `~/.codex/AGENTS.md`;
+- the agy Engineer Specialist definition to `~/.gemini/config/agents/engineer-specialist/agent.md`.
 
-## WebCodex
+Existing different destination files are backed up before replacement.
 
-Engineer responsibilities are the same for Codex and WebCodex, but the verified runtime loading locations differ.
+After changing Runner-global instruction path configuration in WebCodex, apply the Runner configuration as WebCodex requires. Changing the contents of an already configured instruction file is live for subsequent project bootstrap / instruction observation.
 
-Current verified behavior:
+## Context Budget
 
-```text
-Ordinary Codex:
-~/.codex/AGENTS.md
-→ loaded as machine-wide Engineer rules
+Keep `runtime/codex/AGENTS.md` compact.
 
-WebCodex:
-~/.codex/AGENTS.md
-→ not automatically loaded
+WebCodex combines Runner-global and project instruction sources under bounded projection budgets. Project rules must remain available even when global guidance is long, so essential global behavior — Primary Engineer identity, safety, agy role, validation, review boundary, and reporting — must fit early in this file.
 
-<WebCodex registered project root>/.codex/AGENTS.md
-→ verified shared Engineer runtime rules
-
-<WebCodex registered project root>/AGENTS.md
-→ verified project-specific rules
-```
-
-The same canonical source remains:
+Long-form explanation belongs in:
 
 ```text
-runtime/codex/AGENTS.md
+roles/ENGINEER.md
 ```
-
-Do not maintain a separate hand-edited WebCodex Engineer rules file.
-
-Sync the shared Engineer rules into an explicit registered WebCodex project:
-
-```bash
-bash scripts/sync-codex-runtime.sh \
-  --webcodex-project /Users/wang/Documents/webcodex/projects/CZ2128
-```
-
-Check without changing files:
-
-```bash
-bash scripts/sync-codex-runtime.sh --check \
-  --webcodex-project /Users/wang/Documents/webcodex/projects/CZ2128
-```
-
-For WebCodex, do not rely on parent-workspace AGENTS inheritance, deeper scoped AGENTS injection, or `AGENTS.override.md` until those behaviors are separately re-verified.
-
-The deployment target `<project>/.codex/AGENTS.md` is the shared Engineer runtime layer. It must not overwrite `<project>/AGENTS.md`, which remains project-specific.
