@@ -1,7 +1,7 @@
 # PROJECT AGENTS — TEMPLATE
 
 > Copy this file to the root of a project repository as `AGENTS.md`.
-> Keep it project-specific. Do not duplicate the global Engineer role or generic Codex behavior here.
+> Keep it project-specific. Do not duplicate the global Engineer role or generic Engineer runtime behavior here.
 
 ## Project Identity
 
