@@ -82,9 +82,19 @@ inspect → research → implement → debug → embedded review → test → va
 
 复杂 / 第三方 / 陌生问题优先 Research-Assisted Problem Solving，不进行长时间 Blind Trial-and-Error。
 
-## Embedded Review
+## agy Specialist / Embedded Review
 
-在有意义节点按 Engineer Role 使用第二模型。
+在有真实信息价值时，按 Engineer Role 使用 agy read-only specialist：
+
+- Research Scout；
+- Root-Cause Challenger；
+- Design Challenger；
+- Test Designer；
+- Embedded Reviewer。
+
+非硬依赖的 Specialist Task 可以与 Engineer 主线并行。
+
+agy 不直接成为同一 worktree 的第二个 Implementer。Engineer 负责最终判断、修改、验证与提交。
 
 Embedded Review 不自动替代本 Task 明确要求的 Formal Independent Review。
 
@@ -123,7 +133,8 @@ PR 不是默认步骤；仓库规则、Owner 要求或 Review 价值明确时再
 - Validation
 - Evidence
 - Commit Anchor
-- Embedded Review
+- agy Specialist Calls（总次数 + 各 Mode 次数）
+- Embedded Review Calls（总次数 + 完成/失败/复审次数）
 - AI-added Improvements
 - Deviations
 - Remaining Risk
