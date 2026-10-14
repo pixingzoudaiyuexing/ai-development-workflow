@@ -299,7 +299,7 @@ gemini-3.6-flash-high
 gemini-3.6-flash-medium
 gemini-3.6-flash-low
 
-gemini-3.1-pro-high
+gemini-4-argon-high
 gemini-3.1-pro-low
 
 claude-sonnet-4-6
@@ -320,7 +320,7 @@ effort: high
 ### Deep / High-risk Review
 
 ```text
-model: gemini-3.1-pro-high
+model: gemini-4-argon-high
 effort: high
 ```
 
@@ -330,7 +330,7 @@ effort: high
 
 ```text
 1. gemini-3.8-flash-high
-2. gemini-3.1-pro-high
+2. gemini-4-argon-high
 ```
 
 然后由 Engineer 基于真实 Evidence 统一 adjudicate。
