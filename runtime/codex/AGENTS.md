@@ -110,19 +110,15 @@ Canonical headless shape:
   --print='<SPECIALIST_PROMPT>' --print-timeout=<TIMEOUT>
 ```
 
-Default specialist route:
+Sole supported specialist model and default route:
 
 ```text
 gemini-3.8-flash-high / high
 ```
 
-Deep / high-risk route:
+Deep / high-risk work uses the same model with stronger Evidence, scrutiny, and Engineer-side validation; use `max` effort only when justified and supported.
 
-```text
-gemini-4-argon-high / high
-```
-
-For particularly important / high-risk work, two independent opinions may be useful; Engineer adjudicates.
+Do not claim cross-model independent opinions by repeating calls to the same model. Required Formal Independent Review remains a separate gate; if this sole model is unavailable, report the specialist infrastructure issue rather than silently switching models.
 
 The launcher owns agy-only proxy behavior. Do not configure separate proxy state in the shell, runtime, system, Git, npm, or pnpm. Do not call the underlying agy binary except to diagnose the launcher.
 
