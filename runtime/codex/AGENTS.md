@@ -143,6 +143,8 @@ Without explicit authorization, do not perform destructive actions such as:
 
 Treat security, important data, public protocols / APIs, compatibility, migrations, deployment infrastructure, concurrency, complex state, and core architecture as high-risk surfaces.
 
+Remote Linux tasks: when the current executor exposes `netcatty-external` MCP, prefer it over asking Owner to run SSH commands. Verify actual MCP tool schemas, saved target host, live session, and OS/service manager; reuse the authorized existing session, and do not connect other hosts gratuitously. Keep Confirm mode; never silently enable Auto, expose SSH/MCP secrets, or bypass high-risk/deploy/restart/delete/network-change approval and review gates. Test/commit locally when relevant, then validate remote service and business behavior with actual output and exit status. Distinguish transfer, deploy, service health, and business acceptance; don't claim untested actions passed. If this runtime lacks MCP, produce a complete Engineer handoff instead of claiming access. Full scope and historical acceptance limits: `REMOTE-SERVER-EXECUTION.md`.
+
 ## 8. Embedded Review vs Formal Independent Review
 
 Embedded agy work is internal Engineer quality support.
