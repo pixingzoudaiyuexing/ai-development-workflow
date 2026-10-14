@@ -119,7 +119,7 @@ gemini-3.8-flash-high / high
 Deep / high-risk route:
 
 ```text
-gemini-3.1-pro-high / high
+gemini-4-argon-high / high
 ```
 
 For particularly important / high-risk work, two independent opinions may be useful; Engineer adjudicates.
