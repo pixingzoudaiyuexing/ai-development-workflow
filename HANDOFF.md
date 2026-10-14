@@ -173,6 +173,10 @@ Task 以 Coherent Work Unit 为单位。
 
 内部 inspect / research / implement / debug / review / test / commit 不构成 Owner Relay Gate。
 
+涉及服务器操作的 Engineer Task，应按需明确：Netcatty 已保存的**目标服务器名称**、项目及 Repo、操作范围和 Non-goals、只读或写入/部署授权、Task Risk / Formal Review 要求、停机与回滚边界、验收条件、期望的脱敏日志/退出码/服务与业务验证结果。不得把 SSH 地址、密码、私钥或桥接凭据搬运到 Prompt。
+
+如果当前对话没有 `netcatty-external` 权限，不得假装执行；向具有实际 MCP 权限的 Codex Engineer 发送完整 Prompt，并在结果返回后按 `REMOTE-SERVER-EXECUTION.md` 核验实际 Evidence。DevOps / Acceptance 是任务类型，不自动创建新的长期 Role Mask。
+
 ## 9. Independent Review Handoff
 
 Formal Review 必须提供足够 Evidence / Review Object。
