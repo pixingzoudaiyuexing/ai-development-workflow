@@ -99,6 +99,7 @@ Project Manager 应主动调查并引导 Owner。
 - `RISK-GATES.md`
 - `DOCUMENTATION.md`
 - `EMERGENCY.md`
+- `REMOTE-SERVER-EXECUTION.md`：通过已授权 Codex 的 Netcatty MCP 远程执行与验收规则
 
 旧项目如果固定到旧 Workflow Version + Revision，不因 `main` 更新自动迁移。
 
