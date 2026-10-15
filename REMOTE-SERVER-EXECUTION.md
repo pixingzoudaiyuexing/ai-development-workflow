@@ -13,7 +13,7 @@
 
 ## 2. Owner-provided Acceptance Baseline (2026-10-14)
 
-The Owner reports a successful acceptance exercise using macOS 15.7.4 (Apple Silicon), Netcatty 1.1.83, Codex CLI 0.151.0, and an enabled local-only MCP named `netcatty-external` registered in `~/.codex/config.toml` with permission mode **Confirm**. The exercise reported discovery of 67 MCP tool definitions.
+The Owner reports a successful acceptance exercise using macOS 15.7.4 (Apple Silicon), Netcatty 1.1.83, Codex CLI 0.151.0, and an enabled local-only MCP named `netcatty-external` registered in `~/.codex/config.toml`. The exercise reported discovery of 67 MCP tool definitions.
 
 Reported **PASS** in that local Codex environment:
 
@@ -41,15 +41,11 @@ When a task requires a remote Linux server:
 6. Before package/service changes, identify `/etc/os-release`, architecture, package manager, init/service manager, and installed components. Do not assume Debian/Ubuntu commands on Alpine/OpenRC.
 7. On MCP failure, report the actual tool/permission/connection blocker. Do not claim execution and do not automatically ask the Owner to perform manual SSH steps if a viable authorized Codex handoff exists.
 
-## 4. Authorization, Safety, and Risk Gates
+## 4. Execution Defaults
 
-- Preserve Netcatty's **Confirm** permission mode. Never silently switch it to Auto, bypass approval prompts, or evade MCP/host permissions.
-- Read-only diagnostics may proceed within the authorized task, subject to Confirm approval prompts.
-- Before configuration changes, installs/upgrades, file writes, or deployments, inspect existing state and dependencies; explain relevant impact. Back up or provide a recovery path when warranted.
-- Assess service disruption before restarting/replacing services. Inspect targets carefully before deletion; do not perform broad or destructive file operations without explicit current-task authorization.
-- SSH, firewall, network and authentication changes require extra checks against lockout. Irreversible/high-risk operations require explicit Owner authorization and applicable `RISK-GATES.md` review gates.
-- Never export, copy into prompts, log, commit, or disclose SSH passwords, keys, tokens, MCP bridge credentials, or other secrets.
-- A working remote command does not implicitly authorize deployment, privilege escalation, touching another host, or changing production data.
+- Use Netcatty's saved SSH connection details. Do not ask Owner to repeat addresses, usernames, passwords, or private keys; if the task does not identify a unique target, ask for its saved host name only.
+- Engineer independently handles in-scope remote commands, file operations, tests, and deployments. Use the existing `RISK-GATES.md` for genuinely high-impact decisions rather than introducing separate Netcatty-specific command approvals.
+- Check impact and recovery options before consequential changes, validate actual remote results, and never expose SSH or MCP credentials in prompts, logs, or Git.
 
 ## 5. Engineering, Deployment, and Acceptance
 
@@ -61,7 +57,7 @@ For an authorized deployment or repair:
 identify target + scope + authority
 → inspect current MCP / SSH session + remote OS and service state
 → local implementation / tests / Git / review (when applicable)
-→ assess change risk, backup / rollback, and approval
+→ check change impact and recovery needs
 → perform authorized remote actions with Netcatty MCP
 → verify remote service and business behavior
 → report actual Evidence + remaining risks
