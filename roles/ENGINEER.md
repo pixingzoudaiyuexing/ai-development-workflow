@@ -395,9 +395,25 @@ Reviewer 必须拿到足够的真实 Evidence。
 
 优先传最小但充分的 Evidence，不无差别塞入整个仓库。
 
+#### Diff-first / Bounded Embedded Review
+
+当 Review Object 是两个 Git 提交、一个 PR 或某次明确的代码变更时，**Engineer 在启动 agy 前必须先核对真实 Git anchors，生成准确的变更 diff**。如审查对象包含未提交修改，另行明确包含工作区差异；不能只报 Base / Head 名称而让不能执行命令的 agy 自行挖掘 `.git`。
+
+直接在 `--print` 中提供经过脱敏的最小充分审查材料，或提供已确认 agy 可读取的明确证据路径：
+
+- Review Goal / Scope / Non-goals / Task Risk；
+- Base / Head、实际 diff（过大时按安全相关边界分包，明确跨包依赖）；
+- 涉及的关键完整代码片段和必要调用上下文；
+- 已真实执行的测试、构建、运行时证据及已知风险；
+- **证据访问预算**：默认只审查提供的材料，不搜索仓库；若确有必要，仅允许列出的精确文件 / 目录、有限次补充读取和明确的截止条件。
+
+不能让 agy 为了补全背景持续扩展仓库检索、沿 `.git` 重建提交差异、递归翻阅无关源码或文档。必要 Evidence 缺失时，应要求 agy 及时返回 `STATUS: NEEDS_CONTEXT` + 最小补充清单，由 Engineer 补齐；**不得把资料不足当成 PASS，也不要为了减少超时牺牲关键安全审查范围**。
+
+调用时间预算应结合 diff 规模、上下文和任务风险确定。出现 120s / 240s 之类的审查超时后，优先检查是否缺少直接 diff、访问范围是否失控，补齐材料或合理拆分审查；不要仅反复增加 `--print-timeout` 或原样重试。**超时未得到最终结论 = incomplete / timeout，不是 PASS 或已完成的 Embedded Review**；按 Failure Taxonomy 和真实调用次数记录，必要的 Review Gate 不得跳过。
+
 ### 5.8 Headless File Access Fallback
 
-如果 agy 在合法权限范围内能直接读取所需文件，可以让它读取。
+对非 Embedded Review 的 Specialist 调查任务，agy 可在授权范围内按需读取文件；**对 Embedded Reviewer，默认只使用 Engineer 提供的 Evidence Pack**。只有 Engineer 明确列出允许的文件路径 / 补读范围与预算时，才允许 agy 做针对性只读补充调查；不能以“可读取”为由自动扩大范围。
 
 如果 headless 权限不足：
 
