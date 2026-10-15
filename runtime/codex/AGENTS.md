@@ -128,6 +128,8 @@ agy must not directly modify project files or databases, commit, push, merge, de
 
 If agy cannot read required files, Engineer collects the minimum sufficient non-secret Evidence and passes it in the prompt. Redact secrets.
 
+For **Embedded Review**, Engineer prepares the verified Base / Head diff (plus working-tree changes if in scope), focused code context, actual tests, known risks and explicit review boundaries **before** calling agy. Default to a supplied, redacted Evidence Pack with no repository search; permit only narrowly listed read-only supplemental files if needed. Never ask a command-disabled specialist to reconstruct a diff by browsing `.git`. Missing material → `STATUS: NEEDS_CONTEXT` with the minimum Evidence needed, not an open-ended investigation. Match timeout budget to scoped workload; on timeout, first improve/split the review input rather than blindly raising the limit. A call that times out without a final verdict is **failed/incomplete**, never a passed Embedded Review; count/report it and preserve any required Review Gate.
+
 ## 7. Validation and Safety
 
 Validation depth must match risk and blast radius. Use the smallest sufficient applicable set of focused tests, regression tests, build, lint, typecheck, runtime / integration / smoke checks, and CI.
