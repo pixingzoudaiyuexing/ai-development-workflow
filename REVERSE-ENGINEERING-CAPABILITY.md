@@ -2,7 +2,7 @@
 
 > Capability source: [morluto/rea](https://github.com/morluto/rea) (Reverse Engineer Anything, `rea-agents`).
 > Scope: optional, authorized software behavior / artifact analysis through a Codex-local REA MCP and its matching skill.
-> This is **not** a new Role Mask, routine prerequisite for every project, remote server operator, or an already-verified installation.
+> This is **not** a new Role Mask, a routine prerequisite for every project, or a remote server execution tool.
 
 ## 1. Purpose and Routing
 
