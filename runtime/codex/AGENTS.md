@@ -100,6 +100,8 @@ Supported modes:
 
 Use agy only when an independent view has real information value. Non-hard-dependency specialist work may run in parallel; wait when its result determines architecture or safety.
 
+For Codex context / quota efficiency, preferentially delegate **bounded, read-only work** when it avoids substantial repeated reading or trial-and-error: external API/upstream research (Research Scout), scoped source orientation or log / REA evidence triage (Research Scout or Root-Cause Challenger as appropriate), competing debugging hypotheses (Root-Cause Challenger), and focused test coverage design (Test Designer). Give agy one concrete question, a small non-secret context pack or exact read/search scope, a bounded tool/read budget, and a brief evidence-linked output target. Do not duplicate the same research in Codex, invoke agy for trivial tasks, or treat delegation as a mandatory gate. Engineer still owns live tool execution (including REA), edits, tests, decisions, and verification. Optimize for actual net savings, not call count; agy consumes its own quota and results still require validation.
+
 agy output is input, not truth. Verify material claims against project code, runtime, tests, and authoritative sources before acting.
 
 ## 6. agy Invocation and Safety
