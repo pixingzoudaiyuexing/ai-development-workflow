@@ -177,6 +177,10 @@ Task 以 Coherent Work Unit 为单位。
 
 如果当前对话没有 `netcatty-external` 权限，不得假装执行；向具有实际 MCP 权限的 Codex Engineer 发送完整 Prompt，并在结果返回后按 `REMOTE-SERVER-EXECUTION.md` 核验实际 Evidence。DevOps / Acceptance 是任务类型，不自动创建新的长期 Role Mask。
 
+对需要通过 REA 进行软件行为调查或逆向分析的 Engineer Task，按需写明：有权调查的目标及版本/文件来源、具体待解答的问题、授权范围（静态分析 / 运行 / 网络观测 / 设备操作等）、禁止事项、目标环境、所需 Evidence 与验收标准。不要把 REA 当作默认必需工具，也不要要求上游提供无法核实的 MCP 已安装声明。
+
+若当前对话没有 REA MCP 权限，应根据 `REVERSE-ENGINEERING-CAPABILITY.md` 交给实际具备能力的 Codex Engineer；工具安装与配置不是已授权调查任务的隐含步骤，必须单独批准。不要转发原始私有程序、凭据或敏感抓包作为通用 Prompt 附件。
+
 ## 9. Independent Review Handoff
 
 Formal Review 必须提供足够 Evidence / Review Object。
