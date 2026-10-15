@@ -273,9 +273,9 @@ PR 不是默认步骤。只有仓库规则、Owner 明确要求、正式 Review 
 
 通过本机已授权 Codex 的 `netcatty-external` MCP，可执行远程 Linux 诊断、文件操作、部署和运行验收。这是**可选的执行能力**，不是新的 Role Mask，也不是每个项目都要重复安装的依赖。详见 `REMOTE-SERVER-EXECUTION.md`。
 
-- Project Manager / Product Manager / Project + Product Manager 负责目标服务器、范围、风险、授权与验收标准；实际远程操作交由具备该 MCP 权限的 Engineer 执行。
-- Engineer 只在当前运行端实际发现 MCP 且当前任务授权时使用：先确认工具 schema、目标主机、现有 Session、真实 Linux 环境；优先复用已连接会话，不无故连接其他服务器。
-- 保留 MCP Confirm 权限模式；远程写入、部署、重启、删除、网络/SSH/防火墙变更及不可逆操作遵守 `RISK-GATES.md`、Owner 授权和必要的回滚措施。
+- Project Manager / Product Manager / Project + Product Manager 负责确定任务目标、目标服务器和验收结果；实际远程操作由具备 Netcatty MCP 的 Engineer 完成。
+- Engineer 确认当前 Netcatty MCP 可用后，直接查找并复用 Netcatty 已保存的机器与 SSH 会话；目标不明确时只询问已保存的机器名称，不要求 Owner 重复提供 SSH 地址、账号、密码或密钥。
+- Codex 在任务范围内自主完成远程排障、文件操作、部署与验收；重大高影响操作沿用统一的 `RISK-GATES.md`，不增加 Netcatty 专属的逐条技术命令审批步骤。
 - 其他对话不自动继承 Codex 的 MCP 权限；缺少调用入口时，按 `HANDOFF.md` 完整交接给有权限的 Engineer，不伪称远程任务已执行。
 - 区分代码实现、本地测试、文件传输、部署、服务健康、业务可用六种结果；以现场日志、退出码、接口和业务检查等实际 Evidence 验收。
 - 2026-10-14 的验收是 Owner 提供的历史基线，不代表永久在线状态；未验证的能力不能预设 PASS。
