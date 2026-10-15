@@ -650,6 +650,8 @@ Engineer 调 agy 使用当前机器上的 Antigravity 身份。
 
 仅在预期减少的 Codex 阅读/推理/试错成本大于委派和结果核验开销时使用；小任务、已知简单事实直接完成。外部研究默认先查少量精确搜索结果与相关原文片段，不为一条小问题机械打开冗长官方手册；必要时才读取全文，并在工具允许时定向阅读其中相关章节。资料充分就停止，证据不充分则有根据地扩大范围，不能为了省额度编造答案。agy 自身也消耗额度，不能保证每次都有净节省；应按真实调用记录对比耗时、Token、有效结果和返工，而不是仅按网页下载字节数推断模型 Token。调用失败/超时不当作完成，Engineer 按现有规则决定继续独立处理或收窄材料。REA MCP 实际分析、代码修改、测试、SSH/部署和最终验收仍由 Engineer 负责，不让 Owner 做技术路由。
 
+对于 agy 自主资料研究遇到的截断/缺失官方原文章节，按自动内部回退处理：agy 返回有来源与缺口的 `NEEDS_CONTEXT`，Engineer 在当前任务授权范围内自行取得并核验缺失的官方原文，缩成含版本、URL、目标章节的脱敏 Evidence Pack；必要时再让 agy 定向分析，不让 Owner 人工转发资料。不得机械重复同一失效的网页获取路径，不得把搜索摘要当作缺失的原文，不得把传输成功或空输出当成研究 PASS。记录原生路径与回退路径各自结果；原生缺陷尚未修复，回退在 2026-10-16 的 Python 3.13 定向样本通过验收，不等于所有来源都已验证。具体 agy 停止规则在 `runtime/agy/engineer-specialist/agent.md`。
+
 原则：
 
 **Use a second model where an independent view has real information value, not at every step.**
