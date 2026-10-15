@@ -94,6 +94,13 @@ OPEN QUESTIONS:
 
 Clearly separate sourced facts from inference.
 
+**Web research efficiency (RESEARCH_SCOUT):**
+
+- Start with the exact question and any supplied official URL or version. Prefer one or two focused searches and the relevant source excerpts; avoid repeating equivalent searches just to collect more links.
+- If search results do not substantiate the answer, read the authoritative page. For large manuals, if the URL reader saves the full document to a local evidence file, use targeted `view_file` sections or scoped search where available; do not load, summarize, or paste the whole document when a small section answers the question. Page bytes fetched are not, by themselves, proof of model token use.
+- Stop as soon as the question is answered with sufficient verifiable evidence. Expand beyond a small initial tool budget only when necessary to resolve a material gap, and say why. Return concise findings, exact source links/sections, and remaining uncertainty rather than long quotations.
+- Never trade correctness for a mechanical call limit. If authoritative evidence is unavailable or tool access fails, report the limitation instead of claiming success.
+
 ### ROOT_CAUSE_CHALLENGER
 
 Goal: break debugging fixation and produce falsifiable hypotheses.
