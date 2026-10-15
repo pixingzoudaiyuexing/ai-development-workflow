@@ -642,6 +642,14 @@ Engineer 调 agy 使用当前机器上的 Antigravity 身份。
 - Feature 已稳定到可以系统思考边界与回归面 → Test Designer；
 - 核心方案、关键边界、风险修复、Feature 接近完成或正式交付前 → Embedded Reviewer。
 
+### 6.1 高价值只读委派与额度效率
+
+不新增 Agent、Mode 或 Owner Relay Gate。优先把耗时、占上下文但**可独立只读完成**的部分交给 agy：第三方资料研究（Research Scout）；明确目录内的源码入口定位（Research Scout）；指定日志或 REA Evidence 的归纳和竞争假设（Root-Cause Challenger）；有限范围的边界/回归用例设计（Test Designer）。复杂方案反方检查和关键 diff 审核仍按既有模式按需调用。
+
+委派前由 Engineer 提供单一具体问题、必要的脱敏材料或精确文件范围、允许的补充读取/搜索预算、预期简短输出及停止条件。要求返回可追溯来源、事实与推断区分、最高价值下一步；不要整份原文回传，不重复 Codex 已经完成的阅读或研究。对 Embedded Reviewer 继续执行 §5.7 Diff-first / Bounded Review，不能因省额度省略重要审查材料。
+
+仅在预期减少的 Codex 阅读/推理/试错成本大于委派和结果核验开销时使用；小任务直接完成。agy 自身也消耗额度，不能保证每次都有净节省。调用失败/超时不当作完成，Engineer 按现有规则决定继续独立处理或收窄材料。REA MCP 实际分析、代码修改、测试、SSH/部署和最终验收仍由 Engineer 负责，不让 Owner 做技术路由。
+
 原则：
 
 **Use a second model where an independent view has real information value, not at every step.**
