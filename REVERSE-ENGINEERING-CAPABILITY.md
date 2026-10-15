@@ -14,12 +14,27 @@ Project Manager / Product Manager / Project + Product Manager define product pur
 
 ## 2. Tool Availability and Source of Truth
 
-- The user has authorized **workflow capability registration**, not installation on their Mac, opening targets, or running binaries.
+- **Historical installation acceptance (2026-10-15):** The Owner supplied a Codex execution report and static Evidence bundle showing REA installed and tested within the stated scope. This does **not** authorize further setup, upgrades, new targets, target execution, or unsafe actions.
 - A documentation change does not install REA. Before making capability claims, check the *current Codex executor* for the REA MCP registration and tools, the matching skill, and required analysis providers.
 - For a configured runtime, inspect the real tool schemas and availability. REA's documentation recommends MCP `tools/list` and `binary_session` with an empty input to inspect per-operation availability. Use only inputs actually supported by that version.
 - Where an installed `rea` command exists, `rea doctor --client codex --json`, `rea doctor --skill --json`, and provider-scoped doctor checks are read-only diagnostics. Missing/unavailable outputs are **not PASS**.
 - Current GitHub docs, prior conversations, and vendor examples are reference material, not proof of local installation, license entitlements, permissions or target analysis success.
 - A Codex-local MCP is **not** automatically available in ChatGPT, agy, WebCodex, or another conversation. Route an authorized task to the real Codex executor when necessary.
+
+## 2.1 Accepted Local Codex Baseline — 2026-10-15
+
+The Owner submitted a detailed installation/acceptance report and REA-exported JSON Evidence. **Status: PASS for Codex REA MCP registration, Skill loading, real calls, and a benign JavaScript static-analysis fixture only.** The report documents the actual Codex app-server checks; the supplied Evidence bundle independently contains the static graph and its limitations. This is a dated record, **not a live health check** for future sessions.
+
+- `rea-agents@6.5.0` registered as Codex MCP `rea`, with the package-runner registration version pinned to 6.5.0; bundled `reverse-engineer-anything` Skill reported installed/enabled in a fresh Codex app-server.
+- New Codex app-server: `rea` connected with **207 published tool definitions** (not 207 individually tested tools). Both scoped `doctor --client codex --json` and `doctor --skill --json` returned exit 0 and `healthy=true`.
+- Actual reported successful MCP calls: `binary_session`, `analyze_javascript_application`, `inspect_analysis_view`, `export_evidence_bundle`.
+- Safe, self-created fixture: 3 files, including 2 JavaScript files; 13 analysis findings, 0 parse errors, 18 application-graph nodes and 21 edges. The exported Evidence confirms the graph and **21 unresolved semantic unknowns**. The fixture was **not executed**. Static graph coverage does not establish runtime behavior or behavioral equivalence.
+- Existing `netcatty-external` MCP registration and real `get_environment` use were reported preserved; the Owner's required Netcatty **Confirm** permission mode was verified as restored after an observed Auto-mode drift. These are test-time facts, not persistent guarantees.
+- **NOT TESTED:** active Codex desktop-chat hot reload/full restart; native disassembly/decompilation and dynamic captures; individual readiness of the remaining published tools or real-world targets. No Hopper/Ghidra/IDA/JADX was installed. An optional Frida dependency was downloaded but not used for instrumentation.
+- **Known limitation:** Node 24.13 supports the tested REA functions, but the `inspect_sqlite_database` tool requires Node 24.15+ or 26+ native SQLite limits support; this does not mean REA's general cache or Evidence storage is unusable.
+- The test report includes one agy Embedded Reviewer call. This does not replace a required Formal Independent Review.
+
+**Operational consequence:** Do not request reinstall or full setup by default on this already-accepted Codex machine. At the next applicable task, check the current session's REA MCP and Skill visibility, capability availability and target authorization. Re-run installation diagnostics or scoped setup **only** when an actual mismatch warrants it; do not expand providers without approval. Do not commit raw private local paths, host inventories, or the unredacted Evidence bundle into this public workflow repository.
 
 ## 3. Installation / Configuration Is a Separate Authorized Action
 
@@ -71,4 +86,4 @@ Distinguish **MCP installed**, **registered in Codex**, **tool available**, **pr
 
 Return as applicable: target identification and authorization scope; REA/runtime/provider versions; commands/tool calls actually used; static vs dynamic effects; key evidence pointers or redacted snippets; uncertainty; implementation/test results; Git state; skipped steps and why; review and security/legal limitations.
 
-This capability record documents upstream functionality and a future workflow integration path. It does **not** claim REA has been installed or tested on the Owner's Mac.
+The accepted Codex-local REA 6.5.0 **static-analysis baseline** is recorded in §2.1. It is historical and scoped; new target analyses and untested providers still require real readiness checks and separate authorization as applicable.
