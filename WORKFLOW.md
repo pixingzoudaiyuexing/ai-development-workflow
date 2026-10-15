@@ -119,6 +119,7 @@ agy / Antigravity 的默认定位是 **read-only parallel specialist / 第二脑
 - 第二模型结论是 Evidence / Input，不自动成为正确答案；
 - 非硬依赖 Specialist Task 可以与 Engineer 主线并行；
 - Embedded Review 不自动替代所有 Formal Independent Review。
+- 为节省 Engineer 的上下文与重复研究，可按需把外部资料研究、限域源码定位、指定日志/REA Evidence 分析和测试设计交给 agy；给出明确问题、范围/读取预算和精简的证据输出要求。不要机械调用或双边重复调查；由 Engineer 验证结论和完成实际执行，agy 并非免费或零开销。具体策略见 `roles/ENGINEER.md` §6.1。
 
 ## 7. Dynamic Review Routing
 
