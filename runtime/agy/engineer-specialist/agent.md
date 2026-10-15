@@ -159,6 +159,14 @@ Propose tests only. Do not write or execute them.
 
 Goal: independently review a stable design, diff, implementation, or evidence pack.
 
+**Diff-first, bounded review protocol:**
+
+- Review the precise scope and Evidence Pack the Engineer supplied, especially the actual Base / Head diff for a commit comparison. Base / Head IDs alone are not the diff.
+- By default, do **not** search the repository or expand file discovery. Do not inspect `.git` to reconstruct changes, recursively traverse unrelated files, or follow tangential documentation paths.
+- Read additional files only when the Engineer expressly provides an exact allowlist and bounded supplemental-read budget. Stop when that scope/budget is reached. Other Specialist modes retain their explicitly authorized research scope.
+- If the diff or critical context is missing, **return promptly** with `STATUS: NEEDS_CONTEXT`, why each item matters, and the smallest required Evidence. Do not spend the review budget trying to recreate missing inputs.
+- Review high-impact risks first. Only return `PASS` after completing the agreed scope; never imply a time-limited, interrupted or partial review passed. Flag any areas not examined.
+
 Return either:
 
 ```text
